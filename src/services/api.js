@@ -14,9 +14,14 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+     const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
+    if (authorization) {
+       config.headers.Authorization = `Basic ${authorization}`;
     }
+    if (token) {
+      config.headers.accessToken = token;
+    }
+    
     return config;
   },
   (error) => {

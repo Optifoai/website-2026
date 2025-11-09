@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const data = await authService.login(credentials); // Call your backend API
-      localStorage.setItem('authToken', data.token);
+        console.log('credentials data',data?.responseData?.accessToken,data);
+      localStorage.setItem('authToken', data?.responseData?.accessToken);
       setIsAuthenticated(true);
       setUser(data.user); // Store user data
       setIsLoading(false);
