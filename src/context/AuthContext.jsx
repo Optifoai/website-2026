@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth'; // API calls
+// import { setLoginDetailInSession } from '../utils/helpers';
 
 const AuthContext = createContext(null);
 
@@ -25,8 +26,10 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       const data = await authService.login(credentials); // Call your backend API
-        console.log('credentials data',data?.responseData?.accessToken,data);
-      localStorage.setItem('authToken', data?.responseData?.accessToken);
+      delete(data?.responseData?.userProfile?.password);
+      // setLoginDetailInSession(userData);
+      localStorage.setItem('authToken', JSON.stringify(data?.responseData?.accessToken));
+      localStorage.setItem('userData', JSON.stringify(data?.responseData?.userProfile));      
       setIsAuthenticated(true);
       setUser(data.user); // Store user data
       setIsLoading(false);
@@ -60,6 +63,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
     setIsAuthenticated(false);
     setUser(null);
   };

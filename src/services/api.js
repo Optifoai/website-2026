@@ -16,7 +16,7 @@ api.interceptors.request.use(
     const token = localStorage.getItem('authToken');
      const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
     if (authorization) {
-       config.headers.Authorization = `Basic ${authorization}`;
+       config.headers.Authorization = `${authorization}`;
     }
     if (token) {
       config.headers.accessToken = token;

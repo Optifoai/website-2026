@@ -13,7 +13,7 @@ const defaultHeaders = {
 function buildHeaders(partnerSecret) {
     const accessToken = localStorage.getItem('authToken');
     const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
-    let headers = { ...defaultHeaders, Authorization: `Basic ${authorization}`,accessToken:accessToken };     
+    let headers = { ...defaultHeaders, Authorization: `${authorization}`,accessToken:accessToken };     
     // if (partnerSecret) headers['X-ClientSecret'] = partnerSecret
     return headers;
 }
