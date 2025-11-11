@@ -22,12 +22,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    console.log('credentials',credentials);
     try {
       setIsLoading(true);
       const data = await authService.login(credentials); // Call your backend API
       delete(data?.responseData?.userProfile?.password);
-      // setLoginDetailInSession(userData);
       localStorage.setItem('authToken', JSON.stringify(data?.responseData?.accessToken));
       localStorage.setItem('userData', JSON.stringify(data?.responseData?.userProfile));      
       setIsAuthenticated(true);

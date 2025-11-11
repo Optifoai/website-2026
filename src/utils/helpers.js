@@ -1,26 +1,43 @@
 
 import React from 'react'
-import { toast } from 'react-toastify'
+// import { toast } from 'react-toastify'
+import STORAGE_KEY from '../constants/storageKey'
+// import { ToastContainer, toast } from 'react-toastify';
 
+
+export const EMPTY_ARRAY = Object.freeze([])
+export const EMPTY_OBJECT = Object.freeze({})
 
 export const setLoginDetailInSession = (loggedInUserData) => {
   const userData = [
     {
       key: STORAGE_KEY.ACCESS_TOKEN,
-      value: loggedInUserData?.AccessToken,
-    },
+      value: loggedInUserData?.accessToken,
+    },    
     {
-      key: STORAGE_KEY.REFRESH_TOKEN,
-      value: loggedInUserData?.RefreshToken,
-    },
-    {
-      key: STORAGE_KEY.ID_TOKEN,
-      value: loggedInUserData?.IdToken,
-    },
-    {
-      key: STORAGE_KEY.TOKEN_TYPE,
-      value: loggedInUserData?.TokenType,
+      key: STORAGE_KEY.USER_DETAILS,
+      value: loggedInUserData?.userProfile,
     },
   ]
   setLocalStorage(userData)
 }
+
+const setLocalStorage = (userData) => {
+  userData.map((data) => {
+    localStorage.setItem(data.key, JSON.stringify(data.value))
+  })
+}
+
+// export const notify = (type, message, heading = '') => {
+//   const messagePass = (<div><h4>{heading}</h4><p>{message}</p></div>);
+//   toast.dismiss()
+//   if (type === 'error') {
+//     toast.error(messagePass, {
+//       position: toast.POSITION.TOP_RIGHT
+//     })
+//   } else if (type === 'success') {
+//     toast.success(messagePass, {
+//       position: toast.POSITION.TOP_RIGHT
+//     })
+//   }
+// }

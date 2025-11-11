@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { notify } from '../utils/helper'
-import { getConfigDetails } from './config'
+// import { notify } from '../utils/helpers'
+// import { getConfigDetails } from './config'
 // import { getConfigDetails } from '../redux/config/Config'
 const axiosClient = axios.create()
 const partner = window.location.toString().split('/')[3]
@@ -11,7 +11,7 @@ axiosClient.interceptors.request.use(
 		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
         const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
 		request.headers['Content-Type'] = 'application/json'
-        request.headers['Authorization'] = `Basic ${authorization}`
+        request.headers['Authorization'] = `${authorization}`
 		request.headers['accessToken'] = accessToken ? accessToken: ''
 		return request
 	},
@@ -29,7 +29,7 @@ axiosClient.interceptors.response.use(
 			return response?.data
 		}else if(response?.status == 401){
 			if(userData?.access_token && userData?.access_token != null){
-				notify('error', 'Session Expired, Please Login Again')
+				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()
 				sessionStorage.clear()
 				setTimeout(() => {
@@ -49,7 +49,7 @@ axiosClient.interceptors.response.use(
 
 		if(error?.response?.status == 401){
 			if(userData?.access_token && userData?.access_token != null){
-				notify('error', 'Session Expired, Please Login Again')
+				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()
 				sessionStorage.clear()
 				setTimeout(() => {

@@ -6,15 +6,10 @@ import Spinner from '../hooks/Spinner';
 
 export default function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
-
+  const accessToken=localStorage.getItem('authToken')
   if (isLoading) {
     return <Spinner />;
   }
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  return isAuthenticated || accessToken ? children : <Navigate to="/login" replace />;
 
-//   if (!isAuthenticated) {
-//     return <Navigate to="/login" replace />;
-//   }
-
-//   return children;
 }
