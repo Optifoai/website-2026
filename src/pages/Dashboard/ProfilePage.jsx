@@ -3,15 +3,15 @@ import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {  EMPTY_OBJECT } from '../../utils/helpers';
+import {  EMPTY_OBJECT ,notify} from '../../utils/helpers';
 import {getUserProfile} from '../../Redux/Actions/loginAction'
 import { useEffect,useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 function ProfilePage(props) {
   const { user } = useAuth();
   const { dispatch,navigate ,isUserLogin,loader} = props  
   const [userData, setUserData] = useState(EMPTY_OBJECT);
-
     useEffect(() => {
         if (!isUserLogin) {
             navigate('/')
@@ -20,8 +20,9 @@ function ProfilePage(props) {
             if (res) {           
                 localStorage.setItem('userData', JSON.stringify(res))
                 setUserData(res)
-                // notify('success', 'User Login Successfully')
+                notify('success','User data fetched successfully')
             } else {
+                notify('error','User data fetched successfully')
                 localStorage.setItem('userData', '{}')
             }
         })
@@ -44,6 +45,7 @@ function ProfilePage(props) {
       <p><strong>Username:</strong> {userData?.fullName || 'Not available'}</p>
       <p><strong>Email:</strong> {userData?.email || 'Not available'}</p>
       <br />
+      <ToastContainer />
       <Link to="/dashboard">Back to Dashboard</Link>
     </div>
   );

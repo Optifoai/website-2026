@@ -29,7 +29,6 @@ const loginReducer = (state = INITIAL_STATE, action) => {
 				data: action.data.responseData,
 				isAuthenticated: true,
 				isUserLogin: true,
-				isAuthenticated: true,
 				hasError: false,
 				errorMessage: ''
 			}
@@ -52,6 +51,8 @@ const loginReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				loader: false,
 				userDetails: action.data,
+				isAuthenticated: true,
+				isUserLogin: true,
 				hasError: false,
 				errorMessage: ''
 			}

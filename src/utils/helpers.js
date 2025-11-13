@@ -2,7 +2,7 @@
 import React from 'react'
 // import { toast } from 'react-toastify'
 import STORAGE_KEY from '../constants/storageKey'
-// import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
 export const EMPTY_ARRAY = Object.freeze([])
@@ -13,7 +13,7 @@ export const setLoginDetailInSession = (loggedInUserData) => {
     {
       key: STORAGE_KEY.ACCESS_TOKEN,
       value: loggedInUserData?.accessToken,
-    },    
+    },
     {
       key: STORAGE_KEY.USER_DETAILS,
       value: loggedInUserData?.userProfile,
@@ -26,6 +26,34 @@ const setLocalStorage = (userData) => {
   userData.map((data) => {
     localStorage.setItem(data.key, JSON.stringify(data.value))
   })
+}
+
+export const notify = (type, message, heading = '') => {
+  if (type === 'success') {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  } else if (type === 'error') {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  }
 }
 
 // export const notify = (type, message, heading = '') => {
