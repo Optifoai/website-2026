@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import InputField from '../../components/common/InputField/InputField';
 import Button from '../../components/common/Button/Button';
@@ -11,7 +11,7 @@ function LoginPage(props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login } = useAuth();
- const accessToken = localStorage.getItem('authToken'); 
+
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   setError('');
@@ -22,12 +22,6 @@ function LoginPage(props) {
   //     setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
   //   }
   // };
-  useEffect(() => {   
-     
-     if (accessToken) {
-             props.navigate('/dashboard')
-        } 
-  }, [accessToken])
 
   const handleSubmit = (e) => {
     const { dispatch,navigate } = props
@@ -47,43 +41,33 @@ function LoginPage(props) {
   };
 
   return (
-    <div class="login-container">
-    <div class="login-left"></div>
-    <div class="login-right">
-      <div class="login-card">
-        <div class="login-logo mb-3">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo" />
-          <h4 class="fw-bold mt-2">OPTIFO.AI</h4>
-          <p class="text-muted small">Optimize your online showroom</p>
-        </div>
-
-        <h5 class="login-title">Login In To Your Account</h5>
-        <p class="login-subtext">
-          Effortlessly login, access your account, and enjoy seamless convenience!
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div class="mb-3">
-            <input type="email" class="form-control" placeholder="Email Address" 
+    <div className="auth-page">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        {error && <p className="error-message">{error}</p>}
+        <InputField
+          label="Email"
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required />
-          </div>
-          <div class="mb-3">
-            <input type="password" class="form-control" placeholder="Password" value={password}
+          required
+        />
+        <InputField
+          label="Password"
+          type="password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required />
-          </div>        
-          <button type="submit" class="btn btn-login">LOGIN</button>
-        </form>
-
-        <a href="#" class="forgot-password">Forgot Your Password?</a>
-        <p class="register-link">
-          Don't have an account? <a href="#">Register here</a>
-        </p>
-      </div>
+          required
+        />
+        <Button type="submit">Login</Button>
+      </form>
+      <p>
+        Don't have an account? <Link to="/signup">Sign Up</Link>
+      </p>
+      <p>
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </p>
     </div>
-  </div>
   );
 }
 

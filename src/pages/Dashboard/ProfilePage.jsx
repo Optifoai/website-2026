@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import {  EMPTY_OBJECT ,notify} from '../../utils/helpers';
 import {getUserProfile} from '../../Redux/Actions/loginAction'
 import { useEffect,useState } from 'react';
@@ -13,9 +13,9 @@ function ProfilePage(props) {
   const { dispatch,navigate ,isUserLogin,loader} = props  
   const [userData, setUserData] = useState(EMPTY_OBJECT);
     useEffect(() => {
-        if (!isUserLogin) {
-            navigate('/')
-        }
+        // if (!isUserLogin) {
+        //     navigate('/')
+        // }
         dispatch(getUserProfile()).then((res) => {
             if (res) {           
                 localStorage.setItem('userData', JSON.stringify(res))

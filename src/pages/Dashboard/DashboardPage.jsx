@@ -45,6 +45,7 @@ DashboardPage.defaulProps = {
 }
 
 function mapStateToProps({ login }) {
+  console.log('dashboard login',login)
     return {
         isUserLogin: login?.isUserLogin,
         userDetails: login?.userDetails,
