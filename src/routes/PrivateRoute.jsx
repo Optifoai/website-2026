@@ -3,18 +3,25 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 // import { Spinner } from '../components/common/Spinner';
 import Spinner from '../hooks/Spinner';
+import Header from '../components/layout/Header/Header';
+import SideBar from '../components/layout/Header/SideBar';
 
 export default function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
-
+  // const accessToken=localStorage.getItem('authToken')
   if (isLoading) {
     return <Spinner />;
   }
-  return isAuthenticated ? children : <Navigate to="/" replace />;
+  return isAuthenticated ?
 
-//   if (!isAuthenticated) {
-//     return <Navigate to="/login" replace />;
-//   }
+     <div class="app"> 
+     <SideBar/>
+        <main class="main">
+         <Header/>
+     {children} 
+      </main>
+    </div> :
+   
+   <Navigate to="/login" replace />;
 
-//   return children;
 }

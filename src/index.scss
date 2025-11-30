@@ -1,0 +1,398 @@
+@import '../src/assets/styles/style.scss';
+
+
+.searchWrapper {
+    .chip {
+        background-color: var(--bs-primary) !important;
+
+    }
+}
+
+.tableBlockSM {
+    @media screen and (max-width:560px) {
+        td {
+            display: block !important;
+            width: 100% !important;
+        }
+    }
+}
+
+.multiSelectContainer li {
+    padding: 5px !important;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: var(--bs-primary) !important;
+    }
+
+    &.highlightOption {
+        background-color: transparent !important;
+        color: #000;
+
+        &:hover {
+            background-color: var(--bs-primary) !important;
+
+        }
+    }
+
+    background-color: none !important;
+
+    input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        margin: 0;
+        margin-right: 5px;
+
+
+
+    }
+}
+
+
+.border-dashed {
+    &.border-bottom {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px dashed #999 !important;
+    }
+
+    border-style:dashed;
+}
+
+@media only screen and (min-width: 200px) and (max-width: 767px) {
+    .tableLicensePlate {
+        min-width: 7rem
+    }
+}
+
+
+//  stepper
+
+.stepper {
+    --steper-width: 30px;
+    --steper-bg-color: #ededed;
+
+    &::before {
+        content: "";
+        width: 100%;
+        position: absolute;
+        height: 1px;
+        background: #ddd;
+    }
+
+    @extend .d-flex;
+    @extend .my-3;
+    @extend .position-relative;
+    @extend .align-items-center;
+    @extend .justify-content-between;
+
+    .stepper-line {
+        @extend .position-absolute;
+        z-index: 1;
+        max-width: 100%;
+        height: 1px;
+        height: 2px;
+        background-color: var(--bs-primary);
+
+
+    }
+
+    .stepper-circle {
+        // cursor: pointer;
+        width: var(--steper-width);
+        height: var(--steper-width);
+        font-weight: light;
+
+        font-size: $font-size-base ;
+        z-index: 10;
+
+        background: #ddd;
+        border-radius: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .stepper-title {
+            position: absolute;
+            padding-top: 5px;
+            font-size: 12px !important;
+
+            @include media-breakpoint-down(sm) {
+                max-width: 80px;
+                text-wrap: wrap !important;
+                ;
+                text-align: center;
+            }
+
+            color: #444;
+            text-wrap: nowrap !important;
+            font-weight: bold !important;
+            top: var(--steper-width);
+
+        }
+
+        &.active {
+            box-shadow: inset 0 0 0px 2px var(--bs-primary);
+            // background-color: var(--bs-primary);
+            color: var(--bs-primary);
+        }
+
+        &.done {
+            background-color: var(--bs-success);
+            color: white;
+        }
+
+        &.draft {
+            background-color: var(--bs-warning);
+            color: white;
+        }
+
+        &.error {
+            background-color: var(--bs-danger);
+            color: white;
+        }
+    }
+}
+
+
+
+//  progressbar
+
+
+
+
+
+// .bg-coverBox{
+//     height: calc(100vh - 70px);
+// }
+
+
+
+
+/* width */
+
+
+.react-datepicker-wrapper {
+    width: 100%;
+
+}
+
+.react-datepicker__day.react-datepicker__day--keyboard-selected {
+    background: none;
+    color: black;
+}
+
+.bannerTop {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    min-height: 180px;
+    background-position: center center;
+    background-size: cover;
+
+    h1 {
+        font-size: 70px;
+        margin: 0;
+        text-transform: uppercase;
+        font-weight: bold;
+
+        @media screen and (max-width: 660px) {
+            font-size: 40px;
+            word-break: break-all;
+        }
+    }
+}
+
+.receiptCard {
+    border-radius: 20px !important;
+    border: 0 !important;
+    position: relative !important;
+    font-size: 1em !important;
+}
+
+.receiptCard .card-header {
+    background-color: transparent;
+    border-bottom: 2px dashed #ddd;
+    padding: 20px 40px;
+}
+
+.receiptCard .card-body {
+    padding: 20px 40px;
+}
+
+.receiptCard .card-footer {
+    padding: 20px 40px;
+    border: none;
+    border-top: 3px solid #eee;
+}
+
+.receiptCard::after {
+
+    box-shadow: inset 6px 0 6px -1px #ddd;
+    clip-path: polygon(0 0, 80% 0, 80% 100%, 0% 100%);
+    content: "";
+    position: absolute;
+    width: 50px;
+    background: #fff;
+    border-radius: 50px;
+    top: 50px;
+    right: -25px;
+    height: 50px;
+}
+
+
+.receiptCard::before {
+    content: "";
+    position: absolute;
+    width: 50px;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: inset -6px 0 6px -1px #ddd;
+    clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 800%);
+    top: 50px;
+    left: -25px;
+    height: 50px;
+}
+
+.receiptCard .card-footer {
+    border-radius: 0 0 20px 20px;
+}
+
+.receiptCard h4,
+.receiptCard .fa {
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 767px) {
+
+    .receiptCard .card-header,
+    .receiptCard .card-footer {
+        padding: 14px 22px;
+    }
+
+    .receiptCard .card-body {
+        padding: 10px 22px;
+    }
+
+    .receiptCard::after,
+    .receiptCard::before {
+        box-shadow: inset 4px 0 6px -1px #ddd;
+        height: 35px;
+        width: 35px;
+        top: 42px;
+    }
+
+    .receiptCard::before {
+        box-shadow: inset -4px 0 6px -1px #ddd;
+    }
+}
+
+.no-view.receiptCard::after,
+.no-view.receiptCard::before,
+.no-view .card-header,
+.no-view .card-body {
+    display: none !important;
+}
+
+.no-view .card-footer {
+    border: 0;
+    border-radius: 20px;
+}
+
+.no-ticket-view .receiptCard {
+    border: solid 1px #ccc;
+}
+
+.no-ticket-view .receiptCard::before,
+.no-ticket-view .receiptCard::after {
+    display: none;
+}
+
+.no-ticket-view .receiptCard .card-footer {
+    border: 0;
+    background-color: #fff;
+}
+
+.no-ticket-view .card-header p.card-title {
+    margin: 0;
+}
+
+.no-ticket-view .card-body {
+    padding-bottom: 0;
+}
+
+.no-ticket-view .card-body,
+.no-ticket-view .card-footer,
+.no-ticket-view .card-header {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.no-ticket-view .card-header img {
+    display: none;
+}
+
+.messageCss {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+.min-h-box {
+    &.noform {
+        min-height: calc(100vh - 134px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        h4.titleHeading {
+            min-width: 400px;
+        }
+    }
+}
+
+
+.network-warning {
+    position: fixed !important;
+    z-index: 10000000 !important;
+    bottom: 0 !important;
+    background-color: #fff !important;
+    color: red !important;
+    padding: 10px !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.crossbtn{
+    position: absolute !important;
+    top: 5px;
+    right: 40px;
+    font-weight: 600 !important;
+
+}
+ul {
+	&.availableSections {
+		padding: 0;
+		margin: 0;
+		display: flex;
+		list-style: none;
+		gap: 0.5rem;
+		li {
+			width: 20px;
+			height: 20px;
+			display: block;
+			border: 1px solid #ddd;
+			&.active {
+				background: var(--bs-success);
+			}
+			&.inactive {
+				background: var(--bs-light);
+			}
+		}
+	}
+}
