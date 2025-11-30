@@ -6,7 +6,7 @@ import PropTypes, { func } from 'prop-types';
 import {  EMPTY_OBJECT ,notify} from '../../utils/helpers';
 import {getUserProfile} from '../../Redux/Actions/loginAction'
 import { useEffect,useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 function ProfilePage(props) {
   const { user } = useAuth();
@@ -45,7 +45,6 @@ function ProfilePage(props) {
       <p><strong>Username:</strong> {userData?.fullName || 'Not available'}</p>
       <p><strong>Email:</strong> {userData?.email || 'Not available'}</p>
       <br />
-      <ToastContainer />
       <Link to="/dashboard">Back to Dashboard</Link>
     </div>
   );

@@ -17,6 +17,19 @@ export const userLogin = (creds) => (dispatch) => {
   })
 }
 
+export const userSignup = (creds) => (dispatch) => {
+  dispatch({ type: CONSTANTS.LOGIN_REQUEST })
+  return postRequest(APICONFIG.getUserSignupUrl, creds).then((res) => {
+    let resObject = { ...creds, ...res }
+    dispatch({ type: CONSTANTS.LOGIN_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = { ...creds, ...err }
+    dispatch({ type: CONSTANTS.LOGIN_FAILURE })
+    return err
+  })
+}
+
 export const getUserProfile = () => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_USER_PROFILE_REQUEST })
   return getRequest(APICONFIG.getUserProfileUrl).then((res) => {
@@ -25,6 +38,19 @@ export const getUserProfile = () => (dispatch) => {
   }).catch((err) => {
     let errObject = err 
     dispatch({ type: CONSTANTS.GET_USER_PROFILE_FAILURE })
+  })
+}
+
+export const updateUserProfile = (creds) => (dispatch) => {
+  dispatch({ type: CONSTANTS.LOGIN_REQUEST })
+  return postRequest(APICONFIG.getUserSignupUrl, creds).then((res) => {
+    let resObject = { ...creds, ...res }
+    dispatch({ type: CONSTANTS.LOGIN_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = { ...creds, ...err }
+    dispatch({ type: CONSTANTS.LOGIN_FAILURE })
+    return err
   })
 }
 

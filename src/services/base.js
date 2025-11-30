@@ -10,7 +10,12 @@ axiosClient.interceptors.request.use(
 	(request) => {
 		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
         const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
-		request.headers['Content-Type'] = 'application/json'
+		  // If payload is FormData, don't set content type
+			if (request.data instanceof FormData) {
+			delete request.headers['Content-Type'];  
+			} else {
+			request.headers['Content-Type'] = 'application/json';
+			}
         request.headers['Authorization'] = `${authorization}`
 		request.headers['accessToken'] = accessToken ? accessToken: ''
 		return request
@@ -69,7 +74,7 @@ axiosClient.interceptors.response.use(
 // axiosClient.defaults.baseURL ="";
 
 axiosClient.defaults.headers = {
-	'Content-Type': 'application/json',
+	// 'Content-Type': 'application/json',
 	Accept: 'application/json',
 }
 

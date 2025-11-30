@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import './index.css';
 import configureStore from './Redux/middleware/configureStore'
 import { Provider } from 'react-redux';
+import './i18n'; 
 
 const store = configureStore();
 ReactDOM.createRoot(document.getElementById('root')).render(

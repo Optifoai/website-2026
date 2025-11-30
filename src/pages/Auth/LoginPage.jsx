@@ -1,89 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import React, { useEffect, useReducer, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '../../hooks/useAuth';
-import InputField from '../../components/common/InputField/InputField';
-import Button from '../../components/common/Button/Button';
-import { userLogin } from '../../Redux/Actions/loginAction';
-import { setLoginDetailInSession } from '../../utils/helpers';
+import { notify } from '../../utils/helpers';;
+import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 function LoginPage(props) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { login } = useAuth();
- const accessToken = localStorage.getItem('authToken'); 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError('');
-  //   try {
-  //     await login({ email, password });
-  //     navigate('/dashboard'); // Redirect to dashboard on successful login
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
-  //   }
-  // };
-  useEffect(() => {   
-     
-     if (accessToken) {
-             props.navigate('/dashboard')
-        } 
-  }, [accessToken])
+  const { navigate, Link } = props
+  const { login, isAuthenticated } = useAuth();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
 
-  const handleSubmit = (e) => {
-    const { dispatch,navigate } = props
-    e.preventDefault();
-    setError('');
-    let loginPayload = {email: email,password: password}   
-      dispatch(userLogin(loginPayload)).then((res) => {
-        let userData=res?.responseData
-        delete(userData?.userProfile?.password);
-        setLoginDetailInSession(userData);
-        navigate('/dashboard');
-      }).catch((err) => {
-        console.log(err);
-      })
-      // Redirect to dashboard on successful login
-
+  const onSubmit = async (data) => {
+    try {
+      await login(data);
+      // navigate('/dashboard'); // Redirect to dashboard on successful login
+    } catch (err) {
+      notify('error', err.response?.data?.message ? err.response?.data?.message : 'Login failed. Please check your credentials.')
+    }
   };
+
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard')
+    }
+  }, [isAuthenticated])
+
+  const [userInput, setUserInput] = useReducer((state, newState) => ({ ...state, ...newState }),
+    {
+      showPassword: false,
+    }
+  );
+
 
   return (
     <div class="login-container">
-    <div class="login-left"></div>
-    <div class="login-right">
-      <div class="login-card">
-        <div class="login-logo mb-3">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo" />
-          <h4 class="fw-bold mt-2">OPTIFO.AI</h4>
-          <p class="text-muted small">Optimize your online showroom</p>
-        </div>
+      <div class="login-left">
 
-        <h5 class="login-title">Login In To Your Account</h5>
-        <p class="login-subtext">
-          Effortlessly login, access your account, and enjoy seamless convenience!
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <div class="mb-3">
-            <input type="email" class="form-control" placeholder="Email Address" 
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required />
+      </div>
+      <div class="login-right">
+        <div class="login-card">
+          <div class="login-logo">
+            <div className='logo-blk'>
+              <img src="optifo-logo.png" alt="Logo" />
+            </div>
           </div>
-          <div class="mb-3">
-            <input type="password" class="form-control" placeholder="Password" value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required />
-          </div>        
-          <button type="submit" class="btn btn-login">LOGIN</button>
-        </form>
 
-        <a href="#" class="forgot-password">Forgot Your Password?</a>
-        <p class="register-link">
-          Don't have an account? <a href="#">Register here</a>
-        </p>
+          <hr className='divider' />
+
+          <h5 class="login-title">{t('loginTitle')}</h5>
+          <p class="login-subtext">{t('loginSubtitle')}</p>
+          <div className="form-field">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div class="f-group mb-3">
+                <label className='form-label'>{t('emailAddressLabel')}</label>
+                <input type="email" class="form-control"
+                  {...register("email", { required: "Email is required" })} />
+                {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>}
+              </div>
+              <div class="f-group mb-3">
+                <label className='form-label'>{t('passwordLabel')}</label>
+                <input type={userInput.showPassword ? "text" : "password"} class="form-control"
+                  {...register("password", { required: "Password is required" })} />
+                {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>}
+                <img className='eye-icon close' src='eye-close.png' onClick={() => setUserInput({ ...userInput, showPassword: !userInput.showPassword })} />
+                {/* <img className='eye-icon open' src='eye-open.png'/> */}
+              </div>
+              <div className="f-group">
+                <button type="submit" class="btn btn-login">{t('loginButton')}</button>
+              </div>
+            </form>
+
+            <Link to="/forgot-password" class="forgot-password">{t('forgotPasswordLink')}</Link>
+            <p className="register-link mb-5">
+              <Trans i18nKey="dontHaveAccount">
+                Don't have an account? <Link to="/signup">Sign Up</Link> here
+              </Trans>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 

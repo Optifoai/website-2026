@@ -27,6 +27,7 @@ const loginReducer = (state = INITIAL_STATE, action) => {
 				...state,
 				loader: false,
 				data: action.data.responseData,
+				userDetails: action.data.responseData,
 				isAuthenticated: true,
 				isUserLogin: true,
 				hasError: false,

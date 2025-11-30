@@ -1,4 +1,5 @@
 @import '../src/assets/styles/style.css';
+@import '../src/assets/styles/global.css'
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
