@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'bootstrap';
 
-function CommonModel({ show, onClose, children }) {
+function CommonModel({ show, onClose,size, children }) {
     const modalRef = useRef();
 
     useEffect(() => {
@@ -27,7 +27,7 @@ function CommonModel({ show, onClose, children }) {
     }, [show, onClose]);
 
     return (
-        <div className="modal fade" ref={modalRef} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden={!show}>
+        <div className={`modal fade ${size ? size : ""}`} ref={modalRef} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden={!show}>
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-body custom-modal-body">

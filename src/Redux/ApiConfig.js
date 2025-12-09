@@ -11,13 +11,18 @@ export const APICONFIG = {
 	getAllCarImageDownloadUrl: `${baseURL}cars/downloadCars`,
 	getCarDeleteAPIUrl: `${baseURL}cars/delete`,
 	getAllCarVideoDownloadUrl: `${baseURL}cars/downloadCarVideo`,
+    CAR_UPDATE: `${baseURL}cars/update`,
+    USER_PROFILE_INFO_UPDATE: `${baseURL}user/update`,
+    SET_BACKGROUND: `${baseURL}backgrounds/setBackground`,
+    DELETE_BACKGROUND: `${baseURL}backgrounds/deleteOne`,
+    UPLOAD_BACKGROUND: `${baseURL}backgrounds/upload`,
 	
     LOGOUT: `${baseURL}user/logout`,
     
     
     USER_STRIPE_PRICE: `${baseURL}user/stripePrices`,
     USER_CREDIT_PRICE: `${baseURL}credit/getCreditPlans`,
-    USER_PROFILE_INFO_UPDATE: `${baseURL}user/update`,
+
     CREATE_STRIPE_CUSTOMER: `${baseURL}user/createStripeCustomer`,
     GET_INVOICE: `${baseURL}/user/getSingleCharges`,
     UPDATE_SUBSCRIPTION: `${baseURL}user/updateSubscription`,
@@ -32,10 +37,10 @@ export const APICONFIG = {
     UPDATE_COUPON: `${baseURL}user/updateUserCoupon`,
     UPDATE_USER_PACK_CREDIT: `${baseURL}user/updatePackUserCredits`,
     UPDATE_CARD: `${baseURL}user/updateCard`,
-    DELETE_BACKGROUND: `${baseURL}backgrounds/deleteOne`,
-    UPLOAD_BACKGROUND: `${baseURL}backgrounds/upload`,
+    
+  
     GET_CARD: `${baseURL}user/getCard`,
-    SET_BACKGROUND: `${baseURL}backgrounds/setBackground`,
+    
     USER_INVOICES: `${baseURL}user/listInvoices`,
     USER_CHARGES_INVOICES: `${baseURL}user/listCharges`,
     CAR_BRANDS: `${baseURL}cars/carBrands`,
@@ -43,7 +48,7 @@ export const APICONFIG = {
     GET_COUPON_BY_ID: `${baseURL}coupons/getCouponById`,
     GET_ADDRESS: `${baseURL}address/getAddress`,
     GET_CURRENCY: `${baseURL}currency/getCurrency`,
-    CAR_UPDATE: `${baseURL}cars/update`,
+   
     CAR_IMAGES_DELETE: `${baseURL}cars/deleteImages`,
     USER_DELETE_ACCOUNT: `${baseURL}user/delete`,
     REMOVE_CAR_IMAGE_BACKGROUND: `${baseURL}cars/uploadImageWithBgRemoval`,

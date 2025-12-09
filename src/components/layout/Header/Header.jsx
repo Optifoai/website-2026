@@ -9,10 +9,10 @@ function Header() {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+//   const handleLogout = () => {
+//     logout();
+//     navigate('/login');
+//   };
 
   return (
       <div class="topbar">

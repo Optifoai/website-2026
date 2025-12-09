@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth'; // API calls
-import { userLogin, userSignup } from '../Redux/Actions/loginAction';
+import { getUserProfile, userLogin, userSignup } from '../Redux/Actions/loginAction';
 import { notify, setLoginDetailInSession } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }) => {
   const login = (credentials) => {  
       setIsLoading(true);
       dispatch(userLogin(credentials)).then((res) => {
-        console.log('res',res)
         if(res?.statusCode=='1'){
           let userData = res?.responseData
           delete (userData?.userProfile?.password);
@@ -58,6 +57,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           setUser(userData); // Store user data
           setIsLoading(false);  
+          getUserData()
           return true                
         }else{
           notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
@@ -83,7 +83,6 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       // const data = await authService.signup(userData); // Call your backend API
       dispatch(userSignup(userData)).then((res) => {
-        console.log('res',res)
         if(res?.statusCode=='1'){
             let userData = res?.responseData
             delete (userData?.userProfile?.password);
@@ -91,10 +90,11 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             setUser(data.user);
             setIsLoading(false);
+            getUserData()
             notify('success', res.response?.data?.message ? res.response?.data?.message : 'Signup Successful.')
             navigate('/verify');
             return true;
-        }else{    console.log('res 3',res,res?.error?.responseMessage)       
+        }else{       
           setIsAuthenticated(false);
           setIsLoading(false);
           notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
@@ -111,7 +111,6 @@ export const AuthProvider = ({ children }) => {
 
      
     } catch (error) {
-      console.error('Signup failed:', error);
       setIsAuthenticated(false);
       setUser(null);
       setIsLoading(false);
@@ -164,6 +163,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getUserData = () => {
+    dispatch(getUserProfile())
+      .then((res) => {
+        if (res?.statusCode == '1') {
+          let userData = res?.responseData;
+          delete userData?.userProfile?.password;
+          setUser(userData); // Store user data
+        } else {
+          notify('error', res?.error?.responseMessage || 'Something went wrong!');
+        }
+      })
+      .catch((err) => {
+      //   setLoginDetailInSession({});
+        notify('error', err?.message || 'Something went wrong!');
+      });
+  };
+
+
+
   const value = {
     isAuthenticated,
     user,
@@ -172,6 +190,7 @@ export const AuthProvider = ({ children }) => {
     signup,
     logout,
     forgotPassword,
+    getUserData,
   };
 
   return (

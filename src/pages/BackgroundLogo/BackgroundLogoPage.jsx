@@ -1,64 +1,38 @@
-import React from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { EMPTY_OBJECT } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT } from '../../utils/helpers';
+import { useAuth } from '../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
+import BackgroundPage from './BackgroundPage';
+import LogoPage from './logoPage';
 
 function BackgroundLogoPage(props) {
+const { dispatch, userDetails, navigate } = props;
+const { user } = useAuth();
+const { t, i18n } = useTranslation();
+const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
+  { 
+    logo:EMPTY_ARRAY,
+    background:EMPTY_ARRAY,
+  }
+);
 
+useEffect(()=>{
+  setFormdata({background:userDetails?.backgroundsUploaded ? userDetails?.backgroundsUploaded : EMPTY_ARRAY})
+  setFormdata({logo:userDetails?.logosUploaded ? userDetails?.logosUploaded : EMPTY_ARRAY})
+},[userDetails])
+
+
+
+  const { background, logo } = formdata;
   return (
     <>
       <div class="bg-gradient">
         <h3 className='heading-title'>Background</h3>
         <p className='heading-subtitle'>Select the background type you want to apply on all your exterior images.</p>
       </div>
-      <div className='bg-logo-blk'>
-        <div class="card active">
-          <img src="bg1.png" alt="Background 1" />
-          <div class="bottom-row">
-
-            <label class="radio-item">
-              <input type="radio" name="lang" />
-              <span class="custom-radio"></span>
-              Active
-            </label>
-
-          </div>
-        </div>
-
-
-        <div class="card">
-          <img src="bg2.png" alt="Background 2" />
-          <div class="bottom-row">
-            <label class="radio-item">
-              <input type="radio" name="lang" />
-              <span class="custom-radio"></span>
-
-            </label>
-            <button class="delete-btn"><img src='delete-icon.svg' /></button>
-          </div>
-        </div>
-
-
-        <div class="card">
-          <img src="bg3.png" alt="Background 3" />
-          <div class="bottom-row">
-            <label class="radio-item">
-              <input type="radio" name="lang" />
-              <span class="custom-radio"></span>
-
-            </label>
-            <button class="delete-btn"><img src='delete-icon.svg' /></button>
-          </div>
-        </div>
-
-
-        <div class="card add-card">
-          <div class="add-content">
-            <div class="add-icon"><img src='add-icon.svg' /></div>
-            <p>Add Background</p>
-          </div>
-        </div>
-      </div>
+        <BackgroundPage background={background} />
 
       <div className='divider-1'></div>
 
@@ -66,54 +40,7 @@ function BackgroundLogoPage(props) {
         <h3 className='heading-title'>Logo</h3>
         <p className='heading-subtitle'>Select the Logo you want to apply on all your exterior images.</p>
       </div>
-        <div className='bg-logo-blk'>
-        <div class="card active logo">
-          <img src="logo1.png" alt="Logo 1" />
-          <div class="bottom-row">
-
-            <label class="radio-item">
-              <input type="radio" name="logo" />
-              <span class="custom-radio"></span>
-              Active
-            </label>
-
-          </div>
-        </div>
-
-
-        <div class="card logo">
-          <img src="logo2.png" alt="Logo 2" />
-          <div class="bottom-row">
-            <label class="radio-item">
-              <input type="radio" name="logo" />
-              <span class="custom-radio"></span>
-
-            </label>
-            <button class="delete-btn"><img src='delete-icon.svg' /></button>
-          </div>
-        </div>
-
-
-        <div class="card logo">
-          <img src="logo3.png" alt="Logo 3" />
-          <div class="bottom-row">
-            <label class="radio-item">
-              <input type="radio" name="logo" />
-              <span class="custom-radio"></span>
-
-            </label>
-            <button class="delete-btn"><img src='delete-icon.svg' /></button>
-          </div>
-        </div>
-
-
-        <div class="card add-card">
-          <div class="add-content">
-            <div class="add-icon"><img src='add-icon.svg' /></div>
-            <p>Add Logo</p>
-          </div>
-        </div>
-      </div>
+      <LogoPage logo={logo} />
     </>
   );
 }

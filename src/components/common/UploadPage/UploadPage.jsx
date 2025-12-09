@@ -1,0 +1,201 @@
+import React, { useEffect, useReducer, useState } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Dropzone from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
+import { UplpadFileIcon } from '../model/svg.jsx';
+import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../../utils/helpers';
+
+function UploadPage(props) {
+const {formdata,UploadDone,setFormdata,onClose,acceptfile,fileNote,fileIntructions,isValidDimensions,width,height,fileSize} = props;
+console.log('props',props)
+const { t, i18n } = useTranslation();
+
+ function imageDimensions(file) {
+       return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                const {naturalWidth: width, naturalHeight: height} = img;
+                resolve({width, height});
+            };
+            img.onerror = () => {
+                reject(`${t('problem_with_image')}`);
+            };
+            img.src = URL.createObjectURL(file);
+        });
+    }
+
+ async function handleUploadImage(droppedFile) {
+        let reader = new FileReader();
+        let img = new Image(droppedFile);
+        let file = droppedFile[0];
+        let idxDot = file.name.lastIndexOf('.') + 1;
+        let extFile = file.name.substr(idxDot, file.name.length).toLowerCase();
+        // if (extFile == 'jpg' || extFile == 'jpeg' || extFile == 'png') {
+        if (acceptfile.includes(extFile )) {
+
+            try {
+                const dimensions = await imageDimensions(file);
+                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || !isValidDimensions ) {
+                    reader.addEventListener(
+                        'load',
+                        () => {
+                            setFormdata({
+                                ...formdata,
+                                uploadImageUrl: reader.result,
+                                challengeImageErrorMsg: '',
+                                docErrorMsg: '',
+                                UploadSizeError: false,
+                                ImageExtError: false,
+                            });
+                        },
+                        false
+                    );
+                    if (file) {
+                        reader.readAsDataURL(file);                       
+                        // console.log('upload file',file)
+                        setFormdata({uploadedfile: file})
+                    }
+                } else {
+                    setFormdata({
+                        ...formdata,
+                        uploadImageUrl: '',
+                        challengeImageErrorMsg: '',
+                        docErrorMsg: '',
+                        UploadSizeError: true,
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            setFormdata({
+                ...formdata,
+                uploadImageUrl: '',
+                challengeImageErrorMsg: '',
+                docErrorMsg: '',
+                ImageExtError: true,
+            });
+        }
+    }
+
+      function AgainUpload() {
+        setFormdata({
+            ...formdata,
+            uploadImageUrl: '',
+            challengeImageErrorMsg: '',
+            docErrorMsg: '',
+            UploadSizeError: false,
+
+        });
+    }
+
+    const closeModel=()=>{       
+         setFormdata({
+            ...formdata,
+            uploadImageUrl: '',
+            challengeImageErrorMsg: '',
+            docErrorMsg: '',
+            UploadSizeError: false,
+        });
+         onClose()
+}
+
+    
+// console.log('formdata uploadedfile 2',formdata.uploadedfile)
+
+    return (
+        <>
+            <section class="card-block" aria-label="Preview Card">
+                <Dropzone
+                    onDrop={(acceptedFiles) => handleUploadImage(acceptedFiles)}
+                    maxSize={fileSize ? parseInt(fileSize, 10) : undefined}
+                >
+                    {({ getRootProps, getInputProps }) => (
+                        <>
+                            {formdata?.uploadImageUrl ? (
+                                <div>
+                                    <img src={formdata?.uploadImageUrl} alt="" className="w-100" />
+                                    <div className="text-right mt-2">
+                                        <button  className="btn btn-login" onClick={AgainUpload}>
+                                            {t('change_img')}
+                                        </button>
+                                        <button className="btn btn-login" onClick={UploadDone}>
+                                            {t('ok_text')}
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="upload_file_main">
+                                    <div className="upload_file h-100" {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <div
+                                            className="d-flex align-items-center justify-content-center h-100 text-center">
+                                            <div>
+                                                <UplpadFileIcon />
+                                                <p className="mt-2 mb-2">
+                                                    {t('drag_drop')}{' '}
+                                                    <strong className="text-decoration-underline">
+                                                        {t('upload_fr_computer')}
+                                                    </strong>
+                                                </p>
+                                                <p className="small mb-2">
+                                                   {fileNote}
+                                                </p>
+                                                <p className="small">
+                                                    {fileIntructions}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div>
+                                <small className="text-red">
+                                    {formdata?.UploadSizeError ? `${t('valid_imge_size')}` : ''}
+                                </small>
+                            </div>
+                            <div>
+                                <small className="text-red">
+                                    {formdata?.ImageExtError ? `${t('only_text')} ${ acceptfile.join(', ')} ${t('allow_text')}`  : ''}
+                                </small>
+                            </div>
+                        </>
+                    )}
+                </Dropzone>
+
+                <div className="popup-btn">
+                    {/* <button type="button" className="btn btn-login" onClick={UploadDone}>Ok yes</button> */}
+                    <button type="button" className="btn btn-secondary" onClick={closeModel}> {t('cancel_text')}</button>
+                </div>
+
+            </section>
+        </>
+    );
+}
+
+UploadPage.propTypes = {
+    dispatch: PropTypes.func,
+    data: PropTypes.object,
+    loader: PropTypes.bool,
+    userDetails: EMPTY_OBJECT,
+
+}
+
+UploadPage.defaulProps = {
+    dispatch: PropTypes.func,
+    data: EMPTY_OBJECT,
+    userDetails: EMPTY_OBJECT,
+    loader: PropTypes.bool,
+
+}
+
+function mapStateToProps({ login }) {
+    return {
+        isUserLogin: login?.isUserLogin,
+        userDetails: login?.userDetails,
+        loader: login?.loader
+    }
+}
+
+export default connect(mapStateToProps)(UploadPage)
