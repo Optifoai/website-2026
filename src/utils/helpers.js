@@ -8,6 +8,8 @@ import moment from 'moment';
 
 export const EMPTY_ARRAY = Object.freeze([])
 export const EMPTY_OBJECT = Object.freeze({})
+export const EMPTY_STRING = ''
+
 
 export const setLoginDetailInSession = (loggedInUserData) => {
   const userData = [
@@ -130,5 +132,10 @@ export const formDataToJson = (formData) => {
   })
   return formObject
 }
+
+
+  export const carTypes = ['Mini', 'Hatchback', 'Sedan', 'Wagon', 'SUV', 'Van', 'Convertible'];
+  export const carPositions = ['Front','Back','FrontR','FrontL','BackR','BackL','SideR','SideL','FrontSeats','RearSeats','Dashboard','Wheel','Exterior','Interior'];
+  export const numberPlatePositions = ['Front', 'Back', 'FrontR', 'FrontL', 'BackR', 'BackL'];
 
 

@@ -113,5 +113,79 @@ export const generate360ImageAPI = (payLoad) => (dispatch) => {
   })
 }
 
+export const getCarBrandList = () => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CAR_BRANDS}`
+  return getRequest(apiurl).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to get Car delete
+export const updateCarDetails = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CAR_UPDATE}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to get Car delete
+export const updateCarBackground = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.SET_BACKGROUND}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+
+// Calls the API to get Car delete
+export const actionBackgroundDelete = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_DELETE_REQUEST })
+  let apiurl = `${APICONFIG.DELETE_BACKGROUND}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_DELETE_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_DELETE_FAILURE })
+  })
+}
+
+// Calls the API to get Car delete
+export const uploadBackground = (payLoad,obj='') => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.UPLOAD_BACKGROUND}`
+  if(obj && obj!=''){
+    apiurl = `${APICONFIG.UPLOAD_BACKGROUND}?${obj}`
+  }else{
+    apiurl = `${APICONFIG.UPLOAD_BACKGROUND}?backgroundType=${payLoad.backgroundType}`
+    delete payLoad.backgroundType
+  }
+  
+  
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+
 
 

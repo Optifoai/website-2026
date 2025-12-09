@@ -21,6 +21,7 @@ function CarDetails(props) {
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
         {
             carDetails: EMPTY_OBJECT,
+            carID:'',
             galleImages: EMPTY_ARRAY,
             allImageURL: EMPTY_ARRAY,
             tabValue: 1,
@@ -46,11 +47,12 @@ function CarDetails(props) {
 
     useEffect(() => {
         getCarData(id)
-        setFormdata({ selectedImage: [] })
+        setFormdata({ selectedImage: [],carID:id })
     }, [id])
 
     const getCarData = (vehicleId) => {
-        dispatch(getCarDetails(vehicleId)).then((res) => {
+        let vehicleIds=vehicleId ? vehicleId:formdata?.carID
+        dispatch(getCarDetails(vehicleIds)).then((res) => {
             if (res?.statusCode == '1') {
                 const data = res?.responseData || {};
                 const carImageList = data?.carImages || [];
@@ -188,7 +190,7 @@ function CarDetails(props) {
                     </Tabs>
 
                 </section>
-                <CarSideBar carDetailsData={formdata} actionDownloadModal={actionDownloadModal} />
+                <CarSideBar carDetailsData={formdata} actionDownloadModal={actionDownloadModal} getCarData={getCarData} />
             </div>
 
         </>

@@ -20,6 +20,10 @@ import CreditsPage from '../pages/Credits/CreditsPage';
 import BillingPage from '../pages/Billing/BillingPage';
 import AccountPage from '../pages/Account/AccountPage';
 import CarDetails from '../pages/Car/CarDetails';
+import CreateCar from '../pages/CreateCar/CreateCar';
+import CreateBackground from '../pages/CreateBackground/CreateBackground';
+import BrandDetails from '../pages/Brand/BrandDetails';
+import Brand from '../pages/Brand/Brand';
 
 
 export default function AppRouter() {
@@ -49,6 +53,10 @@ export default function AppRouter() {
           <Route path="/credits" element={<PrivateRoute> <CreditsPage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/billing" element={<PrivateRoute> <BillingPage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/car/:id" element={<PrivateRoute> <CarDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/create-car" element={<PrivateRoute> <CreateCar dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/brand" element={<PrivateRoute> <Brand dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/brand-details" element={<PrivateRoute> <BrandDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/create-background" element={<PrivateRoute> <CreateBackground dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           
           {/* <Footer /> */}
           {/* Redirect to dashboard if logged in, otherwise to login */}

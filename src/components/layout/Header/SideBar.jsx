@@ -4,6 +4,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import logo from '/images/logo.png';
+
 
 function SideBar(props) {
     const { user, logout } = useAuth();
@@ -23,7 +25,8 @@ function SideBar(props) {
                     <div class="logo-lens"></div>
                 </div>
 
-                <img src="logo.png" />
+                <img src={logo ? logo:''} alt="Optifo Logo"/>
+                {/* <img src="/images/logo.png" alt="Optifo Logo" /> */}
                 <div>   <img src="title.png" /></div>
 
 
@@ -53,6 +56,36 @@ function SideBar(props) {
                             <img src={location.pathname === '/background-logo' ? "background-logo-active.svg" : "background-logo.svg"} />
                         </div>
                         <span>{t('sidebarBackgroundLogo')}</span>
+                    </Link>
+
+                </li>
+                <li>
+                    <Link to="/create-car" className={`nav-item ${location.pathname === '/create-car' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/create-car' ? "credits-active.svg" : "credits.svg"} />
+
+                        </div>
+                        <span>{t('create_car')}</span>
+                    </Link>
+
+                </li>
+                <li>
+                    <Link to="/create-background" className={`nav-item ${location.pathname === '/create-background' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/create-background' ? "credits-active.svg" : "credits.svg"} />
+
+                        </div>
+                        <span>{t('create_bg_text')}</span>
+                    </Link>
+
+                </li>
+                <li>
+                    <Link to="/brand" className={`nav-item ${location.pathname === '/brand' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/brand' ? "credits-active.svg" : "credits.svg"} />
+
+                        </div>
+                        <span>{t('car_brand')}</span>
                     </Link>
 
                 </li>
