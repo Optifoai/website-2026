@@ -80,7 +80,7 @@ function BackgroundPage(props) {
     return (
         <>
             {loader ? <LoaderSpiner /> :
-                <div className='bg-logo-blk'>
+                <div className='bg-logo-blk  flex-wrap'>
                     {background?.length > 0 ? background?.map((item, index) => {
                         return (<>
                             <div class={`card ${item?.isActive ? 'active' : ''}`} key={`bg-${index}`}>

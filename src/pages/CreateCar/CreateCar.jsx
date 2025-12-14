@@ -36,7 +36,11 @@ function CreateCar(props) {
     const { addModalOpen } = formdata;
 
     if (selectedFiles.urls.length > 0 && isModalClosed) {
-        return <CreateCarForm selectedImages={selectedFiles.urls} files={selectedFiles.files} />;
+        return <CreateCarForm 
+        selectedImages={selectedFiles.urls}
+        files={selectedFiles.files}
+        getCarImage={selectedFiles.files}
+        />;
     }
 
   return (

@@ -12,10 +12,15 @@ export const APICONFIG = {
 	getCarDeleteAPIUrl: `${baseURL}cars/delete`,
 	getAllCarVideoDownloadUrl: `${baseURL}cars/downloadCarVideo`,
     CAR_UPDATE: `${baseURL}cars/update`,
-    USER_PROFILE_INFO_UPDATE: `${baseURL}user/update`,
+    // USER_PROFILE_INFO_UPDATE: `${baseURL}user/update`,
+    USER_PROFILE_INFO_UPDATE: `${baseURL}user/updatev1`,
+
     SET_BACKGROUND: `${baseURL}backgrounds/setBackground`,
     DELETE_BACKGROUND: `${baseURL}backgrounds/deleteOne`,
     UPLOAD_BACKGROUND: `${baseURL}backgrounds/upload`,
+    // CAR_BRANDS: `${baseURL}cars/viewMyFolders`,
+    CAR_BRANDS: `${baseURL}cars/carBrands`,
+
 	
     LOGOUT: `${baseURL}user/logout`,
     
@@ -43,7 +48,7 @@ export const APICONFIG = {
     
     USER_INVOICES: `${baseURL}user/listInvoices`,
     USER_CHARGES_INVOICES: `${baseURL}user/listCharges`,
-    CAR_BRANDS: `${baseURL}cars/carBrands`,
+    
     GET_COUPONS: `${baseURL}coupons/getAllCoupon`,
     GET_COUPON_BY_ID: `${baseURL}coupons/getCouponById`,
     GET_ADDRESS: `${baseURL}address/getAddress`,

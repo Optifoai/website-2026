@@ -9,9 +9,10 @@ import { updateUserProfile } from '../../Redux/Actions/loginAction'; // Assuming
 import CommonModel from '../../components/common/model/CommonModel';
 import { getCarDelete } from '../../Redux/Actions/carAction';
 import { Tab, Tabs } from 'react-bootstrap';
+import PhoneInput from 'react-phone-input-2'
 function AccountPage(props) {
     const { dispatch, userDetails, navigate } = props;
-    const { user,getUserData } = useAuth();
+    const { user, getUserData } = useAuth();
     const { t, i18n } = useTranslation();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -22,7 +23,8 @@ function AccountPage(props) {
             showNewPassword: false,
             showConfirmPassword: false,
             password: EMPTY_STRING,
-            userDetails: EMPTY_OBJECT
+            userDetails: EMPTY_OBJECT,
+            loader: false
 
         }
     );
@@ -32,7 +34,9 @@ function AccountPage(props) {
             fullName: '',
             email: '',
             companyName: '',
-            language: 'en'
+            language: 'en',
+            phone: "",
+            countryCode: "+91",
         }
     });
 
@@ -46,22 +50,27 @@ function AccountPage(props) {
 
 
 
-
-    // Populate form with user data when the component mounts or user changes
+  /* ================= LOAD USER ================= */
     useEffect(() => {
-        let getLocalUserData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : EMPTY_OBJECT
-        let userdata = user && user != null ? user?.userProfile : userDetails?.userProfile ? userDetails?.userProfile : getLocalUserData
-        
-        // let userdata = userdataRes?.responseData?.userProfile
-
-        if (userdata) {
-            setValue('fullName', userdata?.fullName);
-            setValue('email', userdata?.email);
-            setValue('companyName', userdata?.companyDetails?.companyName);
-            setValue('language', userdata?.languageSelected);
-            // setValue('language', i18n.language);
-
-        }
+      const localUser = localStorage.getItem("userData")
+        ? JSON.parse(localStorage.getItem("userData"))
+        : EMPTY_OBJECT;
+  
+      const profile =
+        user?.userProfile ??
+        userDetails?.userProfile ??
+        localUser;
+  
+      if (profile) {
+        setValue("fullName", profile.fullName || "");
+        setValue("email", profile.email || "");
+        setValue("companyName", profile.companyDetails?.companyName || "");
+        setValue("language", profile.languageSelected || "en");
+        setValue("phone", profile.phone ? String(profile.countryCode)+ String(profile.phone) : "");
+        setValue("countryCode", profile.countryCode || "+91");
+  
+        // setState({ loader: false });
+      }
     }, [user, userDetails, setValue]);
 
     const changeTabValue = (e) => {
@@ -73,16 +82,17 @@ function AccountPage(props) {
     };
 
     const onSubmit = (data) => {
-        // Dispatch an action to update the user profile
-        // let payload ={
-        //     "type": 2,
-        //     "companyDetails": {
-        //         "companyName": data?.companyName,
-        //     },
-        //    "fullName": data?.fullName,
-        //  }
-       
-        dispatch(updateUserProfile(data)).then(res => {
+        const phoneWithoutCountryCode = data.phone.replace(data.countryCode, '').trim();
+         const payload = {
+        fullName: data.fullName,
+        email: data.email,
+        companyName: data.companyName,
+        language: data.language,
+        countryCode: data.countryCode,
+        phone: phoneWithoutCountryCode,
+        };
+
+        dispatch(updateUserProfile(payload)).then(res => {
             if (res?.statusCode == '1') {
                 getUserData()
                 notify('success', 'Profile updated successfully!');
@@ -95,16 +105,16 @@ function AccountPage(props) {
     };
 
     const onChangePasswordSubmit = (data) => {
-      let payload= 
+        let payload =
         {
             "optifoPassword": data?.currentPassword,
             "password": data?.newPassword
         }
-      
-           dispatch(updateUserProfile(payload)).then(res => {
+
+        dispatch(updateUserProfile(payload)).then(res => {
             console.log("Change Password Response:", res);
             if (res?.statusCode == '1') {
-                notify('success',res?.responseData?.message ? res?.responseData?.message : 'Password updated successfully!');
+                notify('success', res?.responseData?.message ? res?.responseData?.message : 'Password updated successfully!');
             } else {
                 notify('error', res?.error?.responseMessage || 'Failed to update Password.');
             }
@@ -138,12 +148,12 @@ function AccountPage(props) {
 
     return (
         <>
-            <div className='d-flex justify-between mt-4 border-bottom-1'>
+            {formdata?.loader ? <LoaderSpiner /> : <div className='d-flex justify-between mt-4 '>
                 <section className="flex-1">
                     <Tabs
                         defaultActiveKey={1}
                         activeKey={formdata?.tabValue}
-                        id="uncontrolled-tab-example"
+                        className='custom-tabs'
                         onSelect={(e) => changeTabValue(e)}
                     >
                         <Tab eventKey={1} title='Account Info'>
@@ -173,23 +183,48 @@ function AccountPage(props) {
                                         <input type="text" className="form-control" {...register("companyName", { required: "Company name is required" })} />
                                         {errors.companyName && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.companyName.message}</p>}
                                     </div>
-                                    <label className='form-label'>Language</label>
-                                    <Controller
-                                        name="language"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <div className="language-container">
-                                                <label className="radio-item">
-                                                    <input type="radio" {...field} value="da" checked={field.value === 'da'} onChange={(e) => { field.onChange(e); i18n.changeLanguage('da'); }} />
-                                                    <span className="custom-radio"></span> Dansk
-                                                </label>
-                                                <label className="radio-item">
-                                                    <input type="radio" {...field} value="en" checked={field.value === 'en'} onChange={(e) => { field.onChange(e); i18n.changeLanguage('en'); }} />
-                                                    <span className="custom-radio"></span> English
-                                                </label>
-                                            </div>
-                                        )}
-                                    />
+
+                                    {/* PHONE INPUT */}
+                                    <div className="mb-3">
+                                        <label>Phone</label>
+                                        <Controller
+                                            name="phone"
+                                            control={control}
+                                            rules={{ required: true }}
+                                            render={({ field }) => (
+                                                <PhoneInput
+                                                    country="in"
+                                                    value={field.value || ""}
+                                                    onChange={(value, country) => {
+                                                        field.onChange(value);
+                                                        setValue("countryCode", `+${country.dialCode}`);
+                                                    }}
+                                                    countryCodeEditable={false}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+
+                                    <div className="mb-3">
+
+                                        <label className='form-label'>Language</label>
+                                        <Controller
+                                            name="language"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <div className="language-container">
+                                                    <label className="radio-item">
+                                                        <input type="radio" {...field} value="da" checked={field.value === 'da'} onChange={(e) => { field.onChange(e); i18n.changeLanguage('da'); }} />
+                                                        <span className="custom-radio"></span> Dansk
+                                                    </label>
+                                                    <label className="radio-item">
+                                                        <input type="radio" {...field} value="en" checked={field.value === 'en'} onChange={(e) => { field.onChange(e); i18n.changeLanguage('en'); }} />
+                                                        <span className="custom-radio"></span> English
+                                                    </label>
+                                                </div>
+                                            )}
+                                        />
+                                    </div>
                                     <div className='modal-footer popup-btn d-flex max-w-320 mt-4'>
                                         <button type="submit" className="btn btn-login flex-1">Save Changes</button>
 
@@ -230,7 +265,7 @@ function AccountPage(props) {
                                         {passwordErrors.confirmPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.confirmPassword.message}</p>}
                                         <img className='eye-icon close' src='/eye-close.png' onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
                                     </div>
-                                 
+
                                     <div className='modal-footer popup-btn d-flex max-w-320 mt-4'>
                                         <button type="submit" className="btn btn-login flex-1">Change Password</button>
 
@@ -252,7 +287,7 @@ function AccountPage(props) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>}
 
             <CommonModel show={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
                 <img src="/delete-image.png" alt="Delete confirmation" />

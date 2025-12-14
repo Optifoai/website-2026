@@ -18,10 +18,10 @@ function Header() {
       <div class="topbar">
                 <div class="title">
                     <h2>RECENT CARS</h2>
-                    <button class="chip"><img src="filter.png" /> Filter</button>
+                    {/* <button class="chip"><img src="filter.png" /> Filter</button> */}
                 </div>
 
-                <div class="controls">
+                {/* <div class="controls">
                     <button class="small-btn"><img src="three-dots.png" /> More</button>
                     <div>
                         <button class="small-btn"><img src="tile.svg" /></button>
@@ -31,7 +31,7 @@ function Header() {
                         <button onClick={() => i18n.changeLanguage('en')} disabled={i18n.language === 'en'}>English</button>
                         <button onClick={() => i18n.changeLanguage('da')} disabled={i18n.language === 'da'}>Dansk</button>
                     </div>
-                </div>
+                </div> */}
             </div>
   );
 }

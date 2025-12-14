@@ -8,12 +8,13 @@ import CommonModel from '../../components/common/model/CommonModel';
 import { useTranslation, Trans } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 
 function DashboardPage(props) {
     const { t } = useTranslation();
-    const { user,getUserData } = useAuth();   
+    const { user, getUserData } = useAuth();
     const { dispatch, navigate, isUserLogin, loader, Link } = props
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
         {
@@ -23,23 +24,39 @@ function DashboardPage(props) {
             deleteModelOpen: false,
             videoModelOpen: false,
             editModelOpen: false,
+            hasMore: true,
+            activePage: 1,
+            loader: false,
+
         }
     );
 
-   useEffect(() => {
-  getCarData();
-//   getUserData();
-}, EMPTY_ARRAY);  // FIXED
+    useEffect(() => {
+        getCarData();
+        //   getUserData();
+    }, EMPTY_ARRAY);  // FIXED
 
 
-
+console.log('formdata',formdata)
+    
     //get car list
     const getCarData = () => {
-        dispatch(getCarList()).then((res) => {
+        const {carsList,activePage}=formdata
+        activePage=='1' ? setFormdata({loader:true}) : setFormdata({loader:false})
+        let params = { page: activePage, limit: 10}
+        dispatch(getCarList(params)).then((res) => {
+            setFormdata({loader:false})
+            // ResponseFilter(res);
             if (res?.statusCode == '1') {
-                let data = res?.responseData?.carsList
-                setFormdata({ ...formdata, carsList: data, deleteModelOpen: false })
-                // notify('success', res.response?.data?.message ? res.response?.data?.message : 'data fetched Successful.')
+                 let carListData = res?.responseData?.carsList
+                 if (carsList?.length >= res?.responseData?.totalRecords) {
+                    setFormdata({ hasMore: false });
+                } else {                    
+                    let data = carsList?.concat(carListData)
+                    setFormdata({ ...formdata, carsList: data, deleteModelOpen: false })
+                    setFormdata({ activePage: activePage + 1 });
+                }
+               
                 return true;
             } else {
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
@@ -51,16 +68,17 @@ function DashboardPage(props) {
     };
 
     const actionDelteModal = () => {
+        //  getCarData()
         let payLoad = {
             vehicleId: formdata?.actionCarDetails?._id,
         };
         dispatch(getCarDelete(payLoad)).then((res) => {
             if (res?.statusCode == '1') {
-                getCarData()
+                
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Car deleted successful.')
                 setFormdata({ deleteModelOpen: false });
-
-                return true;
+                getCarData()
+                // return true;
             } else {
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
             }
@@ -133,57 +151,92 @@ function DashboardPage(props) {
         setFormdata({ videoModelOpen: false });
     }
 
+    const CarForm = () => {
+        return (<section class="card-block" aria-label="Preview Card">
+
+            {formdata?.carsList?.length > 0 && formdata?.carsList?.map((items, index) => {
+                return (
+                    <div key={index} class="car-card" >
+
+                        <div class="image-section">
+                            <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
+
+                            <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
+                                <img src='trash.png' />
+                            </div>
+                        </div>
+
+                        <div class="content-section" >
+                            <Link to={`/car/${items._id}`}> <>
+                                <h2 class="car-title">{items?.carModel}</h2>
+
+                                <p class="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
+
+                                <p class="license-plate">{items?.carId}</p>
+                            </> </Link>
+                            <div class="date-download-blk">
+                                <p class="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
+
+                                {/* <p class="date-time">06:00PM, 03 Mar 2021</p> */}
+
+                                <div class="action-buttons">
+                                    {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
+                                        <img src="video.svg" />
+                                    </button>}
+
+                                    <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
+                                        <img src="download.svg" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                )
+            })
+            }
+
+        </section>)
+    }
 
     return (
         <>
-            {loader ? <LoaderSpiner /> :
+            {formdata?.loader ? <LoaderSpiner /> :
                 <div>
-                    <section class="card-block" aria-label="Preview Card">
-
-                        {formdata?.carsList?.length > 0 && formdata?.carsList?.map((items, index) => {
-                            return (
-                                <div key={index} class="car-card" >
-
-                                    <div class="image-section">
-                                        <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
-
-                                        <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
-                                            <img src='trash.png' />
-                                        </div>
-                                    </div>
-
-                                    <div class="content-section" >
-                                        <Link to={`/car/${items._id}`}> <>
-                                            <h2 class="car-title">{items?.carType}</h2>
-
-                                            <p class="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
-
-                                            <p class="license-plate">{items?.carModel}</p>
-                                        </> </Link>
-                                        <div class="date-download-blk">
-                                            <p class="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
-
-                                            {/* <p class="date-time">06:00PM, 03 Mar 2021</p> */}
-
-                                            <div class="action-buttons">
-                                                {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
-                                                    <img src="video.svg" />
-                                                </button>}
-
-                                                <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
-                                                    <img src="download.svg" />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            )
-                        })
+                 
+                     <InfiniteScroll
+                      style={{ height: 'auto', overflow: 'hidden' }}
+                      dataLength={formdata?.carsList.length}
+                      pageStart={1}
+                      next={getCarData}
+                      hasMore={formdata.hasMore}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>Yay! You have seen it all</b>
+                            </p>
                         }
+                      loader={
+                        formdata?.carsList.length >= 10 ? (
+                          <p className="text-center mb-0">Loading...</p>
+                        ) : (
+                          ''
+                        )
+                      }
+                    refreshFunction={getCarData}
+                    pullDownToRefresh
+                    pullDownToRefreshThreshold={50}
+                    pullDownToRefreshContent={
+                        <h3 style={{ textAlign: 'center' ,color:'white'}}>&#8595; Pull down to refresh</h3>
+                    }
+                    releaseToRefreshContent={
+                        <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
+                    }
+                    >
+                        {CarForm()}
+                    </InfiniteScroll>
 
-                    </section>
-                </div>}
+                </div>
+               } 
             {/* car delete model */}
             <CommonModel show={formdata.deleteModelOpen} onClose={() => { setFormdata({ deleteModelOpen: false }) }}>
                 <img src="/delete-image.png" />
