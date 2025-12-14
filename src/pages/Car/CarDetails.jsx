@@ -105,7 +105,6 @@ function CarDetails(props) {
 
     const actionDownloadModal = () => {
         let items = formdata?.carDetails
-        console.log('actionDownloadModal items', items)
 
         let payLoad = {
             imgArray: formdata?.selectedImage.length > 0 ? formdata?.selectedImage : formdata?.allImageURL,

@@ -33,10 +33,16 @@ const { t, i18n } = useTranslation();
         let extFile = file.name.substr(idxDot, file.name.length).toLowerCase();
         // if (extFile == 'jpg' || extFile == 'jpeg' || extFile == 'png') {
         if (acceptfile.includes(extFile )) {
+            console.log('coming isValidDimensions',isValidDimensions)
+            console.log('coming width',width)
+
+            console.log('coming height',height)
+
 
             try {
                 const dimensions = await imageDimensions(file);
-                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || !isValidDimensions ) {
+                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || isValidDimensions==false ) {
+                    console.log('coming if')
                     reader.addEventListener(
                         'load',
                         () => {
@@ -57,6 +63,7 @@ const { t, i18n } = useTranslation();
                         setFormdata({uploadedfile: file})
                     }
                 } else {
+                    console.log('coming else')
                     setFormdata({
                         ...formdata,
                         uploadImageUrl: '',
@@ -106,7 +113,7 @@ const { t, i18n } = useTranslation();
 
     return (
         <>
-            <section class="card-block" aria-label="Preview Card">
+            <section class="mt-3" aria-label="Preview Card">
                 <Dropzone
                     onDrop={(acceptedFiles) => handleUploadImage(acceptedFiles)}
                     maxSize={fileSize ? parseInt(fileSize, 10) : undefined}
@@ -166,7 +173,7 @@ const { t, i18n } = useTranslation();
 
                 <div className="popup-btn">
                     {/* <button type="button" className="btn btn-login" onClick={UploadDone}>Ok yes</button> */}
-                    <button type="button" className="btn btn-secondary" onClick={closeModel}> {t('cancel_text')}</button>
+                    <button type="button" className="btn btn-secondary " onClick={closeModel}> {t('cancel_text')}</button>
                 </div>
 
             </section>
@@ -179,6 +186,8 @@ UploadPage.propTypes = {
     data: PropTypes.object,
     loader: PropTypes.bool,
     userDetails: EMPTY_OBJECT,
+    isValidDimensions: PropTypes.bool,
+
 
 }
 
@@ -187,6 +196,7 @@ UploadPage.defaulProps = {
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,
     loader: PropTypes.bool,
+    isValidDimensions:false
 
 }
 

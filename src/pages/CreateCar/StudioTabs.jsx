@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Tab, Tabs } from 'react-bootstrap';
@@ -7,9 +7,9 @@ import { SiReasonstudios } from 'react-icons/si';
 import { LuRectangleEllipsis } from 'react-icons/lu';
 import { RiQrScan2Line } from 'react-icons/ri';
 import { MdLibraryBooks } from 'react-icons/md';
-import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT, notify,carTypes } from '../../utils/helpers';
 import { CheckIcon, DeleteIcon } from '../../components/common/model/svg';
-import { actionBackgroundDelete, updateCarBackground } from '../../Redux/Actions/carAction';
+import { actionBackgroundDelete, getBrandList, getCarBrandList, updateCarBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
 import CommonModel from '../../components/common/model/CommonModel';
 import AddBackgroundPage from '../BackgroundLogo/AddBackgroundPage';
@@ -33,35 +33,76 @@ function StudioTabs(props) {
 
 
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormdata({ [name]: value });
-    };
-
+   
     // Mock data - replace with actual data from props or state management
     const displayBg = userDetails?.backgroundsUploaded || [];
     const displayPlate = userDetails?.number_plates || [];
     const displayBanner = userDetails?.banners || []; // Assuming banners are managed similarly
-    const carTypes = ['Sedan', 'SUV', 'Hatchback', 'Truck'];
-    const carsList = [{ brandName: 'BMW' }, { brandName: 'Maruti' }];
+    // const carTypes = ['Sedan', 'SUV', 'Hatchback', 'Truck'];
 
-    const handleBackgroundChange = (e) => {
-        const { value } = e.target;
-        let payload = {
-            "backgroundId": value,
-            "backgroundType": "background"
-        };
-        dispatch(updateCarBackground(payload)).then(res => {
-            if (res?.statusCode == '1') {
-                getUserData();
-                notify('success', res?.responseData?.message ? res?.responseData?.message : 'Data updated successfully!');
-            } else {
-                notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Failed');
-            }
-        }).catch(err => {
-            notify('error', err?.message ? err?.message : 'An error occurred.');
+     useEffect(() => {
+        getBrandData();
+      }, EMPTY_ARRAY);  
+
+     const getBrandData = () => {
+        setFormdata({ loader: true })
+        dispatch(getCarBrandList()).then((res) => {
+         
+          if (res?.statusCode == '1') {
+            let data = res?.responseData?.carsList
+            setFormdata({ ...formdata, carsList: data,loader: false })       
+          } else {
+             setFormdata({ loader: false })
+            notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
+          }
+        }).catch((err) => {
+          setFormdata({ loader: false })
+          notify('error', err?.message ? err?.message : 'Something went wrong!')
         });
+    
+      };
+
+    const ActiveBg = (e, backgroundId) => {
+        const {value}=e.target
+        setFormdata({ ...formdata,activeBGId:backgroundId,backgroundURL: value,});     
     };
+
+      const ActiveLogo = (e, backgroundId) => {
+        const {value}=e.target
+        if (formdata?.activeLogoId === backgroundId) {
+            setFormdata({ ...formdata,activeLogoId: '',activeLogoURL: '',});
+        }else{
+            setFormdata({ ...formdata,activeLogoId:backgroundId,activeLogoURL: value});
+        }
+
+    };
+
+    const ActiveBanner = (e, backgroundId) => {
+        if (formdata?.activeBannerId === backgroundId) {
+            setFormdata({ ...formdata,activeBannerId: '',activeBannerURL: '',});
+        }else{
+            setFormdata({ ...formdata,activeBannerId:backgroundId,activeBannerURL: e.target.value,});
+        }    
+    };
+
+
+    // const handleBackgroundChange = (e) => {
+    //     const { value } = e.target;
+    //     let payload = {
+    //         "backgroundId": value,
+    //         "backgroundType": "background"
+    //     };
+    //     dispatch(updateCarBackground(payload)).then(res => {
+    //         if (res?.statusCode == '1') {
+    //             getUserData();
+    //             notify('success', res?.responseData?.message ? res?.responseData?.message : 'Data updated successfully!');
+    //         } else {
+    //             notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Failed');
+    //         }
+    //     }).catch(err => {
+    //         notify('error', err?.message ? err?.message : 'An error occurred.');
+    //     });
+    // };
 
     const handleDelete = () => {
         setLocalState({ isSubmit: true });
@@ -88,30 +129,41 @@ function StudioTabs(props) {
         setLocalState({ deleteModalOpen: true, backgroundId: id });
     };
 
+     const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormdata({ [name]: value });
+    };
+
+
+
     return (
         <Tabs
             defaultActiveKey="2"
             activeKey={activeTab}
             onSelect={(k) => setActiveTab(k)}
-            className="nav flex-column pb-4 mb-3"
+            className="border-0 flex-column"
         >
             <Tab eventKey="2" title={<><SiReasonstudios className="me-2" /> Studio</>}>
                 <div className="account-tab">
-                    <div className="account-list">
-                        <div className="bg-logo-blk">
+                   
+                        <div className="bg-logo-blk flex-wrap">
                             {displayBg?.map((item, i) => (
                                 <div className="card" key={i}>
                                     <div className={`account-card-list ${item?.isActive ? 'active' : ''}`}>
                                         <span className="delete-bg" onClick={() => openDeleteModal(item._id)}>
                                             <DeleteIcon />
                                         </span>
-                                        <div>
+                                        <div className='status-active'>
                                             <input
                                                 type="radio"
-                                                onChange={handleBackgroundChange}
-                                                checked={item.isActive}
+                                                // onChange={handleBackgroundChange}
+                                                // checked={item.isActive}
+                                                // name="activeValue"
+                                                // value={item._id}
+                                                onChange={(e) => ActiveBg(e, item._id)}
+                                                checked={item._id==formdata?.activeBGId}
                                                 name="activeValue"
-                                                value={item._id}
+                                                value={item.backgroundImage}
                                             />
                                             <div className="select-bg">
                                                 <div>
@@ -141,19 +193,19 @@ function StudioTabs(props) {
                                 </div>
                             )}
                         </div>
-                        <div className="pr-4 mt-4">
-                            <button onClick={() => setActiveTab('3')} type="button" className="btn btn-black">Proceed</button>
+                        <div className="">
+                            <button onClick={() => setActiveTab('3')} type="button" className="buy-btn position-static">Proceed</button>
                         </div>
-                    </div>
+                   
                 </div>
             </Tab>
 
             <Tab eventKey="3" title={<><LuRectangleEllipsis className="me-2" /> Plate</>}>
                 <div className="account-tab">
-                    <div className="account-list">
+                    <div className="plate-list bg-logo-blk flex-wrap">
                         {displayPlate?.map((items, i) => {
                             return (
-                                <div className="mob-100 mb-2" key={i}>
+                                <div className="card mb-2" key={i}>
                                     <div className="account-card-list">
                                         <span
                                             className="delete-bg"
@@ -166,7 +218,7 @@ function StudioTabs(props) {
                                         >
                                             <DeleteIcon />
                                         </span>
-                                        <div
+                                        <div className='status-active'
                                         // onClick={(e) => ActiveLogo(e, items._id)}
                                         >
                                             <input
@@ -194,7 +246,7 @@ function StudioTabs(props) {
                                         </div>
                                         {items.backgroundImage ? (
                                             <div
-                                                className="h-100 d-flex align-items-center justify-content-center">
+                                                className="card">
                                                 <img
                                                     src={items.backgroundImage}
                                                     className="plate-mxw-100"
@@ -213,15 +265,15 @@ function StudioTabs(props) {
                                 <div className="card add-card">
                                     <div className="add-content" onClick={() => setLocalState({ addModalOpen: true })}>
                                         <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
-                                        <p>Add Background</p>
+                                        <p>Add Logo</p>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         {/* Add plate management UI here */}
-                        <div className="pr-0 mt-4">
-                            <button onClick={() => setActiveTab('4')} type="button" className="btn btn-black">Proceed</button>
+                        <div className="">
+                            <button onClick={() => setActiveTab('4')} type="button" className=" buy-btn position-static">Proceed</button>
                         </div>
                     </div>
                 </div>
@@ -229,12 +281,12 @@ function StudioTabs(props) {
 
             <Tab eventKey="4" title={<><RiQrScan2Line className="me-2" /> Banner</>}>
                 <div className="account-tab">
-                    <div className="account-list">
+                    <div className="bg-logo-blk flex-wrap">
                         <p>Banner selection UI will go here.</p>
-                        <div className="custom-row">
+                        <div className="bg-logo-blk flex-wrap custom-row">
                             {displayBanner?.map((items, i) => {
                                 return (
-                                    <div className="mob-100 mb-2" key={i}>
+                                    <div className="card mb-2" key={i}>
                                         <div className="account-card-list">
                                             <span
                                                 className="delete-bg"
@@ -247,7 +299,7 @@ function StudioTabs(props) {
                                             >
                                                 <DeleteIcon />
                                             </span>
-                                            <div
+                                            <div className='status-active'
                                             // onClick={(e) => ActiveBanner(e, items._id)}
                                             >
                                                 <input
@@ -275,7 +327,7 @@ function StudioTabs(props) {
                                             </div>
                                             {items.backgroundImage ? (
                                                 <div
-                                                    className="h-100 d-flex align-items-center justify-content-center">
+                                                    className="card">
                                                     <img
                                                         src={items.backgroundImage}
                                                         className="mxw-100"
@@ -294,7 +346,7 @@ function StudioTabs(props) {
                                     <div className="card add-card">
                                         <div className="add-content" onClick={() => setLocalState({ addModalOpen: true })}>
                                             <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
-                                            <p>Add Background</p>
+                                            <p>Add Banner</p>
                                         </div>
                                     </div>
                                 </div>
@@ -304,8 +356,8 @@ function StudioTabs(props) {
 
 
                         </div>
-                        <div className="pr-4 mt-4">
-                            <button onClick={() => setActiveTab('5')} type="button" className="btn btn-black">Proceed</button>
+                        <div className="">
+                            <button onClick={() => setActiveTab('5')} type="button" className="buy-btn position-static">Proceed</button>
                         </div>
                     </div>
                 </div>
@@ -313,10 +365,10 @@ function StudioTabs(props) {
 
             <Tab eventKey="5" title={<><MdLibraryBooks className="me-2" /> Car Details</>}>
                 <div className="account-tab">
-                    <div className="account-list">
+                    <div className=" car-details-blk">
                         <div className="row">
                             <div className="col-md-6">
-                                <h6 className="">Car Type <span className='text-danger'> *</span></h6>
+                                 <label class="form-label">Car Type <span className='text-danger'> *</span></label>
                                 <select
                                     className="form-control mb-3"
                                     value={formdata.carType}
@@ -331,7 +383,8 @@ function StudioTabs(props) {
                             </div>
 
                             <div className="col-md-6">
-                                <h6 className="">Car Brand <span className='text-danger'> *</span></h6>
+                                 <label class="form-label">Car Brand <span className='text-danger'> *</span></label>
+                                
                                 <select
                                     className="form-control mb-3"
                                     value={formdata.carBrand}
@@ -339,7 +392,7 @@ function StudioTabs(props) {
                                     onChange={handleInputChange}
                                 >
                                     <option value={''}>Select</option>
-                                    {carsList?.map(type => (
+                                    {formdata?.carsList?.map(type => (
                                         <option key={type?.brandName} value={type?.brandName}>{type?.brandName}</option>
                                     ))}
                                 </select>
@@ -348,7 +401,7 @@ function StudioTabs(props) {
 
                         <div className="row">
                             <div className="col-md-6">
-                                <h6 className="">Car Year</h6>
+                                 <label class="form-label">Car Year </label>
                                 <input
                                     type='text'
                                     name='carYear'
@@ -359,7 +412,7 @@ function StudioTabs(props) {
                             </div>
 
                             <div className="col-md-6">
-                                <h6 className="">Car Model</h6>
+                                <label class="form-label">Car Model</label>
                                 <input
                                     type='text'
                                     name='carModel'
@@ -372,7 +425,7 @@ function StudioTabs(props) {
 
                         <div className="row">
                             <div className="col-md-6">
-                                <h6 className="">Car Id <span className='text-danger'> *</span></h6>
+                                <label class="form-label">Car Id <span className='text-danger'> *</span></label>
                                 <input
                                     type='text'
                                     name='carId'
@@ -383,8 +436,8 @@ function StudioTabs(props) {
                             </div>
                         </div>
 
-                        <div className="pr-5 mt-4">
-                            <button type="button" className="btn btn-black" onClick={saveCarDetails}>Save</button>
+                        <div className="">
+                            <button type="button" className="buy-btn position-static" onClick={saveCarDetails}>Save</button>
                         </div>
                     </div>
                 </div>

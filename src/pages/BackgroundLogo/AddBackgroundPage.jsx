@@ -74,11 +74,10 @@ function AddBackgroundPage(props) {
         setFormdata({ addModalOpen: false });
     }
 
-    const changeBackground = (e) => {
-         
+    const changeBackground = (data='') => {
        let payload =
        {
-         backgroundId: formdata?.BgImageUrl,
+         backgroundId:data? data:  formdata?.BgImageUrl,
          backgroundType: "background"
         }
             dispatch(updateCarBackground(payload)).then(res => {
@@ -91,7 +90,7 @@ function AddBackgroundPage(props) {
             }).catch(err => {
                 notify('error', err?.message ? err?.message : 'An error occurred.');
             });
-            getUserData()
+            // getUserData()
         };
     
 //    upload code
@@ -105,8 +104,9 @@ function AddBackgroundPage(props) {
         dispatch(uploadBackground(bg,obj)).then((res) => {
              console.log('coming BgUploadDone res',res)
             setFormdata({ isSubmit: false })
-            if (res?.statusCode == '1') {                
-                changeBackground()
+            if (res?.statusCode == '1') { 
+                setFormdata({BgImageUrl:res?.responseData})               
+                changeBackground(res?.responseData)
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Data Updated successful.')
 
 
@@ -126,32 +126,35 @@ function AddBackgroundPage(props) {
 
     return (
         <>
-
+         
             <Tabs
                 defaultActiveKey={1}
                 activeKey={formdata?.tabValue}
                 id="uncontrolled-tab-example"
                 onSelect={(e) => changeTabValue(e)}
-            >
+                className='background-tabs justify-content-around'
+            >   
                 <Tab eventKey={1} title='Gallery'>
+                    
                       <div className="bg-modal-list">
                         <div className="row">
                             {optifoBackgrounds.map((item, i) => {
                                 return (
-                                    <div className="col-md-3 mb-3" key={i}>
+                                    <div className="col-md-4 mb-3" key={i}>
                                         <div className="custom-bg-main">
-                                            <label>
+                                           
+                                            <div className="custom-bg-in">
+                                                <img src={item.backgroundImage} className="w-100"/>
+                                            </div>
+                                             <label class="radio-item">
                                                 <input
                                                     type="radio"
                                                     name="showBgValue"
                                                     value={formdata?.BgImageUrl?.backgroundImage}
                                                     onChange={() => setFormdata({BgImageUrl:item})}
                                                 />
-                                                <span></span>
+                                                <span class="custom-radio"></span>
                                             </label>
-                                            <div className="custom-bg-in">
-                                                <img src={item.backgroundImage} className="w-100"/>
-                                            </div>
                                         </div>
                                     </div>
                                 );

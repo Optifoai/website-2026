@@ -55,7 +55,7 @@ export default function AppRouter() {
           <Route path="/car/:id" element={<PrivateRoute> <CarDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/create-car" element={<PrivateRoute> <CreateCar dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/brand" element={<PrivateRoute> <Brand dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
-          <Route path="/brand-details" element={<PrivateRoute> <BrandDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="car/brand-details/:folderName" element={<PrivateRoute> <BrandDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/create-background" element={<PrivateRoute> <CreateBackground dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           
           {/* <Footer /> */}

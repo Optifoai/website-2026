@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="48" viewBox="0 0 168 48">
+    <g fill="none" fill-rule="evenodd">
+        <g fill="#000">
+            <g>
+                <g fill-rule="nonzero">
+                    <path d="M46.032 18.834v.415c-.206 12.564-10.449 22.642-23.014 22.643C10.453 41.893.208 31.817 0 19.254v-.416.59h10.665c0 6.825 5.533 12.358 12.358 12.358s12.358-5.533 12.358-12.358h10.66v-.594h-.009z" transform="translate(-128 -112) translate(128 112) translate(0 5.187)"/>
+                    <path d="M23.02 6.898c3.276 0 6.42 1.3 8.737 3.618 2.317 2.317 3.619 5.46 3.618 8.738v.17H10.659v-.17c0-3.278 1.302-6.42 3.62-8.738 2.317-2.317 5.46-3.619 8.738-3.618h.002zM39.093 0c1.07 0 2.034.644 2.443 1.633.409.988.182 2.125-.574 2.881-.757.756-1.895.982-2.882.572-.988-.41-1.632-1.375-1.631-2.444C36.45 1.182 37.633 0 39.093 0z" transform="translate(-128 -112) translate(128 112) translate(0 5.187)"/>
+                </g>
+                <text font-family="Poppins, sans-serif" font-size="36.887" font-weight="bold" letter-spacing="-.576" transform="translate(-128 -112) translate(128 112)">
+                    <tspan x="55.331" y="39">Optifo</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

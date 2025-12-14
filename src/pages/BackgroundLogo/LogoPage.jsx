@@ -7,9 +7,10 @@ import { useAuth } from '../../context/AuthContext';
 import AddBackgroundPage from './AddBackgroundPage';
 import CommonModel from '../../components/common/model/CommonModel';
 import UploadPage from '../../components/common/UploadPage/UploadPage';
+import LoaderSpiner from '../../hooks/LoaderSpiner';
 
 function LogoPage(props) {
-    const { userDetails,dispatch} = props;
+    const { userDetails,dispatch,loader} = props;
     const { getUserData } = useAuth();
 
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
@@ -48,6 +49,25 @@ function LogoPage(props) {
             notify('error', err?.message ?err?.message  : 'An error occurred.');
         });
     };
+
+     const changeBackground = (data='') => {
+           let payload =
+           {
+             backgroundId:data? data:  formdata?.BgImageUrl,
+             backgroundType: "logo"
+            }
+                dispatch(updateCarBackground(payload)).then(res => {
+                    if (res?.statusCode == '1') {
+                        getUserData()
+                        notify('success', res?.responseData?.message ? res?.responseData?.message : 'Data updated successfully!');
+                    } else {
+                        notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Failed');
+                    }
+                }).catch(err => {
+                    notify('error', err?.message ? err?.message : 'An error occurred.');
+                });
+                // getUserData()
+            };
       function BgUploadDone() {
         console.log('coming logo')
             var bg = new FormData();
@@ -59,7 +79,7 @@ function LogoPage(props) {
                  console.log('coming BgUploadDone res',res)
                 setFormdata({ isSubmit: false })
                 if (res?.statusCode == '1') {                
-                    changeBackground()
+                    changeBackground(res?.responseData)
                     notify('success', res.response?.data?.message ? res.response?.data?.message : 'Data Updated successful.')
     
     
@@ -103,7 +123,7 @@ function LogoPage(props) {
   return (
     <>  
    
-      <div className='bg-logo-blk'>      
+        {loader ? <LoaderSpiner /> :<div className='bg-logo-blk'>      
     
             {logo?.length > 0 ? logo.map((item, index) => {
               return (
@@ -127,7 +147,7 @@ function LogoPage(props) {
                 <p>Add Logo</p>
               </div>
             </div>
-          </div>
+          </div>}
 
           <CommonModel show={deleteModalOpen} onClose={() => setFormdata({deleteModalOpen :false})}>
                     <img src="/delete-image.png" alt="Delete confirmation" />
@@ -142,7 +162,7 @@ function LogoPage(props) {
           <CommonModel show={addModalOpen} size="modal-xl" onClose={() => setFormdata({addModalOpen :false})}>
             <UploadPage 
               fileNote={'NOTE: Background size 1600 x 1201 pixels'}
-              fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
+              fileIntructions={'(Wall height 600 pixels + floor height 600 pixels file)'} 
               UploadDone={BgUploadDone}
               formdata={formdata} 
               setFormdata={setFormdata}
@@ -151,7 +171,7 @@ function LogoPage(props) {
               width={'1600'}
               height={'1200'}
               fileSize={'400000000'}
-              isValidDimensions={true}
+              isValidDimensions={false}
               />                               
         </CommonModel>
 </>

@@ -18,20 +18,14 @@
   "sidebarBackgroundLogo": "Background & Logo",
   "sidebarCredits": "Credits",
   "sidebarBilling": "Billing Details",
-
-  
   "cancelText": "Cancel",
   "deleteText": "Delete",
   "deleteCarMsgText": "Do you really want to delete this car from your Optifo list?",
-
   "UpdateText": "Update",
   "SaveText": "Save",
-  "DownloadAllText":"Download All",
-  "DownloadText":"Download",
+  "DownloadAllText": "Download All",
+  "DownloadText": "Download",
   "create_car": "Create Car",
-
-
-
   "fill_addr_info": "Please fill your billing information",
   "seperate_comma": "seperate multiple email addresses by comma",
   "automatict_refill_text": "Automatic refill",
@@ -322,7 +316,6 @@
   "delete_logo": "Delete logo?",
   "delete_plate": "Delete plate?",
   "delete_banner": "Delete banner?",
+  "download_ai_image": "Download AI video",
   "runout_auto_refill_buy": "When you buy the pack, you accept that Optifo will automatically refill when you run out of credits. You can always disable this later."
 }
-
-

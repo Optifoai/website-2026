@@ -1,7 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDateFormat, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
 import { useTranslation } from 'react-i18next';
 import Dropdown from 'react-bootstrap/Dropdown';
 // import WebRotate360Viewer from './WebRotate360Viewer';
@@ -9,11 +9,12 @@ import WebRotate360Viewer from './WebRotate360Viewer';
 import Dropzone from 'react-dropzone';
 import CommonModel from '../../components/common/model/CommonModel';
 import { Trans } from 'react-i18next';
-import { UplpadFileIcon } from '../../components/common/model/svg';
-import { generate360ImageAPI, getCarDelete, UploadCarVideoAPIUrl } from '../../Redux/Actions/carAction';
+import { AddIcon, DownloadIcon, DownloadVideo, UplpadFileIcon } from '../../components/common/model/svg';
+import { generate360ImageAPI, generateAImageAPI, getBrandList, getCarBrandList, getCarDelete, updateCarDetails, UploadCarVideoAPIUrl } from '../../Redux/Actions/carAction';
 import { useForm } from 'react-hook-form';
 import EditCarForm from './EditCarForm';
 import { useNavigate } from 'react-router-dom';
+import LoaderSpiner from '../../hooks/LoaderSpiner';
 
 
 function CarSideBar(props) {
@@ -21,18 +22,10 @@ function CarSideBar(props) {
      const navigate = useNavigate();
     const { dispatch, isUserLogin, loader, Link } = props
     const { carDetailsData, actionDownloadModal, getCarData } = props
-    // console.log('carDetailsData',carDetailsData)
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
-    React.useEffect(() => {
-        if (carDetailsData?.carDetails) {
-            setValue('brand', carDetailsData.carDetails.carBrand);
-            setValue('model', carDetailsData.carDetails.carModel);
-            setValue('year', carDetailsData.carDetails.carYear);
-            setValue('carId', carDetailsData.carDetails.carId);
-        }
-    }, [carDetailsData, setValue]);
+
 
 
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
@@ -47,21 +40,28 @@ function CarSideBar(props) {
             logoUploadSizeError: false,
 
             editModelOpen: false,
-            deleteModelOpen:false
+            deleteModelOpen:false,
+            carsBrandList: [],
+            loader: false,
+            closeAIVideo:false,
+
+
 
 
         }
     );
 
     function generate_360_image() {
+       setFormdata({ loader: true });
         let carVideoLink = carDetailsData?.carDetails?.carVideo && carDetailsData?.carDetails?.carVideo !== '' ? carDetailsData?.carDetails.carVideo : "";
         let payload = {
             "carVideo": carVideoLink,
             "vehicleId": carDetailsData?.carDetails?._id
         };
         dispatch(generate360ImageAPI(payload)).then((res) => {
+            setFormdata({ loader: false });
             if (res?.statusCode == '1') {
-                notify('success', res.response?.data?.message ? res.response?.data?.message : 'Video uploaded successfully.');
+                notify('success', res.responseData?.message ? res.responseData?.message : '360 Video Generated successfully.');
                 setFormdata({ generate360VideoModelOpen: true });
                 return true;
             } else {
@@ -69,6 +69,7 @@ function CarSideBar(props) {
                 setFormdata({ generate360VideoModelOpen: false });
             }
         }).catch((err) => {
+            setFormdata({ loader: false });
             notify('error', err?.message ? err?.message : 'Something went wrong!');
             setFormdata({ generate360VideoModelOpen: false });
         });
@@ -82,7 +83,7 @@ function CarSideBar(props) {
     );
 
     const editCarForm = (
-        <EditCarForm carDetailsData={carDetailsData} onClose={() => setFormdata({ editModelOpen: false })} getCarData={getCarData} />
+        <EditCarForm carsBrandList={formdata.carsBrandList} carDetailsData={carDetailsData} onClose={() => setFormdata({ editModelOpen: false })} getCarData={getCarData} />
     )
 
     // 360 function
@@ -151,6 +152,86 @@ function CarSideBar(props) {
         </Dropzone>
     );
 
+
+     const updateAIvideoInfo = (data) => {
+        let responcePreviousData=data 
+         let formPostData = {
+                vehicleId: carDetailsData?.carDetails?._id,
+                aIVideoUrl: responcePreviousData?.s3_url
+               
+            };
+
+             dispatch(updateCarDetails(formPostData)).then((res) => {
+            if (res?.statusCode == '1') {
+                notify('success', res.response?.data?.message ? res.response?.data?.message : 'Video uploaded successfully.');
+                setFormdata({ closeAIVideo: false });
+                getCarData()                
+            } else {
+                notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!');
+                setFormdata({ closeAIVideo: false });
+            }
+        }).catch((err) => {
+            notify('error', err?.message ? err?.message : 'Something went wrong!');
+            setFormdata({ closeAIVideo: false });
+        });
+
+        
+    }
+
+    const UpdateCarAIImageInfo = (e) => {
+        setFormdata({ loader: true })
+        e.preventDefault();
+        let selectedImage=carDetailsData?.carDetails?.backgroundRemoveImages3Url
+        if(selectedImage?.length>0){           
+            let formPostData = {             
+                image_urls: selectedImage,                
+                text_data: [formdata.aiVideoImageInfo],
+               
+            };
+
+             dispatch(generateAImageAPI(formPostData)).then((res) => {
+                setFormdata({ loader: false })
+            if (res?.status == 'success') {
+                 updateAIvideoInfo(res)            
+            } else {
+                notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!');
+                setFormdata({ closeAIVideo: false });
+            }
+        }).catch((err) => {
+            notify('error', err?.message ? err?.message : 'Something went wrong!');
+            setFormdata({ closeAIVideo: false });
+        });    
+           
+        }else{
+           
+         notify('error',  'No Image Selected');
+        
+        
+        }
+        
+   
+      
+    };
+
+    const changeInputValue = (e) => {
+        setFormdata({
+            ...formdata,
+            [e.target.name]: e.target.value,
+        });
+     
+    };
+
+    const uploadAIVideoBody = (
+        <>
+          <div class="flex-1 mb-3">
+                            <label className='form-label'>Car Info</label>
+                            <input type="text" class="form-control"  name="aiVideoImageInfo"
+                          value={formdata.aiVideoImageInfo}
+                              onChange={(e) => changeInputValue(e)} />
+                           
+                        </div></>
+    )
+
     const uploadCarVideo = (e) => {
         let formPostData = new FormData();
         formPostData.append('carVideo', formdata.uploadedvideo); // The file object
@@ -192,7 +273,6 @@ function CarSideBar(props) {
         let logoExtFile = fileLogo.name
             .substr(logoIdxDot, fileLogo.name.length)
             .toLowerCase();
-        // console.log('logoExtFile',logoExtFile)  
         if (logoExtFile == 'mp4' || logoExtFile == 'mov') {
             const image = fileLogo
 
@@ -236,6 +316,28 @@ function CarSideBar(props) {
         }
     };
 
+      useEffect(() => {
+                getCarBrand()
+            }, [EMPTY_ARRAY])
+
+      const getCarBrand = () => {
+                dispatch(getBrandList()).then((res) => {
+
+                    if (res?.statusCode == '1') {
+                        let data = res?.responseData?.carsList
+
+                        setFormdata({ ...formdata, carsBrandList: data})
+                        // notify('success', res.response?.data?.message ? res.response?.data?.message : 'data fetched Successful.')
+                        return true;
+                    } else {
+                        notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
+                    }
+                }).catch((err) => {
+                    notify('error', err?.message ? err?.message : 'Something went wrong!')
+                });
+        
+            };
+
 
       const actionDelteModal = () => {
               let payLoad = {
@@ -258,7 +360,58 @@ function CarSideBar(props) {
             
         }
 
-    console.log('carDetailsData', carDetailsData)
+          function download_ai_video() {
+          if (!carDetailsData?.carDetails?.aIVideoUrl) {
+                    throw new Error('Resource URL not provided! You need to provide one');
+                }
+                fetch(carDetailsData?.carDetails?.aIVideoUrl)
+                    .then((response) => response.blob())
+                    .then((blob) => {
+                        const blobURL = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = carDetailsData?.carDetails?.aIVideoUrl;
+                        a.style = 'display: none';
+                        a.click();
+                    });
+  
+    }
+
+    function generate_ai_video(vehicleId, carDetails) {
+         setFormdata({
+            modalYear: carDetailsData.year,
+            aiVideoImageInfo: carDetailsData.aiVideoImageInfo,
+        });
+        setFormdata({...carDetailsData , closeAIVideo: true});
+    }
+
+       const showDownloadAll = (items) => {
+        var date = new Date();
+        let todaysInterval = date.setTime(date.getTime());
+        todaysInterval = Math.floor(todaysInterval / 1000)
+
+        let difference = items.videoUploadDate - todaysInterval
+        let daysLef = 0
+        daysLef = Math.floor(difference / 86400);
+        return daysLef
+    }
+   
+       function downloadVideo(index, items, type) {
+        setFormdata({ loader: true });
+        let links = [];
+
+        setFormdata({ loader: false });
+        var link = document.createElement('a');
+        link.download = items.carVideo;
+
+        link.href = items.carVideo;
+        document.body.appendChild(link);
+        link.click();
+        // });
+        setFormdata({ downloadAll: false });
+    }
+
+
+   
     return (
         <>
 
@@ -284,19 +437,58 @@ function CarSideBar(props) {
                     <p class="label">Created</p>
                     <p class="value">{carDetailsData?.carDetails?.created ? displayDateFormat(carDetailsData?.carDetails?.created) : '-'}</p>
                 </div>
+                  {/* video */}
+                   {carDetailsData?.carDetails && carDetailsData?.carDetails.carVideo ?
+                            <div className="btn btn-gray boxdesignbox w-100 text-uppercase w-100">
+                                <div class="wrap">
+                                    <div class="first">
+                                        <DownloadVideo />
+
+                                    </div>
+                                    <div class="second text-left ml-1">
+                                        <h6>Video available</h6>
+                                        <span>{showDownloadAll(carDetailsData?.carDetails)} days left to download video</span>
+                                    </div>
+                                </div>
+
+                                <button
+                                    disabled={formdata?.loader}
+                                    className="btn btn-primary small-btn"
+                                    onClick={() =>
+                                        downloadVideo(carDetailsData?.carDetails?._id, carDetailsData?.carDetails)
+                                    } target="_blank">
+                                    Download video
+                                </button>
+                            </div>
+
+                            : ''}
                 {/* 360 creation flow */}
                 <div class="justify-content-between">
                     {carDetailsData?.carDetails?.carVideo == '' ?
-                        <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='../download.svg' />  {t('upload_video_text')}</button>
-                        : <button type='button' class="small-btn" onClick={generate_360_image}><img src='../download.svg' /> {t('generate_image_text')}</button>}
+                        <button type='button' class="btn btn-primary small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='../download.svg' />  {t('upload_video_text')}</button>
+                        : <button type='button' class="btn btn-primary small-btn" onClick={generate_360_image}><img src='../download.svg' /> {t('generate_image_text')}</button>}
                 </div>
 
                 {/* AI video creation flow */}
-                <div class="justify-content-between">
+                {carDetailsData?.carDetails?.aIVideoUrl && carDetailsData?.carDetails?.aIVideoUrl!=''?
+                           
+                <button  className={`btn btn-primary small-btn`}
+                    onClick={() => download_ai_video()}
+                    >
+                    <DownloadIcon /> {t('download_ai_image')}
+                </button>:
+                    <button className={`btn btn-primary small-btn`}
+                    onClick={() => generate_ai_video(carDetailsData?.carDetails?._id, carDetailsData?.carDetails)}
+                    >
+                    <AddIcon /> {t('generate_ai_image')}
+                </button>
+                }
+            
+                {/* <div class="justify-content-between">
 
                     <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='../download.svg' /> {t('generate_ai_image')}</button>
 
-                </div>
+                </div> */}
 
 
                 <div class="d-flex btn-download justify-content-between">
@@ -328,8 +520,18 @@ function CarSideBar(props) {
             </CommonModel>
 
             {/* car generate 360 video model */}
-            <CommonModel show={formdata.generate360VideoModelOpen} onClose={() => { setFormdata({ generate360VideoModelOpen: false }) }}>
+            {formdata?.loader ? <LoaderSpiner /> :<CommonModel show={formdata.generate360VideoModelOpen}  size="modal-xl" onClose={() => { setFormdata({ generate360VideoModelOpen: false }) }}>
                 {editInputFeild360Image}
+                 <button type="button" className="btn btn-secondary" onClick={() => { setFormdata({ generate360VideoModelOpen: false }); }}>{t('cancelText')}</button>
+            </CommonModel>}
+
+             {/* car AI video model */}
+            <CommonModel show={formdata.closeAIVideo} onClose={() => { setFormdata({ closeAIVideo: false }) }}>
+                {uploadAIVideoBody}
+                <div className="popup-btn">
+                    <button type="button" className="btn btn-login" disabled={formdata?.loader} onClick={UpdateCarAIImageInfo}>{t('upload_video_text')}</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => { setFormdata({ closeAIVideo: false }); }}>{t('cancelText')}</button>
+                </div>
             </CommonModel>
 
             {/* car Edit downlaod model */}

@@ -5,8 +5,8 @@ const WebRotate360Viewer = ({ images, carID, car360ImageRes }) => {
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   // Determine image base
-  // const imageUrl = `https://optifo-dev.s3.eu-west-2.amazonaws.com/${carID}/magic360/frame-01-01.jpg`;
-  const imageUrl = `/magic360/output/frame-01-01.jpg`;
+  const imageUrl = `https://optifo-dev.s3.eu-west-2.amazonaws.com/${carID}/magic360/frame-01-01.jpg`;
+  // const imageUrl = `/magic360/output/frame-01-01.jpg`;
 
   const imageCount = car360ImageRes?.magic360?.frameCount || 38;
 

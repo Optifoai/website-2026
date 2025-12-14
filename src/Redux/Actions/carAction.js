@@ -5,9 +5,10 @@ import { APICONFIG } from '../ApiConfig'
 
 // Calls the API to get Car List
 
-export const getCarList = () => (dispatch) => {
+export const getCarList = (params = {}) => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_CAR_LIST_REQUEST })
-  let apiurl = `${APICONFIG.getCarListUrl}?catagory=date`
+  const { page = 1, limit = 10 } = params;
+  let apiurl = `${APICONFIG.getCarListUrl}?catagory=date&page=${page}&limit=${limit}`
   return getRequest(apiurl).then((res) => {
     dispatch({ type: CONSTANTS.GET_CAR_LIST_SUCCESS, data: res })
     return res
@@ -89,14 +90,14 @@ export const UploadCarVideoAPIUrl = (payLoad) => (dispatch) => {
 
 // Calls the API to get Car delete
 export const generateAImageAPI = (payLoad) => (dispatch) => {
-  dispatch({ type: CONSTANTS.GET_CAR_DELETE_REQUEST })
-  let apiurl = `${APICONFIG.getCarDeleteAPIUrl}`
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CREAT_AI_IMAGE}`
   return postRequest(apiurl,payLoad).then((res) => {
-    dispatch({ type: CONSTANTS.GET_CAR_DELETE_SUCCESS, data: res })
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
     return res
   }).catch((err) => {
     let errObject = err 
-    dispatch({ type: CONSTANTS.GET_CAR_DELETE_FAILURE })
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
   })
 }
 
@@ -187,5 +188,44 @@ export const uploadBackground = (payLoad,obj='') => (dispatch) => {
 }
 
 
+// Calls the API to get Car List
 
+export const getBrandList = () => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.getCarListUrl}?catagory=date`
+  return getRequest(apiurl).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to get Car List
+
+export const getBrandDetails = (folderName) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.getCarListUrl}?catagory=folder&folderName=${folderName}&searchKeyword=`
+  return getRequest(apiurl).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = err 
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+
+// Calls the API to create car
+export const createCarSave = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CREAT_CAR}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
 

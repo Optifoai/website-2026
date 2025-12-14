@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {  EMPTY_ARRAY, EMPTY_OBJECT } from '../../utils/helpers';
+import {  EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { getCarBrandList, getCarList, updateCarDetails } from '../../Redux/Actions/carAction';
@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 function EditCarForm(props) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { carDetailsData,dispatch , onUpdate, onClose, getCarData} = props;
+    const { carDetailsData,dispatch , onUpdate, onClose, getCarData,carsBrandList} = props;
+    console.log('EditCarForm props',props)
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
@@ -92,9 +93,9 @@ function EditCarForm(props) {
                         <label className='form-label'>Brand</label>
                         <select class="form-select" {...register('brand', { required: 'Brand is required' })}>
                             <option value="">Select Brand</option>
-                            {formdata.carsBrandList?.map((brand, index) => (
-                                <option key={index} value={brand.brandName}>
-                                    {brand.brandName}
+                            {carsBrandList?.map((brand, index) => (
+                                <option key={index} value={brand.carBrand}>
+                                    {brand.carBrand}
                                 </option>
                             ))}
                         </select>
@@ -136,6 +137,8 @@ EditCarForm.propTypes = {
     carDetailsData: PropTypes.object,
     onUpdate: PropTypes.func,
     onClose: PropTypes.func,
+    carsBrandList: PropTypes.array,
+
 
 }
 
@@ -144,6 +147,8 @@ EditCarForm.defaulProps = {
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,
     loader: PropTypes.bool,
+    carsBrandList: EMPTY_ARRAY,
+
 
 }
 
