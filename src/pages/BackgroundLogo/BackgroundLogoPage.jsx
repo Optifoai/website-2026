@@ -6,9 +6,10 @@ import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import BackgroundPage from './BackgroundPage';
 import LogoPage from './logoPage';
+import LoaderSpiner from '../../hooks/LoaderSpiner';
 
 function BackgroundLogoPage(props) {
-const { dispatch, userDetails, navigate } = props;
+const { dispatch, userDetails, navigate ,loader} = props;
 const { user } = useAuth();
 const { t, i18n } = useTranslation();
 const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
@@ -28,6 +29,7 @@ useEffect(()=>{
   const { background, logo } = formdata;
   return (
     <>
+    {loader ? <LoaderSpiner /> :<>
       <div class="bg-gradient">
         <h3 className='heading-title'>Background</h3>
         <p className='heading-subtitle'>Select the background type you want to apply on all your exterior images.</p>
@@ -41,6 +43,7 @@ useEffect(()=>{
         <p className='heading-subtitle'>Select the Logo you want to apply on all your exterior images.</p>
       </div>
       <LogoPage logo={logo} />
+      </>}
     </>
   );
 }
@@ -65,6 +68,7 @@ function mapStateToProps({ login }) {
   return {
     isUserLogin: login?.isUserLogin,
     userDetails: login?.userDetails,
+    loader: login?.loader
   }
 }
 

@@ -10,8 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function EditCarForm(props) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { carDetailsData,dispatch , onUpdate, onClose, getCarData,carsBrandList} = props;
-    console.log('EditCarForm props',props)
+    const { carDetailsData,dispatch , onUpdate, onClose, getCarData,carsBrandList, customeClass} = props;
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
@@ -54,7 +53,6 @@ function EditCarForm(props) {
 
 
     const onEditSubmit = (data) => {
-        console.log('Form data submitted:', data);
        const payload= {
             "carBrand": data?.brand,
             "carId":    data?.carId,
@@ -89,9 +87,9 @@ function EditCarForm(props) {
 
             <div className="form-field mt-3">
                 <form onSubmit={handleSubmit(onEditSubmit)}>
-                    <div class="mb-3">
+                    <div class="mb-3 select-option">
                         <label className='form-label'>Brand</label>
-                        <select class="form-select" {...register('brand', { required: 'Brand is required' })}>
+                        <select class="form-control" {...register('brand', { required: 'Brand is required' })}>
                             <option value="">Select Brand</option>
                             {carsBrandList?.map((brand, index) => (
                                 <option key={index} value={brand.carBrand}>

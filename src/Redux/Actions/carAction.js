@@ -7,7 +7,7 @@ import { APICONFIG } from '../ApiConfig'
 
 export const getCarList = (params = {}) => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_CAR_LIST_REQUEST })
-  const { page = 1, limit = 10 } = params;
+  const { page = 1, limit = 20 } = params;
   let apiurl = `${APICONFIG.getCarListUrl}?catagory=date&page=${page}&limit=${limit}`
   return getRequest(apiurl).then((res) => {
     dispatch({ type: CONSTANTS.GET_CAR_LIST_SUCCESS, data: res })
@@ -33,7 +33,7 @@ export const getCarDetails = (vehicleId) => (dispatch) => {
 
 // Calls the API to get Car download all image
 export const getAllCarImages = (payload) => (dispatch) => {
-  console.log('payload',payload)
+
   dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
   let apiurl = `${APICONFIG.getAllCarImageDownloadUrl}`
   return postRequest(apiurl,payload).then((res) => {
@@ -47,7 +47,7 @@ export const getAllCarImages = (payload) => (dispatch) => {
 
 // Calls the API to get Car download all image
 export const getAllCarVideo = (payload) => (dispatch) => {
-  console.log('payload',payload)
+  
   dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
   let apiurl = `${APICONFIG.getAllCarVideoDownloadUrl}`
   return postRequest(apiurl,payload).then((res) => {
@@ -221,6 +221,18 @@ export const getBrandDetails = (folderName) => (dispatch) => {
 export const createCarSave = (payLoad) => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
   let apiurl = `${APICONFIG.CREAT_CAR}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to create car
+export const removeCarImageBackground = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.REMOVE_CAR_IMAGE_BACKGROUND}`
   return postRequest(apiurl,payLoad).then((res) => {
     dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
     return res

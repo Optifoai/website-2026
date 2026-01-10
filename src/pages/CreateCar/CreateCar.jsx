@@ -35,29 +35,54 @@ function CreateCar(props) {
 
     const { addModalOpen } = formdata;
 
-    if (selectedFiles.urls.length > 0 && isModalClosed) {
-        return <CreateCarForm 
-        selectedImages={selectedFiles.urls}
-        files={selectedFiles.files}
-        getCarImage={selectedFiles.files}
+    // if (selectedFiles?.files?.length > 0 && isModalClosed) {
+    if (selectedFiles?.files?.length > 0) {
+        return <CreateCarForm
+            selectedImages={selectedFiles.files}
+            files={selectedFiles.files}
+            setSelectedFiles={setSelectedFiles}
         />;
     }
 
-  return (
-    <>  
-        <div className='bg-logo-blk'> 
+    return (
+        <>
+            {/* <div className='bg-logo-blk'> 
             <div class="card add-card">
               <div class="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
                 <div class="add-icon"><img src='add-icon.svg' /></div>
                 <p>Add Car Image </p>
               </div>
             </div>
-        </div>
+        </div> */}
+            <div style={{ display: 'block'}}
+            >
+                <div className="modal-dialog modal-dialog-centered modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-body custom-modal-body">
+                            <MultipalUploadPage
+                                fileNote={'NOTE: Background size 1600 x 1200 pixels'}
+                                //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
+                                fileIntructions=''
+                                onFileSelect={onFileSelect}
+                                formdata={formdata}
+                                setFormdata={setFormdata}
+                                onClose={onModalClose}
+                                acceptfile={['jpg', 'jpeg', 'png']}
+                                width={'1600'}
+                                height={'1200'}
+                                fileSize={'400000000'}
+                                isValidDimensions={false}
+                                multiple={true}
+                                cancelBtn={false}
+                            /> 
+                             </div></div> 
+                              </div> </div>
 
-        <CommonModel show={addModalOpen} size="modal-xl" onClose={onModalClose}>
+            {/* <CommonModel show={addModalOpen} size="modal-xl" onClose={onModalClose}>
             <MultipalUploadPage 
               fileNote={'NOTE: Background size 1600 x 1201 pixels'}
-              fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
+            //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
+            fileIntructions=''
               onFileSelect={onFileSelect}
               formdata={formdata} 
               setFormdata={setFormdata}
@@ -69,18 +94,18 @@ function CreateCar(props) {
               isValidDimensions={false}
               multiple={true}
               />                               
-        </CommonModel>
-</>
-  );
+        </CommonModel> */}
+        </>
+    );
 }
 
 CreateCar.propTypes = {
     loader: PropTypes.bool,
-    userDetails: EMPTY_OBJECT, 
+    userDetails: EMPTY_OBJECT,
 }
 
 CreateCar.defaulProps = {
-    userDetails: EMPTY_OBJECT,    
+    userDetails: EMPTY_OBJECT,
     loader: PropTypes.bool,
 }
 

@@ -13,6 +13,8 @@ export const APICONFIG = {
 	getAllCarVideoDownloadUrl: `${baseURL}cars/downloadCarVideo`,
     CAR_UPDATE: `${baseURL}cars/update`,
     // USER_PROFILE_INFO_UPDATE: `${baseURL}user/update`,
+    USER_PROFILE_INFO_UPDATE_EMAIL: `${baseURL}user/update`,
+
     USER_PROFILE_INFO_UPDATE: `${baseURL}user/updatev1`,
 
     SET_BACKGROUND: `${baseURL}backgrounds/setBackground`,
