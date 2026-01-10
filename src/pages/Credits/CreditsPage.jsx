@@ -48,11 +48,11 @@ const { t } = useTranslation();
         <h3 className='heading-title'>Credit Packs</h3>
         <p className='heading-subtitle'>Select the credit pack that gives your dealer the most value..</p>
       </div>
-      <section class="card-block" aria-label="Preview Card">
+      <section class="card-block-credit" aria-label="Preview Card">
         <div class="pricing-card">
           <div class="price-section">
-            {/* <h2 class="price">€89<span class="currency">per transaction</span></h2> */}
-            <p class="subtext">€89 per transaction</p>
+            <h2 class="price">€89</h2>
+            <p class="subtext"> per transaction</p>
           </div>
 
           <div class="divider"></div>
@@ -69,8 +69,8 @@ const { t } = useTranslation();
 
         <div class="pricing-card">
           <div class="price-section">
-            {/* <h2 class="price">€129<span class="currency">per transaction</span></h2> */}
-            <p class="subtext">€129 per transaction</p>
+            <h2 class="price">€129</h2>
+            <p class="subtext"> per transaction</p>
           </div>
 
           <div class="divider"></div>

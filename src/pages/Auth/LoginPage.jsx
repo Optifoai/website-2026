@@ -34,6 +34,7 @@ function LoginPage(props) {
     }
   );
 
+  
 
   return (
     <div class="login-container">
@@ -54,19 +55,27 @@ function LoginPage(props) {
           <p class="login-subtext">{t('loginSubtitle')}</p>
           <div className="form-field">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div class="f-group mb-3">
+              <div class="f-group">
                 <label className='form-label'>{t('emailAddressLabel')}</label>
-                <input type="email" class="form-control"
+                <input type="email" class={`form-control ${errors.email ? 'error' : ''}`}
                   {...register("email", { required: "Email is required" })} />
-                {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>}
+                {/* {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>} */}
               </div>
-              <div class="f-group mb-3">
+              <div class="f-group">
                 <label className='form-label'>{t('passwordLabel')}</label>
-                <input type={userInput.showPassword ? "text" : "password"} class="form-control"
+                <input type={userInput.showPassword ? "text" : "password"} class={`form-control ${errors.password ? 'error' : ''}`}
                   {...register("password", { required: "Password is required" })} />
-                {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>}
-                <img className='eye-icon close' src='eye-close.png' onClick={() => setUserInput({ ...userInput, showPassword: !userInput.showPassword })} />
-                {/* <img className='eye-icon open' src='eye-open.png'/> */}
+                {/* {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>} */}
+                <img
+                  className={`eye-icon ${userInput.showPassword ? 'open' : 'close'}`}
+                  src={userInput.showPassword ? 'eye-open.png' : 'eye-close.png'}
+                  onClick={() =>
+                    setUserInput({
+                      ...userInput,
+                      showPassword: !userInput.showPassword,
+                    })
+                  }
+                />
               </div>
               <div className="f-group">
                 <button type="submit" class="btn btn-login">{t('loginButton')}</button>

@@ -21,7 +21,7 @@ function CarDetails(props) {
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
         {
             carDetails: EMPTY_OBJECT,
-            carID:'',
+            carID: '',
             galleImages: EMPTY_ARRAY,
             allImageURL: EMPTY_ARRAY,
             tabValue: 1,
@@ -47,11 +47,11 @@ function CarDetails(props) {
 
     useEffect(() => {
         getCarData(id)
-        setFormdata({ selectedImage: [],carID:id })
+        setFormdata({ selectedImage: [], carID: id })
     }, [id])
 
     const getCarData = (vehicleId) => {
-        let vehicleIds=vehicleId ? vehicleId:formdata?.carID
+        let vehicleIds = vehicleId ? vehicleId : formdata?.carID
         dispatch(getCarDetails(vehicleIds)).then((res) => {
             if (res?.statusCode == '1') {
                 const data = res?.responseData || {};
@@ -86,6 +86,7 @@ function CarDetails(props) {
 
     const changeCheckValue = (e, index, items) => {
         const { checked } = e.target
+
         setInputValue(prevValue => {
             if (checked) {
                 return [...prevValue, index];
@@ -93,15 +94,38 @@ function CarDetails(props) {
                 return prevValue.filter(value => value !== index);
             }
         });
-        let selectImage = [...formdata.selectedImage]
+        let selectImage = formdata.selectedImage
         if (checked) {
             selectImage.splice(index, 0, items)
         } else {
-            selectImage.splice(index, 1)
+            const index = selectImage.indexOf(items);
+            if (index > -1) { // only splice if item is found
+                selectImage.splice(index, 1);
+            }
+            // selectImage.splice(index, 1)
         }
         setFormdata({ selectedImage: selectImage })
 
     };
+
+    // const changeCheckValue = (e, index, items) => {
+    //     const { checked } = e.target
+    //     setInputValue(prevValue => {
+    //         if (checked) {
+    //             return [...prevValue, index];
+    //         } else {
+    //             return prevValue.filter(value => value !== index);
+    //         }
+    //     });
+    //     let selectImage = [...formdata.selectedImage]
+    //     if (checked) {
+    //         selectImage.splice(index, 0, items)
+    //     } else {
+    //         selectImage.splice(index, 1)
+    //     }
+    //     setFormdata({ selectedImage: selectImage })
+
+    // };
 
     const actionDownloadModal = () => {
         let items = formdata?.carDetails
@@ -154,27 +178,26 @@ function CarDetails(props) {
                                                 className="col-lg-3 col-md-4 col-sm-4 col-6 mob-100 mb-3"
                                                 id="thing"
                                                 key={i}
-                                        
+
                                             >
                                                 <div className={`h-100 car-details-box ${inputValue.includes(i) ? 'active' : ''}`}>
-                                                    <div className="selectimg-checkbox">
-                                                        <input
-                                                            type="checkbox"
+                                                    <label className="gallery-item-car-details">
+                                                        <input type="checkbox"
                                                             onChange={(e) => changeCheckValue(e, i, items?.partUrl)}
-                                                            checked={inputValue.includes(i)}
-                                                        />
-                   
-                                                        <span></span>
-                                                    </div>
-                                                    <div className="gallery-img-overlay">
-                                                        <a>
+                                                            checked={inputValue.includes(i)} />
+
+                                                        <div className="gallery-img-overlay">
                                                             <img
                                                                 src={formdata?.galleImages[i].partUrl}
                                                                 alt=""
                                                                 className="w-100"
                                                             />
-                                                        </a>
-                                                    </div>
+                                                        </div>
+
+                                                        <span className="custom-checkbox"></span>
+                                                    </label>
+
+                                                  
                                                 </div>
                                             </div>
                                         );
@@ -189,7 +212,7 @@ function CarDetails(props) {
                     </Tabs>
 
                 </section>
-                <CarSideBar carDetailsData={formdata} actionDownloadModal={actionDownloadModal} getCarData={getCarData} />
+                <CarSideBar inputValue={inputValue} carDetailsData={formdata} actionDownloadModal={actionDownloadModal} getCarData={getCarData} />
             </div>
 
         </>

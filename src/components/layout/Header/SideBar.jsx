@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import { useAuth } from '../../../hooks/useAuth';
@@ -12,19 +12,20 @@ import { getUserProfile } from '../../../services/auth';
 
 
 function SideBar(props) {
-    const { user, logout,getUserData } = useAuth();
+    const { user, logout, getUserData } = useAuth();
     const { userDetails } = props
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
+    const [open, setOpen] = useState(false);
     const handleLogout = () => {
         logout();
         navigate('/login');
     };
 
-    useEffect(()=>{
-    getUserData()
-    },[!user ,user==null])
+    useEffect(() => {
+        getUserData()
+    }, [!user, user == null])
 
     return (
         <aside class="sidebar" role="navigation" aria-label="Main sidebar">
@@ -44,14 +45,16 @@ function SideBar(props) {
             <ul class="" aria-label="Primary">
                 <li>
                     <Link to="/dashboard" className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`} role="button" tabIndex="0" aria-current>
-                        <div class="icon"><img src="dashboard.svg" /></div>
+                        <div class="icon">
+                             <img src={location.pathname === '/dashboard' ? "/dashboard-active.svg" : "/dashboard-deactivate.svg"} />
+                        </div>
                         <span>{t('sidebarDashboard')}</span>
                     </Link>
                 </li>
                 <li>
                     <Link to="/my-account" className={`nav-item ${location.pathname === '/my-account' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/my-account' ? "my-account-active.svg" : "my-account.svg"} />
+                            <img src={location.pathname === '/my-account' ? "/my-account-active.svg" : "/my-account.svg"} />
                         </div>
                         <span>{t('sidebarMyAccount')}</span>
                     </Link>
@@ -61,7 +64,7 @@ function SideBar(props) {
                 <li>
                     <Link to="/background-logo" className={`nav-item ${location.pathname === '/background-logo' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/background-logo' ? "background-logo-active.svg" : "background-logo.svg"} />
+                            <img src={location.pathname === '/background-logo' ? "/background-logo-active.svg" : "/background-logo.svg"} />
                         </div>
                         <span>{t('sidebarBackgroundLogo')}</span>
                     </Link>
@@ -70,7 +73,7 @@ function SideBar(props) {
                 <li>
                     <Link to="/create-car" className={`nav-item ${location.pathname === '/create-car' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/create-car' ? "credits-active.svg" : "credits.svg"} />
+                            <img src={location.pathname === '/create-car' ? "/images/create-car-active.png" : "/images/create-car-deactive.png"} />
 
                         </div>
                         <span>{t('create_car')}</span>
@@ -80,14 +83,14 @@ function SideBar(props) {
                 <li>
                     <Link to="/create-background" className={`nav-item ${location.pathname === '/create-background' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/create-background' ? "credits-active.svg" : "credits.svg"} />
+                            <img src={location.pathname === '/create-background' ? "/background-logo-active.svg" : "/background-logo.svg"} />
 
                         </div>
                         <span>{t('create_bg_text')}</span>
                     </Link>
 
                 </li>
-                <li>
+                {/* <li>
                     <Link to="/brand" className={`nav-item ${location.pathname === '/brand' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
                             <img src={location.pathname === '/brand' ? "/credits-active.svg" : "/credits.svg"} />
@@ -96,7 +99,7 @@ function SideBar(props) {
                         <span>{t('car_brand')}</span>
                     </Link>
 
-                </li>
+                </li> */}
 
                 <li>
                     <Link to="/credits" className={`nav-item ${location.pathname === '/credits' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
@@ -117,25 +120,7 @@ function SideBar(props) {
 
                 </li> */}
 
-                {/* old */}
-                {/* <li>
-                    <a class="nav-item" role="button" tabindex="0">
-                        <div class="icon"><img src="background-logo.svg" /></div>
-                        <span>Background &amp; Logo</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-item" role="button" tabindex="0">
-                        <div class="icon"><img src="credits.svg" /></div>
-                        <span>Credits</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-item" role="button" tabindex="0">
-                        <div class="icon"><img src="billing.svg" /></div>
-                        <span>Billing Info</span>
-                    </a>
-                </li> */}
+         
 
                 <div class="nav-divider"></div>
             </ul>
@@ -151,14 +136,38 @@ function SideBar(props) {
                     </div>
                 </div>
 
-                <div class="profile" title="Account">
+                <div className="profile-wrapper">
+                    <div className="profile" onClick={() => setOpen(!open)}>
+                        <div className="avatar">
+                            <img src="user.png" alt="User" />
+                        </div>
+
+                        <div className="info">
+                            {user?.userProfile?.fullName || "User"}
+                        </div>
+
+                        <div className="caret"><img src='images/caret.png'/></div>
+                    </div>
+
+                    {open && (
+                        <div className="profile-dropdown">
+                            <ul>
+                                <li className="logout" onClick={handleLogout}>
+                                    Logout
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
+
+                {/* <div class="profile" title="Account">
                     <div class="avatar"><img src="user.png" /></div>
                     <div>
                         <div class="info">{user?.userProfile?.fullName ? user?.userProfile?.fullName : 'User'}</div>
                         <button onClick={handleLogout}>Logout</button>
                     </div>
-                    <div class="caret" aria-hidden="true"></div>
-                </div>
+                    <div class="caret" aria-hidden="true">▼</div>
+                </div> */}
             </div>
 
         </aside>
@@ -182,7 +191,7 @@ SideBar.defaulProps = {
 }
 
 function mapStateToProps({ login }) {
-    console.log('sidebar reducer', login);
+
     return {
         isUserLogin: login?.isUserLogin,
         userDetails: login?.userDetails,

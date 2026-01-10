@@ -187,9 +187,10 @@ function BrandDetails(props) {
             <CommonModel show={formdata.deleteModelOpen} onClose={() => { setFormdata({ deleteModelOpen: false }) }}>
                 <img src="/delete-image.png" />
                 <h2>{t('deleteText')} {formdata?.actionCarDetails?.carType}?</h2>
-                <Trans i18nKey="deleteCarMsgText">
+               <p> <Trans i18nKey="deleteCarMsgText">
                     Do you really want to delete this car from your Optifo list?
                 </Trans>
+                </p>
                 <div className="popup-btn">
                     <button type="button" className="btn btn-login" onClick={actionDelteModal}>{t('deleteText')}</button>
                     <button type="button" className="btn btn-secondary" onClick={() => { setFormdata({ deleteModelOpen: false }); }}>{t('cancelText')}</button>

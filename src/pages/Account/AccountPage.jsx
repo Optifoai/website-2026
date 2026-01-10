@@ -10,8 +10,10 @@ import CommonModel from '../../components/common/model/CommonModel';
 import { getCarDelete } from '../../Redux/Actions/carAction';
 import { Tab, Tabs } from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2'
+import LoaderSpiner from '../../hooks/LoaderSpiner';
+import EditEmailForm from './EditEmailForm';
 function AccountPage(props) {
-    const { dispatch, userDetails, navigate } = props;
+    const { dispatch, userDetails, navigate, loader } = props;
     const { user, getUserData } = useAuth();
     const { t, i18n } = useTranslation();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -24,7 +26,9 @@ function AccountPage(props) {
             showConfirmPassword: false,
             password: EMPTY_STRING,
             userDetails: EMPTY_OBJECT,
-            loader: false
+            loader: false,
+            editModelOpen: false,
+
 
         }
     );
@@ -50,27 +54,27 @@ function AccountPage(props) {
 
 
 
-  /* ================= LOAD USER ================= */
+    /* ================= LOAD USER ================= */
     useEffect(() => {
-      const localUser = localStorage.getItem("userData")
-        ? JSON.parse(localStorage.getItem("userData"))
-        : EMPTY_OBJECT;
-  
-      const profile =
-        user?.userProfile ??
-        userDetails?.userProfile ??
-        localUser;
-  
-      if (profile) {
-        setValue("fullName", profile.fullName || "");
-        setValue("email", profile.email || "");
-        setValue("companyName", profile.companyDetails?.companyName || "");
-        setValue("language", profile.languageSelected || "en");
-        setValue("phone", profile.phone ? String(profile.countryCode)+ String(profile.phone) : "");
-        setValue("countryCode", profile.countryCode || "+91");
-  
-        // setState({ loader: false });
-      }
+        const localUser = localStorage.getItem("userData")
+            ? JSON.parse(localStorage.getItem("userData"))
+            : EMPTY_OBJECT;
+
+        const profile =
+            user?.userProfile ??
+            userDetails?.userProfile ??
+            localUser;
+
+        if (profile) {
+            setValue("fullName", profile.fullName || "");
+            setValue("email", profile.email || "");
+            setValue("companyName", profile.companyDetails?.companyName || "");
+            setValue("language", profile.languageSelected || "en");
+            setValue("phone", profile.phone ? String(profile.countryCode) + String(profile.phone) : "");
+            setValue("countryCode", profile.countryCode || "+91");
+
+            // setState({ loader: false });
+        }
     }, [user, userDetails, setValue]);
 
     const changeTabValue = (e) => {
@@ -82,29 +86,38 @@ function AccountPage(props) {
     };
 
     const onSubmit = (data) => {
-        const phoneWithoutCountryCode = data.phone.replace(data.countryCode, '').trim();
-         const payload = {
-        fullName: data.fullName,
-        email: data.email,
-        companyName: data.companyName,
-        language: data.language,
-        countryCode: data.countryCode,
-        phone: phoneWithoutCountryCode,
+        setFormdata({ loader: true })
+        const phoneWithoutCountryCode = data.phone.startsWith(data.countryCode.replace('+', '')) ? data.phone.substring(data.countryCode.length - 1) : data.phone;
+        const payload = {
+            fullName: data.fullName,
+            email: data.email,
+            companyName: data.companyName,
+            language: data.language,
+            countryCode: data.countryCode,
+            phone: phoneWithoutCountryCode,
         };
 
         dispatch(updateUserProfile(payload)).then(res => {
             if (res?.statusCode == '1') {
                 getUserData()
                 notify('success', 'Profile updated successfully!');
+                setFormdata({ loader: false })
+
             } else {
+                setFormdata({ loader: false })
+
                 notify('error', res?.error?.responseMessage || 'Failed to update profile.');
             }
         }).catch(err => {
             notify('error', err?.message || 'An error occurred.');
+            setFormdata({ loader: false })
+
         });
     };
 
     const onChangePasswordSubmit = (data) => {
+        setFormdata({ loader: true })
+
         let payload =
         {
             "optifoPassword": data?.currentPassword,
@@ -112,19 +125,24 @@ function AccountPage(props) {
         }
 
         dispatch(updateUserProfile(payload)).then(res => {
-            console.log("Change Password Response:", res);
+            setFormdata({ loader: false })
+
             if (res?.statusCode == '1') {
                 notify('success', res?.responseData?.message ? res?.responseData?.message : 'Password updated successfully!');
             } else {
                 notify('error', res?.error?.responseMessage || 'Failed to update Password.');
             }
         }).catch(err => {
+            setFormdata({ loader: false })
+
             notify('error', err?.message || 'An error occurred.');
         });
         // Here you would dispatch an action to change the password
     };
 
     const handleDeleteAccount = () => {
+        setFormdata({ loader: true })
+
         let getLocalUserData = localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')) : EMPTY_OBJECT
         let userdata = user && user != null ? user?.userProfile : userDetails?.userProfile ? userDetails?.userProfile : getLocalUserData
 
@@ -132,6 +150,8 @@ function AccountPage(props) {
             userId: userdata._id,
         };
         dispatch(getCarDelete(payLoad)).then((res) => {
+            setFormdata({ loader: false })
+
             if (res?.statusCode == '1') {
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Account deleted successful.')
 
@@ -140,15 +160,20 @@ function AccountPage(props) {
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
             }
         }).catch((err) => {
+            setFormdata({ loader: false })
+
             notify('error', err?.message ? err?.message : 'Something went wrong!')
         });
         setDeleteModalOpen(false);
 
     };
+    const editEmailForm = (
+        <EditEmailForm  formdata={formdata} onClose={() => setFormdata({ editModelOpen: false })} />
+    )
 
     return (
         <>
-            {formdata?.loader ? <LoaderSpiner /> : <div className='d-flex justify-between mt-4 '>
+            {loader ? <LoaderSpiner /> : <div className='d-flex justify-between mt-4 '>
                 <section className="flex-1">
                     <Tabs
                         defaultActiveKey={1}
@@ -167,8 +192,9 @@ function AccountPage(props) {
                                         })} />
                                         {errors.fullName && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.fullName.message}</p>}
                                     </div>
-                                    <div className="mb-3">
+                                    <div className="mb-3 position-relative ">
                                         <label className='form-label'>Email Address</label>
+                                        <div className='d-flex justify-content-between align-items-center'>
                                         <input type="email" className="form-control" {...register("email", {
                                             required: "Email is required",
                                             pattern: {
@@ -176,7 +202,14 @@ function AccountPage(props) {
                                                 message: "Invalid email address"
                                             }
                                         })} readOnly />
+                                           <a href="#" className="edit-account" onClick={() => { setFormdata({ editModelOpen: true }) }}>
+                                          
+                                            <img class="edit-icon " src="/images/icon/Edit-Active.png"></img>
+                                        </a>
+                                        </div>
                                         {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>}
+                                     
+
                                     </div>
                                     <div className="mb-3">
                                         <label className='form-label'>Company Name</label>
@@ -240,7 +273,8 @@ function AccountPage(props) {
                                         <input type={formdata.showCurrentPassword ? "text" : "password"} className="form-control"
                                             {...registerPassword("currentPassword", { required: "Current Password is required" })} />
                                         {passwordErrors.currentPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.currentPassword.message}</p>}
-                                        <img className='eye-icon close' src='/eye-close.png' onClick={() => setFormdata({ showCurrentPassword: !formdata.showCurrentPassword })} />
+
+                                        <img className='eye-icon close' src={formdata.showCurrentPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showCurrentPassword: !formdata.showCurrentPassword })} />
                                     </div>
 
                                     <div className="mb-3 position-relative">
@@ -251,7 +285,7 @@ function AccountPage(props) {
                                                 minLength: { value: 8, message: "Password must be at least 8 characters" }
                                             })} />
                                         {passwordErrors.newPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.newPassword.message}</p>}
-                                        <img className='eye-icon close' src='/eye-close.png' onClick={() => setFormdata({ showNewPassword: !formdata.showNewPassword })} />
+                                        <img className='eye-icon close' src={formdata.showNewPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showNewPassword: !formdata.showNewPassword })} />
                                     </div>
 
                                     <div className="mb-3 position-relative">
@@ -263,7 +297,7 @@ function AccountPage(props) {
                                                     value === watchPassword('newPassword') || "The passwords do not match"
                                             })} />
                                         {passwordErrors.confirmPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.confirmPassword.message}</p>}
-                                        <img className='eye-icon close' src='/eye-close.png' onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
+                                        <img className='eye-icon close' src={formdata.showConfirmPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
                                     </div>
 
                                     <div className='modal-footer popup-btn d-flex max-w-320 mt-4'>
@@ -291,12 +325,20 @@ function AccountPage(props) {
 
             <CommonModel show={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
                 <img src="/delete-image.png" alt="Delete confirmation" />
-                <h2>Are you sure?</h2>
-                <p>This action cannot be undone. All your data will be permanently deleted.</p>
+                <h2>Are you sure you want to delete your account?</h2>
+                <p>When you delete your Optifo account, all your images will be deleted and gone forever.</p>
                 <div className="popup-btn">
                     <button type="button" className="btn btn-login" onClick={handleDeleteAccount}>Yes, Delete</button>
                     <button type="button" className="btn btn-secondary" onClick={() => setDeleteModalOpen(false)}>Cancel</button>
                 </div>
+            </CommonModel>
+
+            {/*Email update model */}
+            <CommonModel size="modal-email" show={formdata.editModelOpen} customeClass={'mw-100'} onClose={() => { setFormdata({ editModelOpen: false }) }}>
+
+                {editEmailForm}
+
+
             </CommonModel>
         </>
     );
@@ -319,10 +361,12 @@ AccountPage.defaulProps = {
 }
 
 function mapStateToProps({ login }) {
-    console.log('AccountPage reducer', login);
+
     return {
         isUserLogin: login?.isUserLogin,
         userDetails: login?.userDetails,
+        loader: login?.loader
+
     }
 }
 

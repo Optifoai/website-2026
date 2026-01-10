@@ -79,7 +79,7 @@ function BackgroundPage(props) {
 
     return (
         <>
-            {loader ? <LoaderSpiner /> :
+            {/* {loader ? <LoaderSpiner /> : */}
                 <div className='bg-logo-blk  flex-wrap'>
                     {background?.length > 0 ? background?.map((item, index) => {
                         return (<>
@@ -107,13 +107,14 @@ function BackgroundPage(props) {
                         </div>
                     </div>
 
-                </div>}
+                </div>
+                {/* } */}
 
                 
                             <CommonModel show={deleteModalOpen} onClose={() => setFormdata({deleteModalOpen :false})}>
                                 <img src="/delete-image.png" alt="Delete confirmation" />
-                                <h2>Are you sure?</h2>
-                                <p>This action cannot be undone. All your data will be permanently deleted.</p>
+                                <h2>Delete Background?</h2>
+                                <p>Are you sure you want to delete this background from Optifo?</p>
                                 <div className="popup-btn">
                                     <button type="button" className="btn btn-login" onClick={handleDelete}>Yes, Delete</button>
                                     <button type="button" className="btn btn-secondary" onClick={() => setFormdata({deleteModalOpen :false})}>Cancel</button>
@@ -121,7 +122,7 @@ function BackgroundPage(props) {
                             </CommonModel>
 
                             
-                            <CommonModel show={addModalOpen} size="modal-xl" onClose={() => setFormdata({addModalOpen :false})}>
+                            <CommonModel show={addModalOpen}   customeClass={'mw-100 w-100 p-4'} size="modal-xl" onClose={() => setFormdata({addModalOpen :false})}>
                                 <AddBackgroundPage onClose={() => setFormdata({addModalOpen :false})}/>                               
                             </CommonModel>
         </>

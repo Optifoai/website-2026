@@ -7,16 +7,16 @@ import { UplpadFileIcon } from '../model/svg.jsx';
 import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../../utils/helpers';
 
 function UploadPage(props) {
-const {formdata,UploadDone,setFormdata,onClose,acceptfile,fileNote,fileIntructions,isValidDimensions,width,height,fileSize} = props;
-console.log('props',props)
-const { t, i18n } = useTranslation();
+    const { formdata, UploadDone, setFormdata, onClose, acceptfile, fileNote, fileIntructions, isValidDimensions, width, height, fileSize } = props;
 
- function imageDimensions(file) {
-       return new Promise((resolve, reject) => {
+    const { t, i18n } = useTranslation();
+
+    function imageDimensions(file) {
+        return new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => {
-                const {naturalWidth: width, naturalHeight: height} = img;
-                resolve({width, height});
+                const { naturalWidth: width, naturalHeight: height } = img;
+                resolve({ width, height });
             };
             img.onerror = () => {
                 reject(`${t('problem_with_image')}`);
@@ -25,24 +25,21 @@ const { t, i18n } = useTranslation();
         });
     }
 
- async function handleUploadImage(droppedFile) {
+    async function handleUploadImage(droppedFile) {
         let reader = new FileReader();
         let img = new Image(droppedFile);
         let file = droppedFile[0];
         let idxDot = file.name.lastIndexOf('.') + 1;
         let extFile = file.name.substr(idxDot, file.name.length).toLowerCase();
         // if (extFile == 'jpg' || extFile == 'jpeg' || extFile == 'png') {
-        if (acceptfile.includes(extFile )) {
-            console.log('coming isValidDimensions',isValidDimensions)
-            console.log('coming width',width)
+        if (acceptfile.includes(extFile)) {
 
-            console.log('coming height',height)
 
 
             try {
                 const dimensions = await imageDimensions(file);
-                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || isValidDimensions==false ) {
-                    console.log('coming if')
+                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || isValidDimensions == false) {
+
                     reader.addEventListener(
                         'load',
                         () => {
@@ -53,17 +50,19 @@ const { t, i18n } = useTranslation();
                                 docErrorMsg: '',
                                 UploadSizeError: false,
                                 ImageExtError: false,
+                                uploadedfile: file
                             });
                         },
                         false
                     );
                     if (file) {
-                        reader.readAsDataURL(file);                       
+
+                        reader.readAsDataURL(file);
                         // console.log('upload file',file)
-                        setFormdata({uploadedfile: file})
+                        setFormdata({ ...formdata, uploadedfile: file })
                     }
                 } else {
-                    console.log('coming else')
+
                     setFormdata({
                         ...formdata,
                         uploadImageUrl: '',
@@ -86,7 +85,7 @@ const { t, i18n } = useTranslation();
         }
     }
 
-      function AgainUpload() {
+    function AgainUpload() {
         setFormdata({
             ...formdata,
             uploadImageUrl: '',
@@ -97,19 +96,19 @@ const { t, i18n } = useTranslation();
         });
     }
 
-    const closeModel=()=>{       
-         setFormdata({
+    const closeModel = () => {
+        setFormdata({
             ...formdata,
             uploadImageUrl: '',
             challengeImageErrorMsg: '',
             docErrorMsg: '',
             UploadSizeError: false,
         });
-         onClose()
-}
+        onClose()
+    }
 
-    
-// console.log('formdata uploadedfile 2',formdata.uploadedfile)
+
+    // console.log('formdata uploadedfile 2',formdata.uploadedfile)
 
     return (
         <>
@@ -122,49 +121,51 @@ const { t, i18n } = useTranslation();
                         <>
                             {formdata?.uploadImageUrl ? (
                                 <div>
-                                    <img src={formdata?.uploadImageUrl} alt="" className="w-100" />
+                                    <img src={formdata?.uploadImageUrl} alt="" className="w-100 rounded-8" />
                                     <div className="text-right mt-2">
-                                        <button  className="btn btn-login" onClick={AgainUpload}>
+                                        <button className="btn btn-login" onClick={AgainUpload}>
                                             {t('change_img')}
                                         </button>
-                                        <button className="btn btn-login" onClick={UploadDone}>
+                                        <button className="btn btn-login  mt-2" onClick={UploadDone}>
                                             {t('ok_text')}
                                         </button>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="upload_file_main">
-                                    <div className="upload_file h-100" {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        <div
-                                            className="d-flex align-items-center justify-content-center h-100 text-center">
-                                            <div>
-                                                <UplpadFileIcon />
-                                                <p className="mt-2 mb-2">
-                                                    {t('drag_drop')}{' '}
-                                                    <strong className="text-decoration-underline">
-                                                        {t('upload_fr_computer')}
-                                                    </strong>
-                                                </p>
-                                                <p className="small mb-2">
-                                                   {fileNote}
-                                                </p>
-                                                <p className="small">
-                                                    {fileIntructions}
-                                                </p>
+                                <div className="bg-modal-list">
+                                    <div className="upload_file_main popup-upload-file">
+                                        <div className="upload_file h-100" {...getRootProps()}>
+                                            <input {...getInputProps()} />
+                                            <div
+                                                className="d-flex align-items-center justify-content-center h-100 text-center">
+                                                <div>
+                                                    <UplpadFileIcon />
+                                                    <p className="mt-2 mb-2">
+                                                        {t('drag_drop')}{' '}
+                                                        <strong className="text-decoration-underline">
+                                                            {t('upload_fr_computer')}
+                                                        </strong>
+                                                    </p>
+                                                    <p className="small mb-2">
+                                                        {fileNote}
+                                                    </p>
+                                                    <p className="small">
+                                                        {fileIntructions}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             )}
                             <div>
-                                <small className="text-red">
+                                <small className="text-danger">
                                     {formdata?.UploadSizeError ? `${t('valid_imge_size')}` : ''}
                                 </small>
                             </div>
                             <div>
-                                <small className="text-red">
-                                    {formdata?.ImageExtError ? `${t('only_text')} ${ acceptfile.join(', ')} ${t('allow_text')}`  : ''}
+                                <small className="text-danger">
+                                    {formdata?.ImageExtError ? `${t('only_text')} ${acceptfile.join(', ')} ${t('allow_text')}` : ''}
                                 </small>
                             </div>
                         </>
@@ -196,7 +197,7 @@ UploadPage.defaulProps = {
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,
     loader: PropTypes.bool,
-    isValidDimensions:false
+    isValidDimensions: false
 
 }
 

@@ -61,7 +61,7 @@ function SignupPage() {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container signup-container">
       <div className="login-left">
 
       </div>
@@ -70,7 +70,7 @@ function SignupPage() {
            <Link to="/login"><img className='back-arrow' src='back-arrow.svg'/></Link> 
           <div className="login-logo">
             <div className='logo-blk'>
-              <img src="optifo-logo.png" alt="Logo" />
+              <img src="signup-logo.png" alt="Logo" />
             </div>
           </div>
 
@@ -81,20 +81,20 @@ function SignupPage() {
           <div className="form-field">
             <form onSubmit={handleSubmit(onSubmit)}>
               {error && <p className="error-message" style={{ color: 'red' }}>{error}</p>}
-              <div className="f-group mb-3">
+              <div className="f-group">
                 <label className='form-label'>{t('fullNameLabel')}</label>
                 <input type="text" className="form-control"
                   {...register("fullName", { required: "Full Name is required" })} />
                 {errors.fullName && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.fullName.message}</p>}
               </div>
-              <div className="f-group mb-3">
+              <div className="f-group">
                 <label className='form-label'>{t('companyNameLabel')}</label>
                 <input type="text" className="form-control"
                   {...register("companyName", { required: "Company Name is required" })} />
                 {errors.companyName && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.companyName.message}</p>}
 
               </div>
-               <div className="f-group mb-3">
+               <div className="f-group">
                 <label className='form-label'>{t('mobileLabel')}</label>
                 {/* <input type="text" className="form-control"
                   {...register("companyName", { required: "Company Name is required" })} /> */}
@@ -120,14 +120,14 @@ function SignupPage() {
                 {errors.phone && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.phone.message}</p>}
 
               </div>
-              <div className="f-group mb-3">
+              <div className="f-group">
                 <label className='form-label'>{t('emailAddressLabel')}</label>
                 <input type="email" className="form-control"
                   {...register("email", { required: "Email is required" })} />
                 {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>}
 
               </div>
-              <div className="f-group mb-3">
+              <div className="f-group">
                 <label className='form-label'>{t('passwordLabel')}</label>
                 <input type={userInput.showPassword ? "text" : "password"} className="form-control"
                   {...register("password", { required: "Password is required" })} />
@@ -146,7 +146,7 @@ function SignupPage() {
                 By clicking below, you agree to the Optifo <a href="https://optifo.com/terms/" target='_blank'>Terms & Condition</a> and <a href='https://optifo.com/privacy-policy/' target='_blank'>Privacy Policy.</a>
               </Trans>
             </p>
-              <div className="f-group mt-3 mb-5">
+              <div className="f-group mb-5">
                 <button type="submit" className="btn btn-login">{t('signupButton')}</button>
               </div>
             </form>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import Button from '../../common/Button/Button';
 import { useTranslation } from 'react-i18next';
@@ -7,31 +7,42 @@ import { useTranslation } from 'react-i18next';
 function Header() {
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const location = useLocation();
+  const { t, i18n } = useTranslation();
 
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/login');
-//   };
+  const getTitle = () => {
+    const path = location.pathname;
+    switch (path) {
+      case '/dashboard':
+        return t('recentCars');   
+      case '/my-account':
+        return t('sidebarMyAccount');
+      case '/background-logo':
+        return t('sidebarBackgroundLogo');
+      case '/create-car':
+        return t('create_car');
+      case '/create-background':
+        return t('create_bg_text');
+      case '/brand':
+        return t('car_brand');
+      case '/credits':
+        return t('sidebarCredits');
+      default:
+        return t('carDetails');
+    }
+  };
 
   return (
       <div class="topbar">
                 <div class="title">
-                    <h2>RECENT CARS</h2>
-                    {/* <button class="chip"><img src="filter.png" /> Filter</button> */}
+                  {location.pathname === '/create-car' ? 
+                  <button onClick={() => window.location.reload()} className="back-button" aria-label="Go back"><img src='images/icon/back.png'/></button>
+                  :
+                  <button onClick={() => navigate(-1)} className="back-button" aria-label="Go back"><img src='images/icon/back.png'/></button>
+                  }
+                    
+                    <h2>{getTitle()}</h2>
                 </div>
-
-                {/* <div class="controls">
-                    <button class="small-btn"><img src="three-dots.png" /> More</button>
-                    <div>
-                        <button class="small-btn"><img src="tile.svg" /></button>
-                        <button class="small-btn"><img src="menubar.svg" /></button>
-                    </div>
-                    <div className="language-switcher">
-                        <button onClick={() => i18n.changeLanguage('en')} disabled={i18n.language === 'en'}>English</button>
-                        <button onClick={() => i18n.changeLanguage('da')} disabled={i18n.language === 'da'}>Dansk</button>
-                    </div>
-                </div> */}
             </div>
   );
 }

@@ -59,7 +59,7 @@ function AddBackgroundPage(props) {
             setFormdata({ isSubmit: false })
             if (res?.statusCode == '1') {
                 getUserData()
-                changeBackground()
+                changeBackground(res.responseData)
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Data Updated successful.')
 
 
@@ -99,10 +99,8 @@ function AddBackgroundPage(props) {
         var bg = new FormData();
         bg.append('bg', formdata.uploadedfile);
         let obj = `backgroundType=${'background'}`;
-        setFormdata({ isSubmit: true })      
-        console.log('coming BgUploadDone 3',bg)
+        setFormdata({ isSubmit: true })
         dispatch(uploadBackground(bg,obj)).then((res) => {
-             console.log('coming BgUploadDone res',res)
             setFormdata({ isSubmit: false })
             if (res?.statusCode == '1') { 
                 setFormdata({BgImageUrl:res?.responseData})               
@@ -126,42 +124,44 @@ function AddBackgroundPage(props) {
 
     return (
         <>
-         
+         <h2>Add a New Custom Background</h2>
             <Tabs
                 defaultActiveKey={1}
                 activeKey={formdata?.tabValue}
                 id="uncontrolled-tab-example"
                 onSelect={(e) => changeTabValue(e)}
-                className='background-tabs justify-content-around'
+                className='background-tabs justify-content-center'
             >   
                 <Tab eventKey={1} title='Gallery'>
                     
                       <div className="bg-modal-list">
-                        <div className="row">
+                        <div className="gallery-row">
                             {optifoBackgrounds.map((item, i) => {
                                 return (
-                                    <div className="col-md-4 mb-3" key={i}>
-                                        <div className="custom-bg-main">
-                                           
+                                    <div className="" key={i}>
+                                        <label class="">
+                                            <input
+                                                type="radio"
+                                                name="showBgValue"
+                                                value={formdata?.BgImageUrl?.backgroundImage}
+                                                onChange={() => setFormdata({ BgImageUrl: item })}
+                                            />
+                                            <span class="checkmark">
+                                                <img src='check-icon.png'/>
+                                            </span>
                                             <div className="custom-bg-in">
-                                                <img src={item.backgroundImage} className="w-100"/>
+                                                <img src={item.backgroundImage} className="w-100 rounded-8" />
                                             </div>
-                                             <label class="radio-item">
-                                                <input
-                                                    type="radio"
-                                                    name="showBgValue"
-                                                    value={formdata?.BgImageUrl?.backgroundImage}
-                                                    onChange={() => setFormdata({BgImageUrl:item})}
-                                                />
-                                                <span class="custom-radio"></span>
-                                            </label>
-                                        </div>
+                                        </label>
+
+                                            
+                                       
                                     </div>
                                 );
                             })}
                         </div>
                     </div>
-                    <div className="popup-btn">
+                    <div className="popup-btn" style={{ maxWidth:'250px',  marginLeft: 'auto', marginRight: 'auto'}}>
                         <button type="button" className="btn btn-login" onClick={handleBackgroud}>Ok</button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
                     </div>
@@ -179,6 +179,7 @@ function AddBackgroundPage(props) {
                     height={'1200'}
                     fileSize={'400000000'}
                     isValidDimensions={true}
+                  
                     />
                  
                 </Tab>

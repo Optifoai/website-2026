@@ -32,7 +32,6 @@ function LogoPage(props) {
       },[userDetails])
 
   const changeLogo = (e) => {
-    console.log('coming',e.target.value)
         const {value}=e.target
         let payload = {
             "backgroundId": value,
@@ -69,14 +68,11 @@ function LogoPage(props) {
                 // getUserData()
             };
       function BgUploadDone() {
-        console.log('coming logo')
             var bg = new FormData();
             bg.append('bg', formdata.uploadedfile);
             let obj = `backgroundType=${'logo'}`;
-            setFormdata({ isSubmit: true })      
-            console.log('coming BgUploadDone 3',bg)
+            setFormdata({ isSubmit: true })  
             dispatch(uploadBackground(bg,obj)).then((res) => {
-                 console.log('coming BgUploadDone res',res)
                 setFormdata({ isSubmit: false })
                 if (res?.statusCode == '1') {                
                     changeBackground(res?.responseData)
@@ -123,7 +119,7 @@ function LogoPage(props) {
   return (
     <>  
    
-        {loader ? <LoaderSpiner /> :<div className='bg-logo-blk'>      
+        {loader ? <LoaderSpiner /> :<div className='bg-logo-blk logo-size'>      
     
             {logo?.length > 0 ? logo.map((item, index) => {
               return (
@@ -151,8 +147,8 @@ function LogoPage(props) {
 
           <CommonModel show={deleteModalOpen} onClose={() => setFormdata({deleteModalOpen :false})}>
                     <img src="/delete-image.png" alt="Delete confirmation" />
-                    <h2>Are you sure?</h2>
-                    <p>This action cannot be undone. Your data will be permanently deleted.</p>
+                    <h2>Delete Logo?</h2>
+                    <p>Are you sure you want to delete this logo from Optifo?</p>
                     <div className="popup-btn">
                         <button type="button" className="btn btn-login" onClick={handleDelete}>Yes, Delete</button>
                         <button type="button" className="btn btn-secondary" onClick={() => setFormdata({deleteModalOpen :false})}>Cancel</button>
@@ -160,9 +156,11 @@ function LogoPage(props) {
                 </CommonModel>
 
           <CommonModel show={addModalOpen} size="modal-xl" onClose={() => setFormdata({addModalOpen :false})}>
+            <h2>Add a New Logo</h2>
             <UploadPage 
-              fileNote={'NOTE: Background size 1600 x 1201 pixels'}
-              fileIntructions={'(Wall height 600 pixels + floor height 600 pixels file)'} 
+              fileNote={'NOTE: Recommended height 140 pixels'}
+            //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels file)'} 
+             fileIntructions=''
               UploadDone={BgUploadDone}
               formdata={formdata} 
               setFormdata={setFormdata}

@@ -30,29 +30,29 @@ function reducer(state, action) {
 }
 
 function CreateCarForm(props) {
-    const { selectedImages, getCarImage = [], files = [], dispatch } = props;
+    const { selectedImages,setSelectedFiles , files = [], dispatch } = props;
     const navigate = useNavigate();
     const [formdata, setFormdata] = useReducer(reducer, initialState);
 
-        useEffect(() => {
-            if (files.length > 0 && formdata.imageDetails.length === 0) {
-                setFormdata({ imageDetails: files.map(() => ({ position: '' })) });
-            }
-        }, [files]);
+    useEffect(() => {
+        if (files.length > 0 && formdata.imageDetails.length === 0) {
+            setFormdata({ imageDetails: files.map(() => ({ position: '' })) });
+        }
+    }, [files]);
 
     /* =======================
        Sync images from redux
     ======================= */
     useEffect(() => {
-        if (!getCarImage.length) return;
+        if (!selectedImages.length) return;
 
-        const dataImage = getCarImage.map((img, index) => ({
-            img:getCarImage[index],
+        const dataImage = selectedImages.map((img, index) => ({
+            img: selectedImages[index],
             position: formdata.dataImage[index]?.position || '',
         }));
 
-        setFormdata({ carImage: getCarImage,caruploadName: getCarImage, dataImage});
-    }, [getCarImage]);
+        setFormdata({ carImage: selectedImages, caruploadName: selectedImages, dataImage });
+    }, [selectedImages]);
 
     /* =======================
        Image position change
@@ -64,7 +64,7 @@ function CreateCarForm(props) {
         newDataImage[index] = {
             ...newDataImage[index],
             position: value,
-            img: getCarImage[index],
+            img: selectedImages[index],
         };
 
         const newPosNames = [...formdata.carImagesPosNames];
@@ -73,30 +73,46 @@ function CreateCarForm(props) {
         setFormdata({
             dataImage: newDataImage,
             carImagesPosNames: newPosNames,
-            // caruploadName: getCarImage,
-            // carImage: getCarImage,
+            // caruploadName: selectedImages,
+            // carImage: selectedImages,
         });
     };
+
+    /* =======================
+      Car Image Add
+    ======================= */
+    const updateCarImage = (file) => {
+        let carpos = selectedImages
+        file.every((f)=> carpos?.push(f))
+        setSelectedFiles({ files: carpos}); 
+    };
+
+    /* =======================
+     Delete Car Image 
+   ======================= */
+    const handleDeleteCar = (e, index) => {
+        let carpos = selectedImages
+        let dataImageRes = formdata?.dataImage
+        let carImagesPosNames=formdata?.carImagesPosNames
+        carpos?.splice(index, 1);
+        dataImageRes.splice(index, 1);
+        carImagesPosNames.splice(index, 1);
+        setSelectedFiles({ files: carpos});
+        setFormdata({ ...formdata, dataImage: dataImageRes,carImagesPosNames:carImagesPosNames, });        
+    }
 
     /* =======================
        Save car
     ======================= */
     const saveCarDetails = () => {
-        
 
-        // if (formdata.carImagesPosNames.length !== formdata.caruploadName.length) {
-        //     notify('error', 'Please select car position!');
-        //     return;
-        // }
-        // const isPositionValid = formdata?.dataImage?.every(
-        // item => typeof item.position === "string" && item.position.trim() !== ""
-        // );
-        if (!formdata?.dataImage?.every(item => item.position?.trim())) {
-         notify('error', 'Please select car position!');
-         return;
+        const isValid = formdata?.dataImage.filter(item => item.position == '');
+        if (formdata?.dataImage.length < 1 || formdata.dataImage.length !== selectedImages.length || isValid.length > 0) {
+            notify('error', 'Please select car position!');
+            return;
         }
 
-        if (!getCarImage?.length) {
+        if (!selectedImages?.length) {
             notify('error', 'Please select car image!');
             return;
         }
@@ -114,27 +130,28 @@ function CreateCarForm(props) {
             formPostData.append('carImages', item.img);
         });
 
-        formPostData.append('carType', formdata.carType);
-        formPostData.append('carYear', formdata.carYear);
-        formPostData.append('carColor', formdata.carColor);
-        formPostData.append('carId', formdata.carId);
-        formPostData.append('carBrand', formdata.carBrand);
-        formPostData.append('carModel', formdata.carModel);
-        formPostData.append('backgroundURL', formdata.backgroundURL);
-        formPostData.append('numberPlateUrl', formdata.activeLogoURL);
-        formPostData.append('bannerUrl', formdata.activeBannerURL);
-        formPostData.append(
-            'carImagesNames',
-            JSON.stringify(formdata.carImagesPosNames)
+        const positions = formdata?.dataImage.map(item => item.position);
+
+        formPostData.append('carType', formdata?.carType);
+        formPostData.append('carYear', formdata?.carYear);
+        formPostData.append('carColor', formdata?.carColor);
+        formPostData.append('carId', formdata?.carId);
+        formPostData.append('carBrand', formdata?.carBrand);
+        formPostData.append('carModel', formdata?.carModel);
+        formPostData.append('backgroundURL', formdata?.backgroundURL);
+        formPostData.append('numberPlateUrl', formdata?.activeLogoURL);
+        formPostData.append('bannerUrl', formdata?.activeBannerURL);
+        // formPostData.append('carImagesNames',JSON.stringify(formdata.carImagesPosNames)
+        formPostData.append('carImagesNames',JSON.stringify(positions)
+
         );
 
         dispatch(createCarSave(formPostData))
             .then(res => {
                 // if (res?.statusCode === '1') {
-                console.log('res',res)
                 if (res) {
-                    notify('success',res?.message || 'Car created successfully');
-                     navigate('/dashboard');
+                    notify('success', res?.message || 'Car created successfully');
+                    navigate('/dashboard');
                 } else {
                     notify('error', res?.error?.responseMessage || 'Something went wrong');
                 }
@@ -147,13 +164,11 @@ function CreateCarForm(props) {
             });
     };
 
-    
-  console.log('coming createform props',props)
-console.log('coming createform formdata',formdata)
+
 
     return (
         <>
-            <h4 className="main-heading mt-2 mb-2">Create Car</h4>
+            {/* <h4 className="main-heading mt-2 mb-2">Create Car</h4> */}
 
             <div className="grid_1_3 custom_tab_section">
                 <StudioTabs
@@ -167,7 +182,8 @@ console.log('coming createform formdata',formdata)
                     selectedImages={selectedImages}
                     imageDetails={formdata.dataImage}
                     handleImagePositionChange={handleImagePositionChange}
-                    files={files}
+                    handleDeleteCar={handleDeleteCar}
+                    updateCarImage={updateCarImage}
                 />
             </div>
         </>
@@ -179,14 +195,14 @@ console.log('coming createform formdata',formdata)
 ======================= */
 CreateCarForm.propTypes = {
     selectedImages: PropTypes.array,
-    getCarImage: PropTypes.array,
+    selectedImages: PropTypes.array,
     files: PropTypes.array,
     dispatch: PropTypes.func,
 };
 
 CreateCarForm.defaultProps = {
     selectedImages: [],
-    getCarImage: [],
+    selectedImages: [],
     files: [],
 };
 

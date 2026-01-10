@@ -21,6 +21,10 @@ export const setLoginDetailInSession = (loggedInUserData) => {
       key: STORAGE_KEY.USER_DETAILS,
       value: loggedInUserData?.userProfile,
     },
+     {
+      key: STORAGE_KEY.VISIT_FIRST,
+      value: true,
+    }
   ]
   setLocalStorage(userData)
 }
@@ -89,7 +93,7 @@ export const displayDateTimeFormat = (date) => {
 }
 
 export const displayDateFormat = (date) => {  
-  return date ? moment(date).format('DD-MM-YYYY') : '-'
+  return date ? moment(date).format('hh:mmA ,D MMM YYYY') : '-'
 }
 
 export const ResponseFilter = (response) =>  {

@@ -7,8 +7,8 @@ import { UplpadFileIcon } from '../model/svg.jsx';
 import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../../utils/helpers';
 
 function MultipalUploadPage(props) {
-const {formdata,UploadDone,setFormdata,onClose,acceptfile,fileNote,fileIntructions,isValidDimensions,width,height,fileSize, onFileSelect, multiple} = props;
-console.log('props',props)
+const {cancelBtn,formdata,UploadDone,setFormdata,onClose,acceptfile,fileNote,fileIntructions,isValidDimensions,width,height,fileSize, onFileSelect, multiple} = props;
+
 const { t, i18n } = useTranslation();
 
  function imageDimensions(file) {
@@ -127,7 +127,7 @@ const { t, i18n } = useTranslation();
                                             {t('change_img')}
                                         </button>
                                         {UploadDone && (
-                                            <button className="btn btn-login" onClick={UploadDone}>
+                                            <button className="btn btn-login  mt-2" onClick={UploadDone}>
                                                 {t('ok_text')}
                                             </button>
                                         )}
@@ -159,12 +159,12 @@ const { t, i18n } = useTranslation();
                                 </div>
                             )}
                             <div>
-                                <small className="text-red">
+                                <small className="text-danger">
                                     {formdata?.UploadSizeError ? `${t('valid_imge_size')}` : ''}
                                 </small>
                             </div>
                             <div>
-                                <small className="text-red">
+                                <small className="text-danger">
                                     {formdata?.ImageExtError ? `${t('only_text')} ${ acceptfile.join(', ')} ${t('allow_text')}`  : ''}
                                 </small>
                             </div>
@@ -172,10 +172,9 @@ const { t, i18n } = useTranslation();
                     )}
                 </Dropzone>
 
-                <div className="popup-btn">
-                    {/* <button type="button" className="btn btn-login" onClick={UploadDone}>Ok yes</button> */}
+                {cancelBtn ?<div className="popup-btn">                   
                     <button type="button" className="btn btn-secondary" onClick={closeModel}> {t('cancel_text')}</button>
-                </div>
+                </div>:null}
 
             </section>
         </>
@@ -189,6 +188,11 @@ MultipalUploadPage.propTypes = {
     userDetails: EMPTY_OBJECT,
     onFileSelect: PropTypes.func,
     multiple: PropTypes.bool,
+    cancelBtn: PropTypes.bool,
+    isValidDimensions: PropTypes.bool,
+
+
+
 
 }
 
@@ -199,6 +203,8 @@ MultipalUploadPage.defaulProps = {
     loader: PropTypes.bool,
     onFileSelect: null,
     multiple: false,
+    cancelBtn:true,
+    isValidDimensions:true
 
 }
 

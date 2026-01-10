@@ -72,5 +72,18 @@ export const updateUserProfile = (creds) => (dispatch) => {
   })
 }
 
+export const updateUserEmail = (creds) => (dispatch) => {
+  dispatch({ type: CONSTANTS.LOGIN_REQUEST })
+  return putRequest(APICONFIG.USER_PROFILE_INFO_UPDATE_EMAIL, creds).then((res) => {
+    let resObject = { ...creds, ...res }
+    dispatch({ type: CONSTANTS.LOGIN_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = { ...creds, ...err }
+    dispatch({ type: CONSTANTS.LOGIN_FAILURE })
+    return err
+  })
+}
+
 
 
