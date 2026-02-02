@@ -76,7 +76,7 @@ function EditEmailForm(props) {
                            
                            <img
                   className={`eye-icon ${showPassword ? 'open' : 'close'}`}
-                  src={showPassword ? 'eye-open.png' : 'eye-close.png'}
+                  src={showPassword ? '/images/eye-open.png' : '/images/eye-close.png'}
                   onClick={() => setShowPassword(!showPassword)}
                 />
                         </div>

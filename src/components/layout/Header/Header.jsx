@@ -27,6 +27,8 @@ function Header() {
         return t('car_brand');
       case '/credits':
         return t('sidebarCredits');
+      case '/plat-banner':
+      return t('create_plat_banner_text');  
       default:
         return t('carDetails');
     }

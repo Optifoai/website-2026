@@ -36,10 +36,10 @@ function ForgotPasswordPage() {
       </div>
       <div class="login-right">
         <div class="login-card position-relative">
-          <Link to="/login"><img className='back-arrow' src='back-arrow.svg' /></Link>
+          <Link to="/login"><img className='back-arrow' src='/images/back-arrow.svg' /></Link>
           <div class="login-logo">
             <div className='logo-blk'>
-              <img src="optifo-logo.png" alt="Logo" />
+              <img src="/images/optifo-logo.png" alt="Logo" />
             </div>
           </div>
 

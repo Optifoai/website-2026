@@ -36,7 +36,7 @@ function SideBar(props) {
 
                 <img src={logo ? logo : ''} alt="Optifo Logo" />
                 {/* <img src="/images/logo.png" alt="Optifo Logo" /> */}
-                <div>   <img src="title.png" /></div>
+                <div>   <img src="/images/title.png" /></div>
 
 
 
@@ -46,7 +46,7 @@ function SideBar(props) {
                 <li>
                     <Link to="/dashboard" className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`} role="button" tabIndex="0" aria-current>
                         <div class="icon">
-                             <img src={location.pathname === '/dashboard' ? "/dashboard-active.svg" : "/dashboard-deactivate.svg"} />
+                             <img src={location.pathname === '/dashboard' ? "/images/dashboard-active.svg" : "/images/dashboard-deactivate.svg"} />
                         </div>
                         <span>{t('sidebarDashboard')}</span>
                     </Link>
@@ -54,23 +54,13 @@ function SideBar(props) {
                 <li>
                     <Link to="/my-account" className={`nav-item ${location.pathname === '/my-account' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/my-account' ? "/my-account-active.svg" : "/my-account.svg"} />
+                            <img src={location.pathname === '/my-account' ? "/images/my-account-active.svg" : "/images/my-account.svg"} />
                         </div>
                         <span>{t('sidebarMyAccount')}</span>
                     </Link>
 
                 </li>
-                {/* new */}
-                <li>
-                    <Link to="/background-logo" className={`nav-item ${location.pathname === '/background-logo' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
-                            <img src={location.pathname === '/background-logo' ? "/background-logo-active.svg" : "/background-logo.svg"} />
-                        </div>
-                        <span>{t('sidebarBackgroundLogo')}</span>
-                    </Link>
-
-                </li>
-                <li>
+                 <li>
                     <Link to="/create-car" className={`nav-item ${location.pathname === '/create-car' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
                             <img src={location.pathname === '/create-car' ? "/images/create-car-active.png" : "/images/create-car-deactive.png"} />
@@ -80,16 +70,37 @@ function SideBar(props) {
                     </Link>
 
                 </li>
+                {/* new */}
+                <li>
+                    <Link to="/background-logo" className={`nav-item ${location.pathname === '/background-logo' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/background-logo' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
+                        </div>
+                        <span>{t('sidebarBackgroundLogo')}</span>
+                    </Link>
+
+                </li>
+                 <li>
+                    <Link to="/plat-banner" className={`nav-item ${location.pathname === '/plat-banner' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/plat-banner' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
+                        </div>
+                        <span>{t('create_plat_banner_text')}</span>
+                    </Link>
+
+                </li>
+               
                 <li>
                     <Link to="/create-background" className={`nav-item ${location.pathname === '/create-background' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/create-background' ? "/background-logo-active.svg" : "/background-logo.svg"} />
+                            <img src={location.pathname === '/create-background' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
 
                         </div>
                         <span>{t('create_bg_text')}</span>
                     </Link>
 
                 </li>
+             
                 {/* <li>
                     <Link to="/brand" className={`nav-item ${location.pathname === '/brand' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
@@ -104,7 +115,7 @@ function SideBar(props) {
                 <li>
                     <Link to="/credits" className={`nav-item ${location.pathname === '/credits' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
                         <div class="icon">
-                            <img src={location.pathname === '/credits' ? "credits-active.svg" : "credits.svg"} />
+                            <img src={location.pathname === '/credits' ? "/images/credits-active.svg" : "/images/credits.svg"} />
 
                         </div>
                         <span>{t('sidebarCredits')}</span>
@@ -127,7 +138,7 @@ function SideBar(props) {
 
             <div class="bottom" aria-hidden="false">
                 <div class="credits" title="Credits left">
-                    <div class="coin"> <img src="coin.svg" /></div>
+                    <div class="coin"> <img src="/images/coin.svg" /></div>
                     <div>
                         <div class="meta">{((user?.userProfile?.creditsLeft ? user?.userProfile?.creditsLeft : 0) + (user?.userProfile?.leftPackCredits ? user?.userProfile?.leftPackCredits : 0))} <span class="muted">{t('credits_left')}</span></div>
 
@@ -139,7 +150,7 @@ function SideBar(props) {
                 <div className="profile-wrapper">
                     <div className="profile" onClick={() => setOpen(!open)}>
                         <div className="avatar">
-                            <img src="user.png" alt="User" />
+                            <img src="/images/user.png" alt="User" />
                         </div>
 
                         <div className="info">
@@ -153,7 +164,7 @@ function SideBar(props) {
                         <div className="profile-dropdown">
                             <ul>
                                 <li className="logout" onClick={handleLogout}>
-                                    Logout
+                                    {t('Logout_text')}
                                 </li>
                             </ul>
                         </div>

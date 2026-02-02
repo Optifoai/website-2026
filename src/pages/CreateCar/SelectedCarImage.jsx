@@ -95,7 +95,7 @@ function SelectedCarImage(props) {
                                 <div className="mob-100 mb-2">
                                     <div className="card add-card">
                                         <div className="add-content" onClick={() => setFormdata({ addModalOpen: true })}>
-                                            <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
+                                            <div className="add-icon"><img src='/images/add-icon.svg' alt="add icon" /></div>
                                             <p>Add New</p>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@ function SelectedCarImage(props) {
                         </div>
                         <CommonModel show={addModalOpen} size="modal-xl" onClose={onModalClose}>
                             <MultipalUploadPage
-                                fileNote={'NOTE: Background size 1600 x 1201 pixels'}
+                                fileNote={'NOTE: Background size 1600 x 1200 pixels'}
                                 //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
                                 fileIntructions=''
 
@@ -116,7 +116,7 @@ function SelectedCarImage(props) {
                                 width={'1600'}
                                 height={'1200'}
                                 fileSize={'400000000'}
-                                isValidDimensions={false}
+                                isValidDimensions={true}
                                 multiple={true}
                                 cancelBtn={true}
                             />

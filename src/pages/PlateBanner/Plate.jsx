@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import {  EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
 import { actionBackgroundDelete, updateCarBackground, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
-import AddBackgroundPage from './AddBackgroundPage';
 import CommonModel from '../../components/common/model/CommonModel';
 import UploadPage from '../../components/common/UploadPage/UploadPage';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
 
-function LogoPage(props) {
+function Plate(props) {
     const { userDetails,dispatch,loader} = props;
     const { getUserData } = useAuth();
 
@@ -24,8 +23,8 @@ function LogoPage(props) {
     );
 
     useEffect(()=>{
-      if(userDetails?.logosUploaded){
-         setFormdata({logo:userDetails?.logosUploaded}) 
+      if(userDetails?.number_plates){
+         setFormdata({logo:userDetails?.number_plates}) 
       }else{
         setFormdata({logo:EMPTY_ARRAY})
       }
@@ -35,7 +34,7 @@ function LogoPage(props) {
         const {value}=e.target
         let payload = {
             "backgroundId": value,
-            "backgroundType": "logo"
+            "backgroundType": "number_plate"
         } 
         dispatch(updateCarBackground(payload)).then(res => {
             if (res?.statusCode == '1') {
@@ -53,7 +52,7 @@ function LogoPage(props) {
            let payload =
            {
              backgroundId:data? data:  formdata?.BgImageUrl,
-             backgroundType: "logo"
+             backgroundType: "number_plate"
             }
                 dispatch(updateCarBackground(payload)).then(res => {
                     setFormdata({addLogoModalOpen :false})
@@ -73,12 +72,13 @@ function LogoPage(props) {
         setFormdata({addLogoModalOpen :false})
             var bg = new FormData();
             bg.append('bg', formdata.uploadedfile);
-            let obj = `backgroundType=${'logo'}`;
+            let obj = `backgroundType=${'number_plate'}`;
             setFormdata({ isSubmit: true })  
             dispatch(uploadBackground(bg,obj)).then((res) => {
                 setFormdata({ isSubmit: false })
-                if (res?.statusCode == '1') {                
-                    changeBackground(res?.responseData)
+                if (res?.statusCode == '1') { 
+                     getUserData()               
+                    // changeBackground(res?.responseData)
                     notify('success', res.response?.data?.message ? res.response?.data?.message : 'Data Updated successful.')
     
     
@@ -96,7 +96,7 @@ function LogoPage(props) {
                 setFormdata({isSubmit: true})      
                  let payload = {
                     "backgroundId": formdata?.backgroundId,
-                    "backgroundType": "logo"
+                    "backgroundType": "number_plate"
                 }
                 dispatch(actionBackgroundDelete(payload)).then((res) => {
                     setFormdata({isSubmit: false})
@@ -144,15 +144,15 @@ function LogoPage(props) {
             <div class="card add-card">
               <div class="add-content" onClick={()=>{setFormdata({addLogoModalOpen :true})}}>
                 <div class="add-icon"><img src='/images/add-icon.svg' /></div>
-                <p>Add Logo</p>
+                <p>Add New Licence Plate</p>
               </div>
             </div>
           </div>}
 
           <CommonModel show={deleteModalOpen} onClose={() => setFormdata({deleteModalOpen :false})}>
                     <img src="/images/delete-image.png" alt="Delete confirmation" />
-                    <h2>Delete Logo?</h2>
-                    <p>Are you sure you want to delete this logo from Optifo?</p>
+                    <h2>Delete Linece Plate?</h2>
+                    <p>Are you sure you want to delete this Linece Plate from Optifo?</p>
                     <div className="popup-btn">
                         <button type="button" className="btn btn-login" onClick={handleDelete}>Yes, Delete</button>
                         <button type="button" className="btn btn-secondary" onClick={() => setFormdata({deleteModalOpen :false})}>Cancel</button>
@@ -160,7 +160,7 @@ function LogoPage(props) {
                 </CommonModel>
 
           <CommonModel show={addLogoModalOpen} size="modal-xl" onClose={() => setFormdata({addLogoModalOpen :false})}>
-            <h2>Add a New Logo</h2>
+            <h2>Add a New Plate</h2>
             <UploadPage 
               fileNote={'NOTE: Recommended height 140 pixels'}
             //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels file)'} 
@@ -180,7 +180,7 @@ function LogoPage(props) {
   );
 }
 
-LogoPage.propTypes = {
+Plate.propTypes = {
     dispatch: PropTypes.func,
     data: PropTypes.object,
     loader: PropTypes.bool,
@@ -188,7 +188,7 @@ LogoPage.propTypes = {
 
 }
 
-LogoPage.defaulProps = {
+Plate.defaulProps = {
     dispatch: PropTypes.func,
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,    
@@ -203,4 +203,4 @@ function mapStateToProps({ login }) {
     }
 }
 
-export default connect(mapStateToProps)(LogoPage)
+export default connect(mapStateToProps)(Plate)

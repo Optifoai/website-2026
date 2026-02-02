@@ -30,6 +30,20 @@ export const userSignup = (creds) => (dispatch) => {
   })
 }
 
+export const userOtpVeification = (creds) => (dispatch) => {
+
+  dispatch({ type: CONSTANTS.LOGIN_REQUEST })
+  return postRequest(APICONFIG.getverifyOtpAndSaveUrl, creds).then((res) => {
+    let resObject = { ...creds, ...res }
+    dispatch({ type: CONSTANTS.LOGIN_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = { ...creds, ...err }
+    dispatch({ type: CONSTANTS.LOGIN_FAILURE })
+    return err
+  })
+}
+
 export const getUserProfile = () => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_USER_PROFILE_REQUEST });
 
@@ -81,6 +95,20 @@ export const updateUserEmail = (creds) => (dispatch) => {
   }).catch((err) => {
     let errObject = { ...creds, ...err }
     dispatch({ type: CONSTANTS.LOGIN_FAILURE })
+    return err
+  })
+}
+
+export const resendOtp = (payload) => (dispatch) => {
+
+  dispatch({ type: CONSTANTS.GET_COMMON_REQUEST })
+  return postRequest(APICONFIG.resendOtpUrl, payload).then((res) => {
+    let resObject = { ...payload, ...res }
+    dispatch({ type: CONSTANTS.GET_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    let errObject = { ...payload, ...err }
+    dispatch({ type: CONSTANTS.GET_COMMON_FAILURE })
     return err
   })
 }

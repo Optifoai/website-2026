@@ -38,7 +38,7 @@ function UploadPage(props) {
 
             try {
                 const dimensions = await imageDimensions(file);
-                if ((isValidDimensions && dimensions.width == width && dimensions.height == height) || isValidDimensions == false) {
+                if ((isValidDimensions && (width || (dimensions.width == width)) && dimensions.height == height) || isValidDimensions == false) {
 
                     reader.addEventListener(
                         'load',

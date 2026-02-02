@@ -138,6 +138,8 @@
   "car_brand": "Car Brands",
   "add_bg_text": "Add background",
   "create_bg_text": "Create background",
+  "create_plat_banner_text": "Licence Plate & Banner",
+
   "add_bg_text_active": "Active background",
   "add_logo_text": "Add logo",
   "add_logo_text_active": "Active logo",
@@ -167,6 +169,12 @@
   "ai_video_info": "AI Video info",
   "car_text": "Cars",
   "account_text": "Account",
+  "accountinfo_text": "Account Info",
+  "Change_Password_text": "Change Password",
+  "Delete_My_Account_text": "Delete My Account",
+
+
+
   "Create_car_text": "Create Car",
   "change_plan": "Change plan",
   "plan_text5": "credits/month.",
@@ -321,5 +329,12 @@
   "delete_plate": "Delete plate?",
   "delete_banner": "Delete banner?",
   "download_ai_image": "Download AI video",
+  "Logout_text": "Logout",
+  "delete_account_text": "If you delete your account, your images will be gone forever.",
+  "delete_account_confiramtion_text": "Are you sure you want to delete your account?",
+  "delete_account_confiramtion_msg_text": "When you delete your Optifo account, all your images will be deleted and gone forever.",
+
   "runout_auto_refill_buy": "When you buy the pack, you accept that Optifo will automatically refill when you run out of credits. You can always disable this later."
+
+  
 }

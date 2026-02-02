@@ -215,7 +215,7 @@ function StudioTabs(props) {
                                 <div className="mob-100 mb-2">
                                     <div className="card add-card">
                                         <div className="add-content" onClick={() => setLocalState({ addModalOpen: true, uploadedfileType: 'background' })}>
-                                            <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
+                                            <div className="add-icon"><img src='/images/add-icon.svg' alt="add icon" /></div>
                                             <p>Add Background </p>
                                         </div>
                                     </div>
@@ -289,7 +289,7 @@ function StudioTabs(props) {
                                     <div className="mob-100 mb-2">
                                         <div className="card add-card">
                                             <div className="add-content" onClick={() => setLocalState({ addModalOpen: true, uploadedfileType: 'number_plate' })}>
-                                                <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
+                                                <div className="add-icon"><img src='/images/add-icon.svg' alt="add icon" /></div>
                                                 <p>Add Plate</p>
                                             </div>
                                         </div>
@@ -371,7 +371,7 @@ function StudioTabs(props) {
                                     <div className="mob-100 mb-2">
                                         <div className="card add-card">
                                             <div className="add-content" onClick={() => setLocalState({ addModalOpen: true, uploadedfileType: 'banner' })}>
-                                                <div className="add-icon"><img src='add-icon.svg' alt="add icon" /></div>
+                                                <div className="add-icon"><img src='/images/add-icon.svg' alt="add icon" /></div>
                                                 <p>Add Banner</p>
                                             </div>
                                         </div>
@@ -394,7 +394,7 @@ function StudioTabs(props) {
                     <div className="account-tab">
                         <div className=" car-details-blk">
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <label class="form-label">Car Type <span className='text-danger'> *</span></label>
                                     <select
                                         className="form-control mb-3"
@@ -409,7 +409,7 @@ function StudioTabs(props) {
                                     </select>
                                 </div>
 
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <label class="form-label">Car Brand <span className='text-danger'> *</span></label>
 
                                     <select
@@ -427,7 +427,7 @@ function StudioTabs(props) {
                             </div>
 
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <label class="form-label">Car Year </label>
                                     <input
                                         type='text'
@@ -439,7 +439,7 @@ function StudioTabs(props) {
                                     />
                                 </div>
 
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <label class="form-label">Car Model</label>
                                     <input
                                         type='text'
@@ -453,7 +453,7 @@ function StudioTabs(props) {
                             </div>
 
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-12">
                                     <label class="form-label">Car Id <span className='text-danger'> *</span></label>
                                     <input
                                         type='text'
@@ -479,7 +479,7 @@ function StudioTabs(props) {
 
             </Tabs>
             <CommonModel show={deleteModalOpen} onClose={() => setLocalState({ deleteModalOpen: false })}>
-                <img src="/delete-image.png" alt="Delete confirmation" />
+                <img src="/images/delete-image.png" alt="Delete confirmation" />
                 <h2>Delete {localState?.deltedfileType?.replace(/_/g, " ")?.replace(/\b\w/g, char => char.toUpperCase())}?</h2>
                 <p>Are you sure you want to delete this {localState?.deltedfileType?.replace(/_/g, " ")?.replace(/\b\w/g, char => char.toUpperCase())} from Optifo?</p>
                 <div className="popup-btn">
