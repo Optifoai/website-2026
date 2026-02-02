@@ -45,7 +45,7 @@ function LoginPage(props) {
         <div class="login-card">
           <div class="login-logo">
             <div className='logo-blk'>
-              <img src="optifo-logo.png" alt="Logo" />
+              <img src="/images/optifo-logo.png" alt="Logo" />
             </div>
           </div>
 
@@ -68,7 +68,7 @@ function LoginPage(props) {
                 {/* {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>} */}
                 <img
                   className={`eye-icon ${userInput.showPassword ? 'open' : 'close'}`}
-                  src={userInput.showPassword ? 'eye-open.png' : 'eye-close.png'}
+                  src={userInput.showPassword ? '/images/eye-open.png' : '/images/eye-close.png'}
                   onClick={() =>
                     setUserInput({
                       ...userInput,

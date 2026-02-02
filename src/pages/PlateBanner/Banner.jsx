@@ -6,9 +6,9 @@ import { actionBackgroundDelete, updateCarBackground } from '../../Redux/Actions
 import { useAuth } from '../../context/AuthContext';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
 import CommonModel from '../../components/common/model/CommonModel';
-import AddBackgroundPage from './AddBackgroundPage';
+import AddBanner from './AddBanner';
 
-function BackgroundPage(props) {
+function Banner(props) {
     const { userDetails, dispatch, loader } = props;
     const { user, getUserData } = useAuth();
 
@@ -23,8 +23,8 @@ function BackgroundPage(props) {
     );
 
     useEffect(() => {
-        if (userDetails?.backgroundsUploaded) {
-            setFormdata({ background: userDetails?.backgroundsUploaded })
+        if (userDetails?.banners) {
+            setFormdata({ background: userDetails?.banners })
         } else {
             setFormdata({ background: EMPTY_ARRAY })
         }
@@ -34,7 +34,7 @@ function BackgroundPage(props) {
         const { value } = e.target
         let payload = {
             "backgroundId": value,
-            "backgroundType": "background"
+            "backgroundType": "banner"
         }
         dispatch(updateCarBackground(payload)).then(res => {
             if (res?.statusCode == '1') {
@@ -52,7 +52,7 @@ function BackgroundPage(props) {
         setFormdata({isSubmit: true})      
          let payload = {
             "backgroundId": formdata?.backgroundId,
-            "backgroundType": "background"
+            "backgroundType": "banner"
         }
         dispatch(actionBackgroundDelete(payload)).then((res) => {
             setFormdata({isSubmit: false})
@@ -103,7 +103,7 @@ function BackgroundPage(props) {
                     <div class="card add-card">
                         <div class="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
                             <div class="add-icon" ><img src='/images/add-icon.svg' /></div>
-                            <p >Add Background</p>
+                            <p >Add New Banner</p>
                         </div>
                     </div>
 
@@ -113,8 +113,8 @@ function BackgroundPage(props) {
                 
                             <CommonModel show={deleteModalOpen} onClose={() => setFormdata({deleteModalOpen :false})}>
                                 <img src="/images/delete-image.png" alt="Delete confirmation" />
-                                <h2>Delete Background?</h2>
-                                <p>Are you sure you want to delete this background from Optifo?</p>
+                                <h2>Delete Banner?</h2>
+                                <p>Are you sure you want to delete this Banner from Optifo?</p>
                                 <div className="popup-btn">
                                     <button type="button" className="btn btn-login" onClick={handleDelete}>Yes, Delete</button>
                                     <button type="button" className="btn btn-secondary" onClick={() => setFormdata({deleteModalOpen :false})}>Cancel</button>
@@ -123,13 +123,13 @@ function BackgroundPage(props) {
 
                             
                             <CommonModel show={addModalOpen}   customeClass={'mw-100 w-100 p-4'} size="modal-xl" onClose={() => setFormdata({addModalOpen :false})}>
-                                <AddBackgroundPage onClose={() => setFormdata({addModalOpen :false})}/>                               
+                                <AddBanner onClose={() => setFormdata({addModalOpen :false})}/>                               
                             </CommonModel>
         </>
     );
 }
 
-BackgroundPage.propTypes = {
+Banner.propTypes = {
     dispatch: PropTypes.func,
     data: PropTypes.object,
     loader: PropTypes.bool,
@@ -137,7 +137,7 @@ BackgroundPage.propTypes = {
 
 }
 
-BackgroundPage.defaulProps = {
+Banner.defaulProps = {
     dispatch: PropTypes.func,
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,
@@ -153,4 +153,4 @@ function mapStateToProps({ login }) {
     }
 }
 
-export default connect(mapStateToProps)(BackgroundPage)
+export default connect(mapStateToProps)(Banner)

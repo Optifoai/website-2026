@@ -6,6 +6,7 @@ import SelectedCarImage from './SelectedCarImage';
 import StudioTabs from './StudioTabs';
 import { createCarSave } from '../../Redux/Actions/carAction';
 import { useNavigate } from 'react-router-dom';
+import LoaderSpiner from '../../hooks/LoaderSpiner';
 
 const initialState = {
     carType: '',
@@ -22,6 +23,7 @@ const initialState = {
     activeLogoURL: '',
     activeBannerURL: '',
     loader: false,
+    formloader: false,
     imageDetails: [],
 };
 
@@ -122,7 +124,7 @@ function CreateCarForm(props) {
             return;
         }
 
-        setFormdata({ loader: true });
+        setFormdata({ formloader: true });
 
         const formPostData = new FormData();
 
@@ -148,20 +150,22 @@ function CreateCarForm(props) {
 
         dispatch(createCarSave(formPostData))
             .then(res => {
+                 
                 // if (res?.statusCode === '1') {
                 if (res) {
+                    setFormdata({ formloader: true });
                     notify('success', res?.message || 'Car created successfully');
                     navigate('/dashboard');
                 } else {
                     notify('error', res?.error?.responseMessage || 'Something went wrong');
+                    setFormdata({ formloader: false });
                 }
+                
             })
             .catch(err => {
                 notify('error', err?.message || 'Something went wrong');
+                 setFormdata({ formloader: false });
             })
-            .finally(() => {
-                setFormdata({ loader: false });
-            });
     };
 
 
@@ -170,7 +174,7 @@ function CreateCarForm(props) {
         <>
             {/* <h4 className="main-heading mt-2 mb-2">Create Car</h4> */}
 
-            <div className="grid_1_3 custom_tab_section">
+            {formdata?.formloader ? <LoaderSpiner /> : <div className="grid_1_3 custom_tab_section">
                 <StudioTabs
                     formdata={formdata}
                     setFormdata={setFormdata}
@@ -185,7 +189,7 @@ function CreateCarForm(props) {
                     handleDeleteCar={handleDeleteCar}
                     updateCarImage={updateCarImage}
                 />
-            </div>
+            </div>}
         </>
     );
 }

@@ -49,7 +49,7 @@ function CreateCar(props) {
             {/* <div className='bg-logo-blk'> 
             <div class="card add-card">
               <div class="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
-                <div class="add-icon"><img src='add-icon.svg' /></div>
+                <div class="add-icon"><img src='/images/add-icon.svg' /></div>
                 <p>Add Car Image </p>
               </div>
             </div>

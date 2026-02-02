@@ -174,10 +174,10 @@ function DashboardPage(props) {
                     <div key={index} class="car-card dashboard-page" >
 
                         <div class="image-section">
-                            <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
+                            <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} />
 
                             <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
-                                <img src='trash.png' />
+                                <img src='/images/trash.png' />
                             </div>
                         </div>
 
@@ -196,11 +196,11 @@ function DashboardPage(props) {
 
                                 <div class="action-buttons">
                                     {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
-                                        <img src="video.svg" />
+                                        <img src="/images/video.svg" />
                                     </button>}
 
                                     <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
-                                        <img src="download.svg" />
+                                        <img src="/images/download.svg" />
                                     </button>
                                 </div>
                             </div>
@@ -257,7 +257,7 @@ function DashboardPage(props) {
             }
             {/* car delete model */}
             <CommonModel show={formdata.deleteModelOpen} onClose={() => { setFormdata({ deleteModelOpen: false }) }}>
-                <img src="/delete-image.png" />
+                <img src="/images/delete-image.png" />
                 <h2>{t('deleteText')} {formdata?.actionCarDetails?.carModel} ?</h2>
                 <p>
                     <Trans i18nKey="deleteCarMsgText">
@@ -272,7 +272,7 @@ function DashboardPage(props) {
             {/* car image downlaod model */}
             <CommonModel show={formdata.downloadModelOpen} onClose={() => { setFormdata({ downloadModelOpen: false }) }}>
 
-                <img src='download-image.png' />
+                <img src='/images/download-image.png' />
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download all photos of the {`${formdata?.actionCarDetails?.carBrand} ${formdata?.actionCarDetails?.carModel}`} ?</p>
                 <div className='popup-btn'>
@@ -285,7 +285,7 @@ function DashboardPage(props) {
             {/* car video downlaod model */}
             <CommonModel show={formdata.videoModelOpen} onClose={() => { setFormdata({ videoModelOpen: false }) }}>
 
-                <img src='download-image.png' />
+                <img src='/images/download-image.png' />
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download video of the {`${formdata?.actionCarDetails?.carBrand} ${formdata?.actionCarDetails?.carModel}`} ?</p>
                 <div className='popup-btn'>
@@ -298,7 +298,7 @@ function DashboardPage(props) {
             {/* Default visit msg show */}
             <CommonModel show={formdata.visitModelOpen} custombg={'visitmodal'} onClose={() => { setFormdata({ visitModelOpen: false }) }}>
                 <div className='visit-car-image'>
-                    <img src='images/visit-car.gif' />
+                    <img src='/images/visit-car.gif' />
                 </div>
                 <h2 className='mt-0'>Glad to have you at Optifo!</h2>
                 <p>Start by choosing your background and adding your company logo on the right. When you're ready to capture photos, download the Optifo iOS app to begin.”</p>

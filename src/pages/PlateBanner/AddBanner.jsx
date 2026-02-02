@@ -12,7 +12,7 @@ import {UplpadFileIcon} from '../../components/common/model/svg.jsx'
 import UploadPage from '../../components/common/UploadPage/UploadPage';
 
 
-function AddBackgroundPage(props) {
+function AddBanner(props) {
     const { userDetails, dispatch, loader,onClose } = props;
     const { user, getUserData } = useAuth();
     const { t, i18n } = useTranslation();
@@ -52,7 +52,7 @@ function AddBackgroundPage(props) {
         setFormdata({ isSubmit: true })
         let payload = {
             "url": formdata?.BgImageUrl?.backgroundImage,
-            "backgroundType": "background"
+            "backgroundType": "banner"
         }
        
         dispatch(uploadBackground(payload)).then((res) => {
@@ -78,7 +78,7 @@ function AddBackgroundPage(props) {
        let payload =
        {
          backgroundId:data? data:  formdata?.BgImageUrl,
-         backgroundType: "background"
+         backgroundType: "banner"
         }
             dispatch(updateCarBackground(payload)).then(res => {
                 if (res?.statusCode == '1') {
@@ -98,13 +98,14 @@ function AddBackgroundPage(props) {
     function BgUploadDone() {
         var bg = new FormData();
         bg.append('bg', formdata.uploadedfile);
-        let obj = `backgroundType=${'background'}`;
+        let obj = `backgroundType=${'banner'}`;
         setFormdata({ isSubmit: true })
         dispatch(uploadBackground(bg,obj)).then((res) => {
             setFormdata({ isSubmit: false })
             if (res?.statusCode == '1') { 
                 setFormdata({BgImageUrl:res?.responseData})               
-                changeBackground(res?.responseData)
+                // changeBackground(res?.responseData)
+                getUserData()
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Data Updated successful.')
 
 
@@ -124,15 +125,15 @@ function AddBackgroundPage(props) {
 
     return (
         <>
-         <h2>Add a New Custom Background</h2>
+         <h2>Add New Banner</h2>
             <Tabs
                 defaultActiveKey={1}
                 activeKey={formdata?.tabValue}
                 id="uncontrolled-tab-example"
-                onSelect={(e) => changeTabValue(e)}
+                // onSelect={(e) => changeTabValue(e)}
                 className='background-tabs justify-content-center'
             >   
-                <Tab eventKey={1} title='Gallery'>
+                {/* <Tab eventKey={1} title='Gallery'>
                     
                       <div className="bg-modal-list">
                         <div className="gallery-row">
@@ -165,11 +166,11 @@ function AddBackgroundPage(props) {
                         <button type="button" className="btn btn-login" onClick={handleBackgroud}>Ok</button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
                     </div>
-                </Tab>
-                <Tab eventKey={2} title='Upload'>
+                </Tab> */}
+                <Tab eventKey={1} title='Upload'>
                     <UploadPage 
                     fileNote={'NOTE: Background size 1600 x 1200 pixels'}
-                    fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
+                    fileIntructions={''} 
                     UploadDone={BgUploadDone}
                     formdata={formdata} 
                     setFormdata={setFormdata}
@@ -189,7 +190,7 @@ function AddBackgroundPage(props) {
     );
 }
 
-AddBackgroundPage.propTypes = {
+AddBanner.propTypes = {
     dispatch: PropTypes.func,
     data: PropTypes.object,
     loader: PropTypes.bool,
@@ -197,7 +198,7 @@ AddBackgroundPage.propTypes = {
 
 }
 
-AddBackgroundPage.defaulProps = {
+AddBanner.defaulProps = {
     dispatch: PropTypes.func,
     data: EMPTY_OBJECT,
     userDetails: EMPTY_OBJECT,
@@ -213,4 +214,4 @@ function mapStateToProps({ login }) {
     }
 }
 
-export default connect(mapStateToProps)(AddBackgroundPage)
+export default connect(mapStateToProps)(AddBanner)

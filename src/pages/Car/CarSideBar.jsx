@@ -543,7 +543,7 @@ function CarSideBar(props) {
 
                         <button
                             disabled={formdata?.loader}
-                            className="btn btn-primary small-btn"
+                            className="small-btn"
                             onClick={() =>
                                 downloadVideo(carDetailsData?.carDetails?._id, carDetailsData?.carDetails)
                             } target="_blank">
@@ -557,7 +557,7 @@ function CarSideBar(props) {
 
                 {/* <div class="justify-content-between">
 
-                    <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='../download.svg' /> {t('generate_ai_image')}</button>
+                    <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/download.svg' /> {t('generate_ai_image')}</button>
 
                 </div> */}
 
@@ -566,34 +566,34 @@ function CarSideBar(props) {
                       {/* 360 creation flow */}
                 <div className="justify-content-between">
                     {carDetailsData?.carDetails?.carVideo == '' ?
-                        <button type='button' class="btn btn-primary small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/icon/Upload-Active.png' /> {t('upload_video_text')}</button>
-                        : <button type='button' class="btn btn-primary small-btn" onClick={generate_360_image}><img src='/images/icon/360.png' /> {t('generate_image_text')}</button>}
+                        <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/icon/Upload-Active.png' /> {t('upload_video_text')}</button>
+                        : <button type='button' class="small-btn" onClick={generate_360_image}><img src='/images/icon/360.png' /> {t('generate_image_text')}</button>}
                 </div>
                 {/* AI video creation flow */}
                 {carDetailsData?.carDetails?.aIVideoUrl && carDetailsData?.carDetails?.aIVideoUrl != '' ?
 
-                    <button className={`btn btn-primary small-btn mt-2`}
+                    <button className={`small-btn mt-2`}
                         onClick={() => download_ai_video()}
                     >
                        <img src='/images/icon/download.png' /> {t('download_ai_image')}
                     </button> :
-                    <button className={`btn btn-primary small-btn mt-2`}
+                    <button className={`small-btn mt-2`}
                         onClick={() => generate_ai_video(carDetailsData?.carDetails?._id, carDetailsData?.carDetails)}
                     >
                         <img src='/images/icon/AI.png' /> {t('generate_ai_image')}
                     </button>
                 }
                     <div className='d-flex justify-content-between mt-2'>
-                        <button type='button' class="small-btn" onClick={actionDownloadModal}><img src='../download.svg' /> {carDetailsData?.selectedImage?.length > 0 ? `${t('DownloadText')} (${carDetailsData?.selectedImage?.length})` : t('DownloadAllText')}</button>
+                        <button type='button' class="small-btn" onClick={actionDownloadModal}><img src='/images/download.svg' /> {carDetailsData?.selectedImage?.length > 0 ? `${t('DownloadText')} (${carDetailsData?.selectedImage?.length})` : t('DownloadAllText')}</button>
 
                         <Dropdown>
                             <Dropdown.Toggle variant="success" id="dropdown-basic" className="small-btn">
-                                <img src="../three-dots.png" />
+                                <img src="/images/vector-dot.svg" />
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={() => setFormdata({ deleteModelOpen: true })}><img src="/images/icon/dalete-car.png" />Delete Car</Dropdown.Item>
                                 <Dropdown.Item onClick={() => setFormdata({ editModelOpen: true })}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Edit Car Info</Dropdown.Item>
-                                <Dropdown.Item onClick={handleRemoveBackground}><img src="../image.png" />Remove Background Image</Dropdown.Item>
+                                <Dropdown.Item onClick={handleRemoveBackground}><img src="/images/image.png" />Remove Background Image</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>
@@ -635,7 +635,7 @@ function CarSideBar(props) {
             {/* car delete model */}
             <CommonModel show={formdata.deleteModelOpen} onClose={() => { setFormdata({ deleteModelOpen: false }) }}>
 
-                <img src="/delete-image.png" />
+                <img src="/images/delete-image.png" />
                 <h2>{t('deleteText')} {formdata?.actionCarDetails?.carType ? formdata?.actionCarDetails?.carType : 'Car'}?</h2>
                 <p><Trans i18nKey="deleteCarMsgText">
                     Do you really want to delete this car from your Optifo list?

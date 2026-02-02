@@ -67,10 +67,10 @@ function SignupPage() {
       </div>
       <div className="login-right">
         <div className="login-card position-relative">
-           <Link to="/login"><img className='back-arrow' src='back-arrow.svg'/></Link> 
+           <Link to="/login"><img className='back-arrow' src='/images/back-arrow.svg'/></Link> 
           <div className="login-logo">
             <div className='logo-blk'>
-              <img src="signup-logo.png" alt="Logo" />
+              <img src="/images/signup-logo.png" alt="Logo" />
             </div>
           </div>
 
@@ -109,6 +109,7 @@ function SignupPage() {
                         country={'in'}
                         placeholder="Enter phone number"
                         inputClass={'phone-input'}
+                        countryCodeEditable={false}
                         value={field.value} 
                         onChange={(value, countryData) => {
                           handleOnChangePhone(value, countryData); // your logic
@@ -132,7 +133,7 @@ function SignupPage() {
                 <input type={userInput.showPassword ? "text" : "password"} className="form-control"
                   {...register("password", { required: "Password is required" })} />
                 {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>}
-                <img className='eye-icon close' src='eye-close.png' onClick={()=>setUserInput({...userInput,showPassword:!userInput.showPassword})}/>
+                <img className='eye-icon close' src='/images/eye-close.png' onClick={()=>setUserInput({...userInput,showPassword:!userInput.showPassword})}/>
                 {/* <img className='eye-icon open' src='eye-open.png'/> */}
               </div>
                <div className="checkbox-row">

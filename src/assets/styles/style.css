@@ -180,7 +180,7 @@ h6 {
 
 /* Left side - image section */
 .login-left {
-  background: url(login-bg.jpg) no-repeat;
+  background: url("/images/login-bg.jpg") no-repeat;
   flex: 1;
   min-width: 59%;
   background-position: 0px 100%;
@@ -190,7 +190,7 @@ h6 {
 /* Right side - form section */
 .login-right {
   flex: 1;
-  background-image: url("login-right.png");
+  background-image: url("/images/login-right.png");
   background-size: 100%;
 }
 
@@ -1647,6 +1647,11 @@ h3.credit {
 
 #dropdown-basic img {
   margin-right: 0;
+  height: 5px;
+}
+
+#dropdown-basic.btn.show {
+  background-color: rgba(12, 24, 54, 1);
 }
 
 .boxdesignbox {
@@ -1690,7 +1695,7 @@ h3.credit {
 
 
 .visitmodal .modal-content {
-  background: url(images/visitmodelbgimg.png);
+  background: url("/images/visitmodelbgimg.png");
   background-size: 100%;
   background-repeat: no-repeat;
   box-shadow: none;

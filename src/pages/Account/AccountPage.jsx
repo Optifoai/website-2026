@@ -181,7 +181,7 @@ function AccountPage(props) {
                         className='custom-tabs'
                         onSelect={(e) => changeTabValue(e)}
                     >
-                        <Tab eventKey={1} title='Account Info'>
+                        <Tab eventKey={1} title={`${t('accountinfo_text')}`}>
                             <div className="form-field mt-3  max-w-320">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <div className="mb-3">
@@ -265,7 +265,7 @@ function AccountPage(props) {
                                 </form>
                             </div>
                         </Tab>
-                        <Tab eventKey={2} title='Change Password'>
+                        <Tab eventKey={2}  title={`${t('Change_Password_text')}`}>
                             <div className="form-field mt-3  max-w-320">
                                 <form onSubmit={handlePasswordSubmit(onChangePasswordSubmit)}>
                                     <div className="mb-3 position-relative">
@@ -274,7 +274,7 @@ function AccountPage(props) {
                                             {...registerPassword("currentPassword", { required: "Current Password is required" })} />
                                         {passwordErrors.currentPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.currentPassword.message}</p>}
 
-                                        <img className='eye-icon close' src={formdata.showCurrentPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showCurrentPassword: !formdata.showCurrentPassword })} />
+                                        <img className='eye-icon close' src={formdata.showCurrentPassword ? '/images/eye-open.png' : '/images/eye-close.png'} onClick={() => setFormdata({ showCurrentPassword: !formdata.showCurrentPassword })} />
                                     </div>
 
                                     <div className="mb-3 position-relative">
@@ -285,7 +285,7 @@ function AccountPage(props) {
                                                 minLength: { value: 8, message: "Password must be at least 8 characters" }
                                             })} />
                                         {passwordErrors.newPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.newPassword.message}</p>}
-                                        <img className='eye-icon close' src={formdata.showNewPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showNewPassword: !formdata.showNewPassword })} />
+                                        <img className='eye-icon close' src={formdata.showNewPassword ? '/images/eye-open.png' : '/images/eye-close.png'} onClick={() => setFormdata({ showNewPassword: !formdata.showNewPassword })} />
                                     </div>
 
                                     <div className="mb-3 position-relative">
@@ -297,7 +297,7 @@ function AccountPage(props) {
                                                     value === watchPassword('newPassword') || "The passwords do not match"
                                             })} />
                                         {passwordErrors.confirmPassword && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{passwordErrors.confirmPassword.message}</p>}
-                                        <img className='eye-icon close' src={formdata.showConfirmPassword ? '/eye-open.png' : '/eye-close.png'} onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
+                                        <img className='eye-icon close' src={formdata.showConfirmPassword ? '/images/eye-open.png' : '/images/eye-close.png'} onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
                                     </div>
 
                                     <div className='modal-footer popup-btn d-flex max-w-320 mt-4'>
@@ -313,9 +313,9 @@ function AccountPage(props) {
                 </section>
                 <div className='car-details account-page-car'>
                     <div className="">
-                        <img src="delete-image.png" alt="" />
-                        <h2>Delete My Account</h2>
-                        <p>If you delete your account, your images will be gone forever.</p>
+                        <img src="/images/delete-image.png" alt="" />
+                        <h2>{t('Delete_My_Account_text')}</h2>
+                        <p>{t('delete_account_text')}</p>
                         <div className="max-130 mx-auto mt-3">
                             <button type="button" className="btn btn-login" onClick={() => setDeleteModalOpen(true)}>DELETE</button>
                         </div>
@@ -324,9 +324,11 @@ function AccountPage(props) {
             </div>}
 
             <CommonModel show={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-                <img src="/delete-image.png" alt="Delete confirmation" />
-                <h2>Are you sure you want to delete your account?</h2>
-                <p>When you delete your Optifo account, all your images will be deleted and gone forever.</p>
+                <img src="/images/delete-image.png" alt="Delete confirmation" />
+                <h2>
+                    {t('delete_account_confiramtion_text')}
+                </h2>
+                <p>{t('delete_account_confiramtion_msg_text')}</p>
                 <div className="popup-btn">
                     <button type="button" className="btn btn-login" onClick={handleDeleteAccount}>Yes, Delete</button>
                     <button type="button" className="btn btn-secondary" onClick={() => setDeleteModalOpen(false)}>Cancel</button>

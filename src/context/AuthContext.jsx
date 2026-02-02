@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth'; // API calls
-import { getUserProfile, userLogin, userSignup } from '../Redux/Actions/loginAction';
+import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } from '../Redux/Actions/loginAction';
 import { notify, setLoginDetailInSession } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import js from '@eslint/js';
 // import { setLoginDetailInSession } from '../utils/helpers';
 
 const AuthContext = createContext(null);
@@ -58,6 +59,8 @@ export const AuthProvider = ({ children }) => {
           setUser(userData); // Store user data
           setIsLoading(false);  
           getUserData()
+          localStorage.removeItem("email");
+          localStorage.removeItem("pass");
           return true                
         }else{
           notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
@@ -82,16 +85,21 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoading(true);
       // const data = await authService.signup(userData); // Call your backend API
+    
+      localStorage.setItem("email", userData?.email ? JSON.stringify(userData?.email) : '')
+      localStorage.setItem("pass", userData?.password ? JSON.stringify(userData?.password) : '')
       dispatch(userSignup(userData)).then((res) => {
+       
         if(res?.statusCode=='1'){
             let userData = res?.responseData
-            delete (userData?.userProfile?.password);
-            setLoginDetailInSession(userData);
-            setIsAuthenticated(true);
-            setUser(data.user);
+           
+            // delete (userData?.userProfile?.password);
+            // setLoginDetailInSession(userData);
+            setIsAuthenticated(false);
+            setUser(userData);
             setIsLoading(false);
-            getUserData()
-            notify('success', res.response?.data?.message ? res.response?.data?.message : 'Signup Successful.')
+            // getUserData()
+            // notify('success', res.response?.data?.message ? res.response?.data?.message : 'Signup Successful.')
             navigate('/verify');
             return true;
         }else{       
@@ -118,6 +126,91 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const verifyOtpAuth = async (userData) => {
+
+    try {
+      setIsLoading(true);
+
+        dispatch(userOtpVeification(userData)).then((res) => {
+     
+
+        setIsLoading(false);
+        if(res?.statusCode=='1'){
+            let email = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("email")):''
+            let password = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("pass")):''
+            login({email, password});
+            // let  credentials={email:user?.userProfile?.params?.email,password:user?.userProfile?.params?.password}           
+            // login(credentials)
+            return true;
+        }else{       
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false;
+        }
+      }).catch((err) => {
+
+
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      });
+
+     
+    } catch (error) {
+         
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+ const reSendOtpAuth = async (payload) => {
+
+    try {
+      setIsLoading(true);
+
+        dispatch(resendOtp(payload)).then((res) => {
+     
+
+        setIsLoading(false);
+        if(res?.statusCode=='1'){
+            let email = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("email")):''
+            let password = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("pass")):''
+            // login({email, password});
+            // let  credentials={email:user?.userProfile?.params?.email,password:user?.userProfile?.params?.password}           
+            // login(credentials)
+            return true;
+        }else{       
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false;
+        }
+      }).catch((err) => {
+
+
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      });
+
+     
+    } catch (error) {
+         
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
   const signupOld = async (userData) => {
     try {
       setIsLoading(true);
@@ -128,7 +221,7 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       return true;
     } catch (error) {
-      console.error('Signup failed:', error);
+   
       setIsAuthenticated(false);
       setUser(null);
       setIsLoading(false);
@@ -193,6 +286,9 @@ export const AuthProvider = ({ children }) => {
     logout,
     forgotPassword,
     getUserData,
+    verifyOtpAuth,
+    reSendOtpAuth,
+    
   };
 
   return (

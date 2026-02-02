@@ -4,52 +4,52 @@ import PropTypes from 'prop-types';
 import { EMPTY_ARRAY, EMPTY_OBJECT } from '../../utils/helpers';
 import { useAuth } from '../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import BackgroundPage from './BackgroundPage';
-// import LogoPage from './logoPage';
+import Banner from './Banner';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
-import LogoPage from './LogoPage';
+import Plate from './Plate';
 
-function BackgroundLogoPage(props) {
+function PlateBanner(props) {
 const { dispatch, userDetails, navigate ,loader} = props;
 const { user } = useAuth();
 const { t, i18n } = useTranslation();
 const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
   { 
-    logo:EMPTY_ARRAY,
-    background:EMPTY_ARRAY,
+    number_plates:EMPTY_ARRAY,
+    banner:EMPTY_ARRAY,
   }
 );
 
 useEffect(()=>{
-  setFormdata({background:userDetails?.backgroundsUploaded ? userDetails?.backgroundsUploaded : EMPTY_ARRAY})
-  setFormdata({logo:userDetails?.logosUploaded ? userDetails?.logosUploaded : EMPTY_ARRAY})
+  setFormdata({banner:userDetails?.banners ? userDetails?.banners : EMPTY_ARRAY})
+  setFormdata({number_plates:userDetails?.number_plates ? userDetails?.number_plates : EMPTY_ARRAY})
 },[userDetails])
 
 
 
-  const { background, logo } = formdata;
+  const { banner, number_plates } = formdata;
   return (
     <>
     {loader ? <LoaderSpiner /> :<>
       <div class="bg-gradient">
-        <h3 className='heading-title'>Background</h3>
-        <p className='heading-subtitle'>Select the background type you want to apply on all your exterior images.</p>
+        <h3 className='heading-title'>Licence Plate</h3>
+        <p className='heading-subtitle'>Select the Licence Plate you want to apply on all your exterior images.</p>
       </div>
-        <BackgroundPage background={background} />
+       <Plate logo ={number_plates} />
+       
 
       <div className='divider-1'></div>
-
-      <div class="bg-gradient">
-        <h3 className='heading-title'>Logo</h3>
-        <p className='heading-subtitle'>Select the Logo you want to apply on all your exterior images.</p>
+ <div class="bg-gradient">
+        <h3 className='heading-title'>Banner</h3>
+        <p className='heading-subtitle'>Select the Banner type you want to apply on all your exterior images.</p>
       </div>
-      <LogoPage logo={logo} />
+     
+      <Banner background ={banner} />
       </>}
     </>
   );
 }
 
-BackgroundLogoPage.propTypes = {
+PlateBanner.propTypes = {
   dispatch: PropTypes.func,
   data: PropTypes.object,
   loader: PropTypes.bool,
@@ -57,7 +57,7 @@ BackgroundLogoPage.propTypes = {
 
 }
 
-BackgroundLogoPage.defaulProps = {
+PlateBanner.defaulProps = {
   dispatch: PropTypes.func,
   data: EMPTY_OBJECT,
   userDetails: EMPTY_OBJECT,
@@ -73,4 +73,4 @@ function mapStateToProps({ login }) {
   }
 }
 
-export default connect(mapStateToProps)(BackgroundLogoPage)
+export default connect(mapStateToProps)(PlateBanner)

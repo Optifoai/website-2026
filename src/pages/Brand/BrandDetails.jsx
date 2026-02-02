@@ -144,10 +144,10 @@ function BrandDetails(props) {
                                 <div key={index} class="car-card" >
 
                                     <div class="image-section">
-                                        <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
+                                        <img class="/images/card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
 
                                         <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
-                                            <img src='/trash.png' />
+                                            <img src='/images/trash.png' />
                                         </div>
                                     </div>
 
@@ -166,11 +166,11 @@ function BrandDetails(props) {
 
                                             <div class="action-buttons">
                                                 {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
-                                                    <img src="/video.svg" />
+                                                    <img src="/images/video.svg" />
                                                 </button>}
 
                                                 <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
-                                                    <img src="/download.svg" />
+                                                    <img src="/images/download.svg" />
                                                 </button>
                                             </div>
                                         </div>
@@ -185,7 +185,7 @@ function BrandDetails(props) {
                 </div>}
             {/* car delete model */}
             <CommonModel show={formdata.deleteModelOpen} onClose={() => { setFormdata({ deleteModelOpen: false }) }}>
-                <img src="/delete-image.png" />
+                <img src="/images/delete-image.png" />
                 <h2>{t('deleteText')} {formdata?.actionCarDetails?.carType}?</h2>
                <p> <Trans i18nKey="deleteCarMsgText">
                     Do you really want to delete this car from your Optifo list?
@@ -199,7 +199,7 @@ function BrandDetails(props) {
             {/* car image downlaod model */}
             <CommonModel show={formdata.downloadModelOpen} onClose={() => { setFormdata({ downloadModelOpen: false }) }}>
 
-                <img src='download-image.png' />
+                <img src='/images/download-image.png' />
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download all photos of the {formdata?.actionCarDetails?.carType}?</p>
                 <div className='popup-btn'>
@@ -212,7 +212,7 @@ function BrandDetails(props) {
             {/* car video downlaod model */}
             <CommonModel show={formdata.videoModelOpen} onClose={() => { setFormdata({ videoModelOpen: false }) }}>
 
-                <img src='download-image.png' />
+                <img src='/images/download-image.png' />
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download video of the {formdata?.actionCarDetails?.carType}?</p>
                 <div className='popup-btn'>

@@ -6,6 +6,10 @@ export const APICONFIG = {
 	getUserLoginUrl: `${baseURL}user/login`,
 	getUserProfileUrl: `${baseURL}user/userProfile`,
 	getUserSignupUrl: `${baseURL}user/sendOtp`,
+	resendOtpUrl: `${baseURL}user/resendOtp`,
+
+	getverifyOtpAndSaveUrl: `${baseURL}user/verifyOtpAndSave`,
+
 	getCarListUrl: `${baseURL}cars/view`,
 	getCarDetailsUrl: `${baseURL}cars/viewOne`,
 	getAllCarImageDownloadUrl: `${baseURL}cars/downloadCars`,
