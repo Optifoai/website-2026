@@ -3,12 +3,11 @@ import axios from 'axios'
 // import { getConfigDetails } from './config'
 // import { getConfigDetails } from '../redux/config/Config'
 const axiosClient = axios.create()
-const partner = window.location.toString().split('/')[3]
 
 // Intercept request
 axiosClient.interceptors.request.use(
 	(request) => {
-		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
+		const accessToken = localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null       
         const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
 		  // If payload is FormData, don't set content type
 			if (request.data instanceof FormData) {
@@ -27,18 +26,29 @@ axiosClient.interceptors.request.use(
 // Intercept response
 axiosClient.interceptors.response.use(
 	(response) => {
-		const userData = JSON.parse(localStorage.getItem('userData'))
+		// const userData = JSON.parse(localStorage.getItem('userData'))
+		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
+
 		// Dispatch any action on success
 		//if(response?.status === responseCodes.SUCCESS200)
 		if (response?.status == 201 || response?.status == 200) {
-			return response?.data
-		}else if(response?.status == 401){
-			if(userData?.access_token && userData?.access_token != null){
+			if(response?.data?.error?.responseMessage && response?.data?.error?.responseMessage=='Your Token has been expired'){
 				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()
 				sessionStorage.clear()
 				setTimeout(() => {
-					window.location.replace(`/${partner}`)
+					window.location.replace(`/login`)
+				}, 5000)
+			}else{
+			return response?.data
+			}
+		}else if(response?.status == 401){
+			if(accessToken && accessToken != null){
+				// notify('error', 'Session Expired, Please Login Again')
+				localStorage.clear()
+				sessionStorage.clear()
+				setTimeout(() => {
+					window.location.replace(`/login`)
 				}, 5000)
 			}else{
 				return	Promise.reject(response?.data)	
@@ -50,15 +60,17 @@ axiosClient.interceptors.response.use(
 	}
 	,
 	(error) => {
-		const userData = JSON.parse(localStorage.getItem('userData'))
+		// const userData = JSON.parse(localStorage.getItem('userData'))
+		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
+
 
 		if(error?.response?.status == 401){
-			if(userData?.access_token && userData?.access_token != null){
+			if(accessToken && accessToken != null){
 				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()
 				sessionStorage.clear()
 				setTimeout(() => {
-					window.location.replace(`/${partner}`)
+					window.location.replace(`/login`)
 				}, 5000)
 			}else{
 				return Promise.reject(error?.response?.data)

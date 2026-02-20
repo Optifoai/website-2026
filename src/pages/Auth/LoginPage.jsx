@@ -7,9 +7,10 @@ import { Trans } from 'react-i18next';
 
 function LoginPage(props) {
   const { navigate, Link } = props
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated ,logout} = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { t } = useTranslation();
+  const accessToken = localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null  
 
   const onSubmit = async (data) => {
     try {
@@ -21,12 +22,13 @@ function LoginPage(props) {
   };
 
 
-
-  useEffect(() => {
-    if (isAuthenticated) {
+  useEffect(() => {   
+    if (isAuthenticated && accessToken) {
       navigate('/dashboard')
+    }else{
+        logout()
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated,accessToken])
 
   const [userInput, setUserInput] = useReducer((state, newState) => ({ ...state, ...newState }),
     {
