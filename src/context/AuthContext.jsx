@@ -1,0 +1,309 @@
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import * as authService from '../services/auth'; // API calls
+import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } from '../Redux/Actions/loginAction';
+import { notify, setLoginDetailInSession } from '../utils/helpers';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import js from '@eslint/js';
+// import { setLoginDetailInSession } from '../utils/helpers';
+
+const AuthContext = createContext(null);
+
+export const AuthProvider = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      // In a real app, you'd validate the token with your backend
+      // For simplicity, we'll assume a token means authenticated
+      // You might also fetch user details here
+      setIsAuthenticated(true);
+      // Example: setUser({ username: 'testuser' });
+    }
+    setIsLoading(false);
+  }, []);
+
+  const loginOld = async (credentials) => {
+    try {
+      setIsLoading(true);
+      const data = await authService.login(credentials); // Call your backend API
+      delete(data?.responseData?.userProfile?.password);
+      localStorage.setItem('authToken', JSON.stringify(data?.responseData?.accessToken));
+      localStorage.setItem('userData', JSON.stringify(data?.responseData?.userProfile));      
+      setIsAuthenticated(true);
+      setUser(data.user); // Store user data
+      setIsLoading(false);
+      return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  const login = (credentials) => {  
+      setIsLoading(true);
+      dispatch(userLogin(credentials)).then((res) => {
+        if(res?.statusCode=='1'){
+          let userData = res?.responseData
+          delete (userData?.userProfile?.password);
+          setLoginDetailInSession(userData);
+          setIsAuthenticated(true);
+          setUser(userData); // Store user data
+          setIsLoading(false);  
+          getUserData()
+          localStorage.removeItem("email");
+          localStorage.removeItem("pass");
+          return true                
+        }else{
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false     
+        }        
+               
+      }).catch((err) => {
+          console.log(err);
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      })
+     
+      // Redirect to dashboard on successful login
+  
+    };
+    const signup = async (userData) => {
+      
+    try {
+      setIsLoading(true);
+      // const data = await authService.signup(userData); // Call your backend API
+    
+      localStorage.setItem("email", userData?.email ? JSON.stringify(userData?.email) : '')
+      localStorage.setItem("pass", userData?.password ? JSON.stringify(userData?.password) : '')
+      dispatch(userSignup(userData)).then((res) => {
+       
+        if(res?.statusCode=='1'){
+            let userData = res?.responseData
+           
+            // delete (userData?.userProfile?.password);
+            // setLoginDetailInSession(userData);
+            setIsAuthenticated(false);
+            setUser(userData);
+            setIsLoading(false);
+            // getUserData()
+            // notify('success', res.response?.data?.message ? res.response?.data?.message : 'Signup Successful.')
+            navigate('/verify');
+            return true;
+        }else{       
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false;
+        }
+      }).catch((err) => {
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      });
+
+     
+    } catch (error) {
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  const verifyOtpAuth = async (userData) => {
+
+    try {
+      setIsLoading(true);
+
+        dispatch(userOtpVeification(userData)).then((res) => {
+     
+
+        setIsLoading(false);
+        if(res?.statusCode=='1'){
+            let email = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("email")):''
+            let password = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("pass")):''
+            login({email, password});
+            // let  credentials={email:user?.userProfile?.params?.email,password:user?.userProfile?.params?.password}           
+            // login(credentials)
+            return true;
+        }else{       
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false;
+        }
+      }).catch((err) => {
+
+
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      });
+
+     
+    } catch (error) {
+         
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+ const reSendOtpAuth = async (payload) => {
+
+    try {
+      setIsLoading(true);
+
+        dispatch(resendOtp(payload)).then((res) => {
+     
+
+        setIsLoading(false);
+        if(res?.statusCode=='1'){
+            let email = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("email")):''
+            let password = localStorage.getItem("email") ? JSON.parse(localStorage.getItem("pass")):''
+            // login({email, password});
+            // let  credentials={email:user?.userProfile?.params?.email,password:user?.userProfile?.params?.password}           
+            // login(credentials)
+            return true;
+        }else{       
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Something went wrong!')
+          return false;
+        }
+      }).catch((err) => {
+
+
+          setIsAuthenticated(false);
+          setLoginDetailInSession({});
+          setUser(null);
+          setIsLoading(false);
+          notify('error',err?.message ? err?.message :'Something went wrong!')
+          return false     
+      });
+
+     
+    } catch (error) {
+         
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  const signupOld = async (userData) => {
+    try {
+      setIsLoading(true);
+      const data = await authService.signup(userData); // Call your backend API
+      localStorage.setItem('authToken', data.token);
+      setIsAuthenticated(true);
+      setUser(data.user);
+      setIsLoading(false);
+      return true;
+    } catch (error) {
+   
+      setIsAuthenticated(false);
+      setUser(null);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('visit');
+    localStorage.clear()
+		sessionStorage.clear()
+   
+    setIsAuthenticated(false);
+    setUser(null);
+  };
+
+  const forgotPassword = async (email) => {
+    try {
+      setIsLoading(true);
+     let res= await authService.forgotPassword(email); // Call your backend API
+     setIsLoading(false);
+      if(res?.statusCode=='1'){
+        notify('success','Forgot password request sent successfully')
+        return true;
+      }else{
+        notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Forgot password request failed')
+        return false;
+      }
+      
+    } catch (error) {
+      console.error('Forgot password request failed:', error);
+      setIsLoading(false);
+      throw error;
+    }
+  };
+
+  const getUserData = () => {
+    dispatch(getUserProfile())
+      .then((res) => {
+        if (res?.statusCode == '1') {
+          let userData = res?.responseData;
+          delete userData?.userProfile?.password;
+          setUser(userData); // Store user data
+        } else {
+          notify('error', res?.error?.responseMessage || 'Something went wrong!');
+        }
+      })
+      .catch((err) => {
+      //   setLoginDetailInSession({});
+        notify('error', err?.message || 'Something went wrong!');
+      });
+  };
+
+
+
+  const value = {
+    isAuthenticated,
+    user,
+    isLoading,
+    login,
+    signup,
+    logout,
+    forgotPassword,
+    getUserData,
+    verifyOtpAuth,
+    reSendOtpAuth,
+    
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
