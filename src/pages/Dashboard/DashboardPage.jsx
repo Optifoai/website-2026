@@ -221,6 +221,7 @@ function DashboardPage(props) {
                 <div>
 
 
+                    {formdata?.carsList.length >0 ?
                     <InfiniteScroll
                         style={{ height: 'auto', overflow: 'hidden' }}
                         dataLength={formdata?.carsList.length}
@@ -251,7 +252,10 @@ function DashboardPage(props) {
                     // }
                     >
                         {CarForm()}
-                    </InfiniteScroll>
+                    </InfiniteScroll> :
+                   <p style={{ textAlign: 'center', marginTop: '180px' }}>
+                        <b>No cars found. Please create a car.</b>
+                    </p>}
 
                 </div>
             }

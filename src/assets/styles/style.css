@@ -1675,6 +1675,13 @@ h3.credit {
   border-color: rgba(255, 255, 255, 0.08);
   margin-bottom: 15px;
 }
+.details-car-page .tab-content {
+    padding-right: 30px;
+}
+
+.details-car-page .tab-content {
+    padding-right: 30px;
+}
 
 .custom_tab_section .nav-tabs {
   /* min-width: 130px; */

@@ -233,6 +233,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
     localStorage.removeItem('visit');
+    localStorage.clear()
+		sessionStorage.clear()
    
     setIsAuthenticated(false);
     setUser(null);
