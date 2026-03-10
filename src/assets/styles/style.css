@@ -1679,6 +1679,10 @@ h3.credit {
     padding-right: 30px;
 }
 
+.details-car-page .tab-content {
+    padding-right: 30px;
+}
+
 .custom_tab_section .nav-tabs {
   /* min-width: 130px; */
   min-width: 140px;
