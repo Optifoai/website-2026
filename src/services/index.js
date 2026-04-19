@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import axiosClient from './base'
+import { client } from './axioConfig'
 // import { getConfigDetails } from './config'
 
 export function getRequest(URL) {
@@ -89,4 +90,13 @@ export function downloadFile(path, payload, fileName) {
 	}).catch(() => {
 		return { status: 500, data: 'Something went wrong, Please try again!' }
 	})
+}
+
+export function postRequestData(URL, payload,token) {
+	let header={
+            headers: {
+              accessToken: token
+            }
+          }
+	return client.post(URL, payload,header)
 }

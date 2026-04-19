@@ -7,6 +7,7 @@ import StudioTabs from './StudioTabs';
 import { createCarSave } from '../../Redux/Actions/carAction';
 import { useNavigate } from 'react-router-dom';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
+import CommonModel from '../../components/common/model/CommonModel';
 
 const initialState = {
     carType: '',
@@ -124,6 +125,11 @@ function CreateCarForm(props) {
             return;
         }
 
+        if (!formdata?.backgroundURL) {
+            notify('error', 'Please select background!');
+            return;
+        }
+
         setFormdata({ formloader: true });
 
         const formPostData = new FormData();
@@ -131,6 +137,7 @@ function CreateCarForm(props) {
         formdata.dataImage.forEach(item => {
             formPostData.append('carImages', item.img);
         });
+        
 
         const positions = formdata?.dataImage.map(item => item.position);
 
@@ -150,10 +157,10 @@ function CreateCarForm(props) {
 
         dispatch(createCarSave(formPostData))
             .then(res => {
-                 
+                 setFormdata({ formloader: false });
                 // if (res?.statusCode === '1') {
                 if (res) {
-                    setFormdata({ formloader: true });
+                    // setFormdata({ formloader: true });
                     notify('success', res?.message || 'Car created successfully');
                     navigate('/dashboard');
                 } else {
@@ -174,7 +181,9 @@ function CreateCarForm(props) {
         <>
             {/* <h4 className="main-heading mt-2 mb-2">Create Car</h4> */}
 
-            {formdata?.formloader ? <LoaderSpiner /> : <div className="grid_1_3 custom_tab_section">
+            {formdata?.formloader ?  ''
+            
+            : <div className="grid_1_3 custom_tab_section">
                 <StudioTabs
                     formdata={formdata}
                     setFormdata={setFormdata}
@@ -190,6 +199,16 @@ function CreateCarForm(props) {
                     updateCarImage={updateCarImage}
                 />
             </div>}
+
+            <CommonModel show={formdata.formloader} custombg={'visitmodal'} onClose={() => { setFormdata({ formloader: false }) }}>
+                            <div className='visit-car-image'>
+                                <img src='/images/visit-car.gif' />
+                            </div>
+                            <h2 className='mt-0'>Glad to have you at Optifo!</h2>
+                            <p>Please wait, the car is being created and is currently in progress..</p>
+            
+                        </CommonModel>
+
         </>
     );
 }

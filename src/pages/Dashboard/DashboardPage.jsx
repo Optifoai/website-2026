@@ -81,7 +81,7 @@ function DashboardPage(props) {
         });
 
     };
-
+  
     const actionDelteModal = () => {
         //  getCarData()
         let payLoad = {
@@ -91,8 +91,10 @@ function DashboardPage(props) {
             if (res?.statusCode == '1') {
 
                 notify('success', res.response?.data?.message ? res.response?.data?.message : 'Car deleted successful.')
-                setFormdata({ deleteModelOpen: false, activePage: 1, carsList: [] });
-                getCarData('1')
+                let carData=formdata?.carsList.filter((item)=>item._id!=formdata?.actionCarDetails?._id)
+                setFormdata({ deleteModelOpen: false, activePage: 1, carsList: carData });
+                // setFormdata({ deleteModelOpen: false, activePage: 1, carsList: [] });
+                // getCarData('1')
                 // return true;
             } else {
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')

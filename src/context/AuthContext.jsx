@@ -247,6 +247,7 @@ export const AuthProvider = ({ children }) => {
      setIsLoading(false);
       if(res?.statusCode=='1'){
         notify('success','Forgot password request sent successfully')
+        navigate('/login');
         return true;
       }else{
         notify('error',res?.error?.responseMessage ? res?.error?.responseMessage :'Forgot password request failed')
