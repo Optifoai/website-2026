@@ -767,7 +767,8 @@ p.value {
 
 .btn-download {
   position: absolute;
-  bottom: 0;
+  /* bottom: 0; */
+  margin-top: 12rem;
   left: 0;
   right: 0;
   padding: 1rem 1rem;
