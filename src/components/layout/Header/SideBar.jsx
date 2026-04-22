@@ -157,7 +157,7 @@ function SideBar(props) {
                             {user?.userProfile?.fullName || "User"}
                         </div>
 
-                        <div className="caret"><img src='images/caret.png'/></div>
+                        <div className="caret"><img src='/images/caret.png'/></div>
                     </div>
 
                     {open && (

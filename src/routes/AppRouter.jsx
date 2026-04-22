@@ -25,6 +25,7 @@ import CreateBackground from '../pages/CreateBackground/CreateBackground';
 import BrandDetails from '../pages/Brand/BrandDetails';
 import Brand from '../pages/Brand/Brand';
 import PlateBanner from '../pages/PlateBanner/PlateBanner';
+import UpdatePassword from '../pages/Auth/updatePassword';
 
 
 export default function AppRouter() {
@@ -42,6 +43,8 @@ export default function AppRouter() {
           <Route path="/signup" element={<SignupPage dispatch={dispatch} navigate={navigate} Link={Link} />} />
           <Route path="/verify" element={<VerifyOtp dispatch={dispatch} navigate={navigate} Link={Link} />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage dispatch={dispatch} navigate={navigate} Link={Link} />} />
+          <Route path="/update-password" element={<UpdatePassword dispatch={dispatch} navigate={navigate} Link={Link} />} />
+
 
 
           {/* Protected Routes */}
