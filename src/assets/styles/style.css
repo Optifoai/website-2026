@@ -767,7 +767,8 @@ p.value {
 
 .btn-download {
   position: absolute;
-  bottom: 0;
+  /* bottom: 0; */
+  margin-top: 12rem;
   left: 0;
   right: 0;
   padding: 1rem 1rem;
@@ -1805,4 +1806,11 @@ h3.credit {
   .login-right {
     flex: 1;
   }
+}
+
+.scroll-container {
+    max-height: 700px;   /* adjust as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 5px;  /* optional for scrollbar spacing */
 }

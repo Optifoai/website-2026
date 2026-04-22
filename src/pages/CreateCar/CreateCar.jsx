@@ -60,7 +60,7 @@ function CreateCar(props) {
                     <div className="modal-content">
                         <div className="modal-body custom-modal-body">
                             <MultipalUploadPage
-                                fileNote={'NOTE: Background size 1600 x 1200 pixels'}
+                                // fileNote={'NOTE: Background size 1600 x 1200 pixels'}
                                 //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
                                 fileIntructions=''
                                 onFileSelect={onFileSelect}

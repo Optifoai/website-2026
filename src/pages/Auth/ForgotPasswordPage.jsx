@@ -47,7 +47,7 @@ function ForgotPasswordPage() {
 
           <h5 class="login-title">Verify Your Email</h5>
           <p class="login-subtext">
-            Enter the verification code sent to your email address name@email.com
+           Please enter your registered email address (name@email.com).
           </p>
           <div className="form-field">
             <form onSubmit={handleSubmit(onSubmit)}>

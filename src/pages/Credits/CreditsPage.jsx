@@ -52,7 +52,7 @@ const { t } = useTranslation();
         <div class="pricing-card">
           <div class="price-section">
             <h2 class="price">€89</h2>
-            <p class="subtext"> per transaction</p>
+            <p class="subtext"> per month</p>
           </div>
 
           <div class="divider"></div>
@@ -70,7 +70,7 @@ const { t } = useTranslation();
         <div class="pricing-card">
           <div class="price-section">
             <h2 class="price">€129</h2>
-            <p class="subtext"> per transaction</p>
+            <p class="subtext"> per month</p>
           </div>
 
           <div class="divider"></div>

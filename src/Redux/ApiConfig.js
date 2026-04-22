@@ -69,7 +69,9 @@ export const APICONFIG = {
     CREAT_360CAR_IMAGE: `${baseURL}cars/generate360Images`,
     UPLOAD_CAR_VIDEO: `${baseURL}cars/uploadCarVideo`,
     // CREAT_AI_IMAGE: `${baseURL}cars/generate360Images1`,
-    CREAT_AI_IMAGE: 'https://fastapi.optifo.in/generate-ai-video'
+    CREAT_AI_IMAGE: 'https://fastapi.optifo.in/generate-ai-video',
+	resetPasswordUrl: `${baseURL}user/resetPassword`,
+
 
 
 
