@@ -38,9 +38,9 @@ function Header() {
       <div class="topbar">
                 <div class="title">
                   {location.pathname === '/create-car' ? 
-                  <button onClick={() => window.location.reload()} className="back-button" aria-label="Go back"><img src='images/icon/back.png'/></button>
+                  <button onClick={() => window.location.reload()} className="back-button" aria-label="Go back"><img src='/images/icon/back.png'/></button>
                   :
-                  <button onClick={() => navigate(-1)} className="back-button" aria-label="Go back"><img src='images/icon/back.png'/></button>
+                  <button onClick={() => navigate(-1)} className="back-button" aria-label="Go back"><img src='/images/icon/back.png'/></button>
                   }
                     
                     <h2>{getTitle()}</h2>

@@ -1807,3 +1807,10 @@ h3.credit {
     flex: 1;
   }
 }
+
+.scroll-container {
+    max-height: 700px;   /* adjust as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 5px;  /* optional for scrollbar spacing */
+}

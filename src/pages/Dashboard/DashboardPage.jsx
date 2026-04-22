@@ -57,7 +57,7 @@ function DashboardPage(props) {
     const getCarData = (page = '') => {
         const { carsList, activePage } = formdata
         activePage == '1' ? setFormdata({ loader: true }) : setFormdata({ loader: false })
-        let params = { page: page ? page : activePage, limit: 20 }
+        let params = { page: page ? page : activePage, limit: 30 }
         dispatch(getCarList(params)).then((res) => {
             setFormdata({ loader: false })
             // ResponseFilter(res);

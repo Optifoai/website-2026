@@ -169,7 +169,7 @@ function CarDetails(props) {
                         onSelect={(e) => changeTabValue(e)}
                     >
                         <Tab eventKey={1} title={<GridView />}>
-                            <div>
+                            <div className='scroll-container'>
                                 <div className="row">
                                     {formdata?.galleImages?.map((items, i) => {
 
