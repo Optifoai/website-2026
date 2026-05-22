@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession } from '../../utils/helpers';
@@ -17,6 +17,7 @@ function DashboardPage(props) {
     const { t } = useTranslation();
     const { user, getUserData } = useAuth();
     const { dispatch, navigate, isUserLogin, loader, Link } = props
+    const [loadedImages, setLoadedImages] = useState({});
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
         {
             carsList: EMPTY_ARRAY,
@@ -176,7 +177,40 @@ function DashboardPage(props) {
                     <div key={index} class="car-card dashboard-page" >
 
                         <div class="image-section">
-                            <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} />
+                           <div className="image-wrapper position-relative">
+                                {!loadedImages[index] && (
+                                    <img
+                                        src="/images/car-placeholder.png"
+                                        alt=""
+                                        className="card-image"
+                                    />
+                                )}
+
+                                <img
+                                    className="card-image"
+                                    src={items?.carImages?.[0]?.partUrl || "/images/car-placeholder.png"}
+                                    alt=""
+                                    style={{
+                                        display: loadedImages[index] ? "block" : "none",
+                                    }}
+                                    onLoad={() => {
+                                        setLoadedImages((prev) => ({
+                                            ...prev,
+                                            [index]: true,
+                                        }));
+                                    }}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "/images/car-placeholder.png";
+
+                                        setLoadedImages((prev) => ({
+                                            ...prev,
+                                            [index]: true,
+                                        }));
+                                    }}
+                                />
+                            </div>
+                            {/* <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} /> */}
 
                             <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
                                 <img src='/images/trash.png' />

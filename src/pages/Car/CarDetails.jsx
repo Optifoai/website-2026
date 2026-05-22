@@ -18,6 +18,8 @@ function CarDetails(props) {
     const [inputValue, setInputValue] = useState([]);
     // const { user } = useAuth();   
     const { dispatch, navigate, isUserLogin, loader, Link } = props
+    const [loadedImages, setLoadedImages] = useState({});
+    
     const [formdata, setFormdata] = useReducer((state, newState) => ({ ...state, ...newState }),
         {
             carDetails: EMPTY_OBJECT,
@@ -187,11 +189,46 @@ function CarDetails(props) {
                                                             checked={inputValue.includes(i)} />
 
                                                         <div className="gallery-img-overlay">
-                                                            <img
-                                                                src={formdata?.galleImages[i].partUrl}
+                                                               <div className="image-wrapper position-relative">
+                                                                {!loadedImages[i] && (
+                                                                    <img
+                                                                        src="/images/car-placeholder.png"
+                                                                        alt=""
+                                                                        className="card-image"
+                                                                    />
+                                                                )}
+
+                                                                <img
+                                                                    className="card-image"
+                                                                    src={formdata?.galleImages[i].partUrl || "/images/car-placeholder.png"}
+                                                                    alt=""
+                                                                    style={{
+                                                                        display: loadedImages[i] ? "block" : "none",
+                                                                    }}
+                                                                    onLoad={() => {
+                                                                        setLoadedImages((prev) => ({
+                                                                            ...prev,
+                                                                            [i]: true,
+                                                                        }));
+                                                                    }}
+                                                                    onError={(e) => {
+                                                                        e.target.onerror = null;
+                                                                        e.target.src = "/images/car-placeholder.png";
+
+                                                                        setLoadedImages((prev) => ({
+                                                                            ...prev,
+                                                                            [i]: true,
+                                                                        }));
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            {/* <img
+                                                                src={formdata?.galleImages[i].partUrl ? formdata?.galleImages[i].partUrl :'/images/car-placeholder.png'}
+                                                               
+                                                                // src={formdata?.galleImages[i].partUrl ?formdata?.galleImages[i].partUrl :'/images/car-placeholder.png'}
                                                                 alt=""
                                                                 className="w-100"
-                                                            />
+                                                            /> */}
                                                         </div>
 
                                                         <span className="custom-checkbox"></span>
