@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { notify } from '../../utils/helpers';
@@ -8,6 +8,9 @@ import { createCarSave } from '../../Redux/Actions/carAction';
 import { useNavigate } from 'react-router-dom';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
 import CommonModel from '../../components/common/model/CommonModel';
+import ImageJobProgress from '../../components/common/ImageJobProgress/ImageJobProgress';
+import { useImageJob } from '../../hooks/useImageJob';
+import { connectSocket } from '../../services/socket';
 
 const initialState = {
     carType: '',
@@ -33,9 +36,27 @@ function reducer(state, action) {
 }
 
 function CreateCarForm(props) {
-    const { selectedImages,setSelectedFiles , files = [], dispatch } = props;
+    const { selectedImages,setSelectedFiles , files = [], dispatch, userDetails } = props;
     const navigate = useNavigate();
     const [formdata, setFormdata] = useReducer(reducer, initialState);
+    const userId = userDetails?._id || userDetails?.id;
+    const { job, phase, progressPercent, setJob, setPhase } = useImageJob(userId);
+    const [showJobProgress, setShowJobProgress] = useState(false);
+
+    useEffect(() => {
+        if (userId) connectSocket(userId);
+    }, [userId]);
+
+    useEffect(() => {
+        if (job?.status === 'completed') {
+            notify('success', 'Car images processed successfully!');
+            setShowJobProgress(true);
+        }
+        if (job?.status === 'failed') {
+            notify('error', job?.errorMessage || 'Image processing failed');
+            setShowJobProgress(true);
+        }
+    }, [job?.status]);
 
     useEffect(() => {
         if (files.length > 0 && formdata.imageDetails.length === 0) {
@@ -157,17 +178,28 @@ function CreateCarForm(props) {
 
         dispatch(createCarSave(formPostData))
             .then(res => {
-                 setFormdata({ formloader: false });
-                // if (res?.statusCode === '1') {
+                setFormdata({ formloader: false });
+
+                // Async queue response (202)
+                if (res?.jobId) {
+                    setJob({
+                        jobId: res.jobId,
+                        status: res.status || 'pending',
+                        totalImages: res.totalImages || positions.length,
+                        processedImages: res.processedImages || 0,
+                    });
+                    setPhase('Upload Started');
+                    setShowJobProgress(true);
+                    notify('success', res?.message || 'Upload received — processing in background');
+                    return;
+                }
+
                 if (res) {
-                    // setFormdata({ formloader: true });
                     notify('success', res?.message || 'Car created successfully');
                     navigate('/dashboard');
                 } else {
                     notify('error', res?.error?.responseMessage || 'Something went wrong');
-                    setFormdata({ formloader: false });
                 }
-                
             })
             .catch(err => {
                 notify('error', err?.message || 'Something went wrong');
@@ -205,9 +237,21 @@ function CreateCarForm(props) {
                                 <img src='/images/visit-car.gif' />
                             </div>
                             <h2 className='mt-0'>Glad to have you at Optifo!</h2>
-                            <p>Please wait, the car is being created and is currently in progress..</p>
+                            <p>Please wait, uploading your car images...</p>
             
                         </CommonModel>
+
+            {showJobProgress && (
+                <ImageJobProgress
+                    phase={phase}
+                    progressPercent={progressPercent}
+                    job={job}
+                    onClose={() => {
+                        setShowJobProgress(false);
+                        if (job?.status === 'completed') navigate('/dashboard');
+                    }}
+                />
+            )}
 
         </>
     );

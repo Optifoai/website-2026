@@ -25,7 +25,7 @@ import CreateBackground from '../pages/CreateBackground/CreateBackground';
 import BrandDetails from '../pages/Brand/BrandDetails';
 import Brand from '../pages/Brand/Brand';
 import PlateBanner from '../pages/PlateBanner/PlateBanner';
-import UpdatePassword from '../pages/Auth/updatePassword';
+import ImageJobsAdmin from '../pages/Admin/ImageJobsAdmin';
 
 
 export default function AppRouter() {
@@ -62,6 +62,7 @@ export default function AppRouter() {
           <Route path="car/brand-details/:folderName" element={<PrivateRoute> <BrandDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/create-background" element={<PrivateRoute> <CreateBackground dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/plat-banner" element={<PrivateRoute> <PlateBanner dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/admin/image-jobs" element={<PrivateRoute> <ImageJobsAdmin /> </PrivateRoute>} />
           
           {/* <Footer /> */}
           {/* Redirect to dashboard if logged in, otherwise to login */}

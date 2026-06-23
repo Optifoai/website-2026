@@ -31,7 +31,7 @@ axiosClient.interceptors.response.use(
 
 		// Dispatch any action on success
 		//if(response?.status === responseCodes.SUCCESS200)
-		if (response?.status == 201 || response?.status == 200) {
+		if (response?.status == 201 || response?.status == 200 || response?.status == 202) {
 			if(response?.data?.error?.responseMessage && response?.data?.error?.responseMessage=='Your Token has been expired'){
 				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()

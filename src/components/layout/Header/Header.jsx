@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import Button from '../../common/Button/Button';
 import { useTranslation } from 'react-i18next';
+import NotificationBell from './NotificationBell';
 
 function Header() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -45,6 +46,9 @@ function Header() {
                     
                     <h2>{getTitle()}</h2>
                 </div>
+                {isAuthenticated && (
+                  <NotificationBell userId={user?._id || user?.id} />
+                )}
             </div>
   );
 }
