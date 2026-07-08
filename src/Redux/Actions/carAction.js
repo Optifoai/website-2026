@@ -15,6 +15,7 @@ export const getCarList = (params = {}) => (dispatch) => {
   }).catch((err) => {
     let errObject = err 
     dispatch({ type: CONSTANTS.GET_CAR_LIST_FAILURE })
+    return err
   })
 }
 

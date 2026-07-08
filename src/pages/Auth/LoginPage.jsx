@@ -56,7 +56,7 @@ function LoginPage(props) {
         <div className="login-card">
           <div className="login-logo">
             <div className='logo-blk'>
-              <img src="/images/optifo-white-logo.svg" alt="Logo" />
+              <img src="/images/optifo-logo.png" alt="Logo" />
             </div>
           </div>
 

@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import logo from '/images/optifo-white-logo.svg';
+import logo from '/images/optifo-logo.png';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { EMPTY_OBJECT } from '../../../utils/helpers';
@@ -25,7 +25,7 @@ function SideBar(props) {
 
     useEffect(() => {
         getUserData()
-    }, [!user, user == null])
+    }, [])
 
     return (
         <aside className="sidebar" role="navigation" aria-label="Main sidebar">
@@ -108,7 +108,7 @@ function SideBar(props) {
 
                 <li>
                     <Link to="/create-car-licence-plate" className={`nav-item ${location.pathname === '/create-car-licence-plate' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/create-car-licence-plate' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
 
                         </div>

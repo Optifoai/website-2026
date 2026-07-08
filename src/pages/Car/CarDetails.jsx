@@ -163,6 +163,7 @@ function CarDetails(props) {
             <div className='d-flex mt-4 details-car-page'>
                 <section className="flex-1">
                     <Tabs
+                        className="car-details-tabs"
                         defaultActiveKey={1}
                         activeKey={formdata?.tabValue}
                         id="uncontrolled-tab-example"

@@ -1,13 +1,11 @@
 import axios from 'axios'
-// import { notify } from '../utils/helpers'
-// import { getConfigDetails } from './config'
-// import { getConfigDetails } from '../redux/config/Config'
+import { getAccessToken } from '../utils/helpers'
 const axiosClient = axios.create()
 
 // Intercept request
 axiosClient.interceptors.request.use(
 	(request) => {
-		const accessToken = localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null       
+		const accessToken = getAccessToken()
         const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
 		  // If payload is FormData, don't set content type
 			if (request.data instanceof FormData) {
@@ -26,8 +24,7 @@ axiosClient.interceptors.request.use(
 // Intercept response
 axiosClient.interceptors.response.use(
 	(response) => {
-		// const userData = JSON.parse(localStorage.getItem('userData'))
-		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
+		const accessToken = getAccessToken()
 
 		// Dispatch any action on success
 		//if(response?.status === responseCodes.SUCCESS200)
@@ -60,8 +57,7 @@ axiosClient.interceptors.response.use(
 	}
 	,
 	(error) => {
-		// const userData = JSON.parse(localStorage.getItem('userData'))
-		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
+		const accessToken = getAccessToken()
 
 
 		if(error?.response?.status == 401){

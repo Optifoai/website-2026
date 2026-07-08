@@ -75,9 +75,11 @@ function DashboardPage(props) {
 
                 return true;
             } else {
+                setFormdata({ loader: false })
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
             }
         }).catch((err) => {
+            setFormdata({ loader: false })
             notify('error', err?.message ? err?.message : 'Something went wrong!')
         });
 
@@ -289,7 +291,7 @@ function DashboardPage(props) {
                     >
                         {CarForm()}
                     </InfiniteScroll> :
-                   <p style={{ textAlign: 'center', marginTop: '180px' }}>
+                   <p style={{ textAlign: 'center', marginTop: '180px', color: '#fff' }}>
                         <b>No cars found. Please create a car.</b>
                     </p>}
 

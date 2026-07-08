@@ -28,8 +28,8 @@ import CreateBackground from '../pages/CreateBackground/CreateBackground';
 import BrandDetails from '../pages/Brand/BrandDetails';
 import Brand from '../pages/Brand/Brand';
 import PlateBanner from '../pages/PlateBanner/PlateBanner';
-import UpdatePassword from '../pages/Auth/updatePassword';
-import CarLicencePlate from '../pages/CarLicencePlate/carLicencePlate';
+import CarLicencePlate from '../pages/CarLicencePlate/CarLicencePlate';
+import CarTemplatePage from '../pages/CarTemplate/CarTemplatePage';
 
 
 
