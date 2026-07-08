@@ -1820,74 +1820,15 @@ h3.credit {
     padding-right: 5px;  /* optional for scrollbar spacing */
 }
 
-/* Car Template page */
-.car-template-page {
-  max-width: 960px;
-  padding-right: 24px;
-  color: #fff;
+.image-Preview {
+    max-width: 600px;   /* Increase preview size */
+    width: 100%;
+    margin: 0 auto;     /* Center horizontally */
 }
 
-.car-template-title,
-.car-template-subtitle,
-.car-template-category h5 {
-  color: #fff;
-  font-weight: 600;
-}
-
-.car-template-page .form-label {
-  color: #c9c9c9;
-}
-
-.car-template-textarea.form-control {
-  width: 100%;
-  height: auto;
-  min-height: 110px;
-  border-radius: 8px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 12px 16px;
-  line-height: 1.5;
-  resize: vertical;
-}
-
-.car-template-textarea.form-control:focus {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #D5D5D5;
-}
-
-.car-template-textarea.form-control::placeholder {
-  color: #989898;
-  opacity: 1;
-}
-
-.car-template-category label span {
-  color: #fff;
-  font-size: 13px;
-}
-
-.car-template-muted {
-  color: #989898;
-}
-
-.car-template-actions .custom-button {
-  min-width: 120px;
-}
-
-.car-feature-tab {
-  padding-right: 24px;
-}
-
-.car-feature-tab-header .btn {
-  white-space: nowrap;
-}
-
-.details-car-page .nav-tabs .nav-link {
-  color: #fff;
-}
-
-.details-car-page .nav-tabs .nav-link.active {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.image-Preview img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
 }

@@ -105,6 +105,17 @@ function SideBar(props) {
                     </Link>
 
                 </li>
+
+                <li>
+                    <Link to="/create-car-licence-plate" className={`nav-item ${location.pathname === '/create-car-licence-plate' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div class="icon">
+                            <img src={location.pathname === '/create-car-licence-plate' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
+
+                        </div>
+                        <span>{t('create_car_plate_text')}</span>
+                    </Link>
+
+                </li>
              
                 {/* <li>
                     <Link to="/brand" className={`nav-item ${location.pathname === '/brand' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>

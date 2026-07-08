@@ -31,7 +31,9 @@ function Header() {
       case '/credits':
         return t('sidebarCredits');
       case '/plat-banner':
-      return t('create_plat_banner_text');  
+        return t('create_plat_banner_text');  
+      case '/create-car-licence-plate':
+        return t('create_car_plate_text');
       default:
         return t('carDetails');
     }

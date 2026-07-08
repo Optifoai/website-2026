@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { notify } from '../../utils/helpers';
 import SelectedCarImage from './SelectedCarImage';
 import StudioTabs from './StudioTabs';
-import { createCarSave } from '../../Redux/Actions/carAction';
+import { createCarSave,getCarDetails,updateCar } from '../../Redux/Actions/carAction';
 import { useNavigate } from 'react-router-dom';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
 import CommonModel from '../../components/common/model/CommonModel';
@@ -36,7 +36,7 @@ function reducer(state, action) {
 }
 
 function CreateCarForm(props) {
-    const { selectedImages,setSelectedFiles , files = [], dispatch, userDetails } = props;
+    const { selectedImages,setSelectedFiles , files = [], dispatch,vehicleId } = props;
     const navigate = useNavigate();
     const [formdata, setFormdata] = useReducer(reducer, initialState);
     const userId = userDetails?._id || userDetails?.id;
@@ -60,7 +60,8 @@ function CreateCarForm(props) {
 
     useEffect(() => {
         if (files.length > 0 && formdata.imageDetails.length === 0) {
-            setFormdata({ imageDetails: files.map(() => ({ position: '' })) });
+            setFormdata({ ...formdata,imageDetails: files.map(() => ({ position: '' })) });
+            console.log('coming 1', files)
         }
     }, [files]);
 
@@ -75,8 +76,37 @@ function CreateCarForm(props) {
             position: formdata.dataImage[index]?.position || '',
         }));
 
-        setFormdata({ carImage: selectedImages, caruploadName: selectedImages, dataImage });
+        setFormdata({...formdata, carImage: selectedImages, caruploadName: selectedImages, dataImage }); 
+            console.log('coming 2')
+
+        
     }, [selectedImages]);
+
+    useEffect(() => {
+        if (vehicleId) {
+            dispatch(getCarDetails(vehicleId)).then(res => {
+                if (res?.statusCode == '1') {
+                    const carData = res?.responseData;
+                   console.log('carData', carData)
+                    setFormdata({...formdata,
+                        carType: carData?.carType || '',
+                        carBrand: carData?.carBrand || '',
+                        carYear: carData?.carYear || '',
+                        carModel: carData?.carModel || '',
+                        carId: carData?.carId || 'k',
+                        carColor: carData?.carColor || '',
+                        backgroundURL: carData?.backgroundURL || '',
+                        activeLogoURL: carData?.numberPlateUrl || '',
+                        activeBannerURL: carData?.bannerUrl || '',
+                    });
+            console.log('coming 3')
+
+                }
+            });
+        }
+    }, [vehicleId]);
+    console.log('formdata', formdata)
+
 
     /* =======================
        Image position change
@@ -172,11 +202,29 @@ function CreateCarForm(props) {
         formPostData.append('numberPlateUrl', formdata?.activeLogoURL);
         formPostData.append('bannerUrl', formdata?.activeBannerURL);
         // formPostData.append('carImagesNames',JSON.stringify(formdata.carImagesPosNames)
-        formPostData.append('carImagesNames',JSON.stringify(positions)
-
-        );
-
-        dispatch(createCarSave(formPostData))
+        formPostData.append('carImagesNames',JSON.stringify(positions));
+        if(vehicleId){//update car
+            formPostData.append('vehicleId', vehicleId);
+             dispatch(updateCar(formPostData,vehicleId))
+            .then(res => {
+                 setFormdata({ formloader: false });
+                if (res?.statusCode == '1') {
+             
+                    // setFormdata({ formloader: true });
+                    notify('success', res?.message || 'Car updated successfully');
+                    navigate('/dashboard');
+                } else {
+                    notify('error', res?.error?.responseMessage || 'Something went wrong');
+                    setFormdata({ formloader: false });
+                }
+                
+            })
+            .catch(err => {
+                notify('error', err?.message || 'Something went wrong');
+                 setFormdata({ formloader: false });
+            })
+        }else{//create car
+             dispatch(createCarSave(formPostData))
             .then(res => {
                 setFormdata({ formloader: false });
 
@@ -205,6 +253,9 @@ function CreateCarForm(props) {
                 notify('error', err?.message || 'Something went wrong');
                  setFormdata({ formloader: false });
             })
+        }
+        //createCarSave
+       
     };
 
 
@@ -221,6 +272,7 @@ function CreateCarForm(props) {
                     setFormdata={setFormdata}
                     saveCarDetails={saveCarDetails}
                     dispatch={dispatch}
+                    vehicleId={vehicleId || ''}
                 />
 
                 <SelectedCarImage
@@ -265,12 +317,14 @@ CreateCarForm.propTypes = {
     selectedImages: PropTypes.array,
     files: PropTypes.array,
     dispatch: PropTypes.func,
+    vehicleId: PropTypes.string,
 };
 
 CreateCarForm.defaultProps = {
     selectedImages: [],
     selectedImages: [],
     files: [],
+    vehicleId: '',
 };
 
 function mapStateToProps({ login }) {

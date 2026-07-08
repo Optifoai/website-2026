@@ -28,8 +28,9 @@ import CreateBackground from '../pages/CreateBackground/CreateBackground';
 import BrandDetails from '../pages/Brand/BrandDetails';
 import Brand from '../pages/Brand/Brand';
 import PlateBanner from '../pages/PlateBanner/PlateBanner';
-import ImageJobsAdmin from '../pages/Admin/ImageJobsAdmin';
-import CarTemplatePage from '../pages/CarTemplate/CarTemplatePage';
+import UpdatePassword from '../pages/Auth/updatePassword';
+import CarLicencePlate from '../pages/CarLicencePlate/carLicencePlate';
+
 
 
 function HomeRedirect() {
@@ -43,6 +44,7 @@ function HomeRedirect() {
 }
 
 export default function AppRouter() {
+
   const dispatch = useDispatch()
   const navigate = useNavigate();
   return (
@@ -77,7 +79,10 @@ export default function AppRouter() {
           <Route path="car/brand-details/:folderName" element={<PrivateRoute> <BrandDetails dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/create-background" element={<PrivateRoute> <CreateBackground dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/plat-banner" element={<PrivateRoute> <PlateBanner dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
-          <Route path="/admin/image-jobs" element={<PrivateRoute> <ImageJobsAdmin /> </PrivateRoute>} />
+          <Route path="/create-car-licence-plate" element={<PrivateRoute> <CarLicencePlate dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/create-car/:id" element={<PrivateRoute> <CreateCar dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          
+
           
           {/* <Footer /> */}
           {/* Redirect based on auth state */}

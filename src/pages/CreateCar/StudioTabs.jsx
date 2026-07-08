@@ -16,7 +16,7 @@ import CommonModel from '../../components/common/model/CommonModel';
 import UploadPage from '../../components/common/UploadPage/UploadPage';
 
 function StudioTabs(props) {
-    const { formdata, setFormdata, saveCarDetails, userDetails, dispatch } = props;
+    const { formdata, setFormdata, saveCarDetails, userDetails, dispatch ,vehicleId} = props;
     const { t } = useTranslation();
     const { getUserData } = useAuth();
     const [activeTab, setActiveTab] = useState('2');
@@ -49,18 +49,18 @@ function StudioTabs(props) {
     }, EMPTY_ARRAY);
 
     const getBrandData = () => {
-        setFormdata({ loader: true })
+        setFormdata({ ...formdata, loader: true })
         dispatch(getCarBrandList()).then((res) => {
 
             if (res?.statusCode == '1') {
                 let data = res?.responseData?.carsList
                 setFormdata({ ...formdata, carsList: data, loader: false })
             } else {
-                setFormdata({ loader: false })
+                setFormdata({...formdata, loader: false })
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
             }
         }).catch((err) => {
-            setFormdata({ loader: false })
+            setFormdata({...formdata, loader: false })
             notify('error', err?.message ? err?.message : 'Something went wrong!')
         });
 
@@ -401,6 +401,7 @@ function StudioTabs(props) {
                                         value={formdata.carType}
                                         name='carType'
                                         onChange={handleInputChange}
+                                        disabled={vehicleId && vehicleId!='' ? true : false}
                                     >
                                         <option value={''}>Select</option>
                                         {carTypes?.map(type => (
@@ -417,6 +418,8 @@ function StudioTabs(props) {
                                         value={formdata.carBrand}
                                         name='carBrand'
                                         onChange={handleInputChange}
+                                        disabled={vehicleId && vehicleId!='' ? true : false}
+
                                     >
                                         <option value={''}>Select</option>
                                         {formdata?.carsList?.map(type => (
@@ -436,6 +439,8 @@ function StudioTabs(props) {
                                         value={formdata.carYear}
                                         onChange={handleInputChange}
                                         placeholder='Car Year'
+                                        readOnly={vehicleId && vehicleId!='' ? true : false}
+
                                     />
                                 </div>
 
@@ -448,6 +453,8 @@ function StudioTabs(props) {
                                         value={formdata.carModel}
                                         onChange={handleInputChange}
                                         placeholder='Car Model'
+                                        readOnly={vehicleId && vehicleId!='' ? true : false}
+
                                     />
                                 </div>
                             </div>
@@ -462,6 +469,10 @@ function StudioTabs(props) {
                                         value={formdata.carId}
                                         onChange={handleInputChange}
                                         placeholder='Car Id'
+                                        // disabled={vehicleId && vehicleId!='' ? true : false}
+                                        autoComplete='off'
+                                        readOnly={vehicleId && vehicleId!='' ? true : false}
+
                                     />
                                 </div>
                             </div>
@@ -515,10 +526,12 @@ StudioTabs.propTypes = {
     saveCarDetails: PropTypes.func.isRequired,
     userDetails: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
+    vehicleId: PropTypes.string,
 };
 
 StudioTabs.defaultProps = {
     userDetails: EMPTY_OBJECT,
+    vehicleId: '',
     dispatch: () => { },
 };
 
