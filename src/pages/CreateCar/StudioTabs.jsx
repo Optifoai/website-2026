@@ -395,7 +395,7 @@ function StudioTabs(props) {
                         <div className=" car-details-blk">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <label class="form-label">Car Type <span className='text-danger'> *</span></label>
+                                    <label className="form-label">Car Type <span className='text-danger'> *</span></label>
                                     <select
                                         className="form-control mb-3"
                                         value={formdata.carType}
@@ -410,7 +410,7 @@ function StudioTabs(props) {
                                 </div>
 
                                 <div className="col-md-12">
-                                    <label class="form-label">Car Brand <span className='text-danger'> *</span></label>
+                                    <label className="form-label">Car Brand <span className='text-danger'> *</span></label>
 
                                     <select
                                         className="form-control mb-3"
@@ -428,7 +428,7 @@ function StudioTabs(props) {
 
                             <div className="row">
                                 <div className="col-md-12">
-                                    <label class="form-label">Car Year </label>
+                                    <label className="form-label">Car Year </label>
                                     <input
                                         type='text'
                                         name='carYear'
@@ -440,7 +440,7 @@ function StudioTabs(props) {
                                 </div>
 
                                 <div className="col-md-12">
-                                    <label class="form-label">Car Model</label>
+                                    <label className="form-label">Car Model</label>
                                     <input
                                         type='text'
                                         name='carModel'
@@ -454,7 +454,7 @@ function StudioTabs(props) {
 
                             <div className="row">
                                 <div className="col-md-12">
-                                    <label class="form-label">Car Id <span className='text-danger'> *</span></label>
+                                    <label className="form-label">Car Id <span className='text-danger'> *</span></label>
                                     <input
                                         type='text'
                                         name='carId'

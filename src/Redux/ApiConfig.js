@@ -70,11 +70,15 @@ export const APICONFIG = {
     NOTIFICATIONS: `${baseURL}notifications`,
     NOTIFICATIONS_UNREAD_COUNT: `${baseURL}notifications/unread-count`,
     ADMIN_IMAGE_JOBS: `${baseURL}admin/image-jobs`,
+    FASTAPI_PROCESS_CAR_IMAGE: `${baseURL}cars/fastapi/processCarImage`,
     CREAT_360CAR_IMAGE: `${baseURL}cars/generate360Images`,
     UPLOAD_CAR_VIDEO: `${baseURL}cars/uploadCarVideo`,
     // CREAT_AI_IMAGE: `${baseURL}cars/generate360Images1`,
     CREAT_AI_IMAGE: 'https://fastapi.optifo.in/generate-ai-video',
 	resetPasswordUrl: `${baseURL}user/resetPassword`,
+
+    VENDOR_CAR_TEMPLATE: `${baseURL}vendor/car-template`,
+    VENDOR_CAR_TEMPLATE_FEATURES: `${baseURL}vendor/car-template/features`,
 
 
 

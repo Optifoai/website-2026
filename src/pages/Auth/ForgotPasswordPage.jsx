@@ -30,23 +30,23 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div class="login-container">
-      <div class="login-left">
+    <div className="login-container">
+      <div className="login-left">
 
       </div>
-      <div class="login-right">
-        <div class="login-card position-relative">
+      <div className="login-right">
+        <div className="login-card position-relative">
           <Link to="/login"><img className='back-arrow' src='/images/back-arrow.svg' /></Link>
-          <div class="login-logo">
+          <div className="login-logo">
             <div className='logo-blk'>
-              <img src="/images/optifo-logo.png" alt="Logo" />
+              <img src="/images/optifo-white-logo.svg" alt="Logo" />
             </div>
           </div>
 
           <hr className='divider' />
 
-          <h5 class="login-title">Verify Your Email</h5>
-          <p class="login-subtext">
+          <h5 className="login-title">Verify Your Email</h5>
+          <p className="login-subtext">
            Please enter your registered email address (name@email.com).
           </p>
           <div className="form-field">
@@ -62,12 +62,12 @@ function ForgotPasswordPage() {
               </div>
 
               <div className="f-group">
-                <button type="submit" class="btn btn-login">VERIFY EMAIL</button>
+                <button type="submit" className="btn btn-login">VERIFY EMAIL</button>
               </div>
             
 
 
-            <p class="register-link mt-5">
+            <p className="register-link mt-5">
               Didn’t receive the code? <button type='submit' >Resend</button>
             </p>
             </form>

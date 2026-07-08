@@ -229,6 +229,19 @@ export const createCarSave = (payLoad) => (dispatch) => {
   })
 }
 
+// FastAPI wrapper: carImages file + numberPlateUrl
+export const processCarImageWithNumberPlate = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  const apiurl = `${APICONFIG.FASTAPI_PROCESS_CAR_IMAGE}`
+  return postRequest(apiurl, payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+    throw err
+  })
+}
+
 // Calls the API to create car
 export const removeCarImageBackground = (payLoad) => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })

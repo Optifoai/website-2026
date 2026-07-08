@@ -18,6 +18,8 @@ function Header() {
         return t('recentCars');   
       case '/my-account':
         return t('sidebarMyAccount');
+      case '/car-template':
+        return t('carTemplateTitle');
       case '/background-logo':
         return t('sidebarBackgroundLogo');
       case '/create-car':
@@ -36,8 +38,8 @@ function Header() {
   };
 
   return (
-      <div class="topbar">
-                <div class="title">
+      <div className="topbar">
+                <div className="title">
                   {location.pathname === '/create-car' ? 
                   <button onClick={() => window.location.reload()} className="back-button" aria-label="Go back"><img src='/images/icon/back.png'/></button>
                   :

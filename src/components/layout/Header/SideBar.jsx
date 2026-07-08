@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import { useAuth } from '../../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
-import logo from '/images/logo.png';
+import logo from '/images/optifo-white-logo.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { EMPTY_OBJECT } from '../../../utils/helpers';
@@ -28,24 +28,22 @@ function SideBar(props) {
     }, [!user, user == null])
 
     return (
-        <aside class="sidebar" role="navigation" aria-label="Main sidebar">
-            <div class="top-strip">
-                <div class="logo-wrap" aria-hidden="true">
-                    <div class="logo-lens"></div>
+        <aside className="sidebar" role="navigation" aria-label="Main sidebar">
+            <div className="top-strip">
+                <div className="logo-wrap" aria-hidden="true">
+                    <div className="logo-lens"></div>
                 </div>
 
                 <img src={logo ? logo : ''} alt="Optifo Logo" />
-                {/* <img src="/images/logo.png" alt="Optifo Logo" /> */}
-                <div>   <img src="/images/title.png" /></div>
 
 
 
             </div>
 
-            <ul class="" aria-label="Primary">
+            <ul className="" aria-label="Primary">
                 <li>
                     <Link to="/dashboard" className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`} role="button" tabIndex="0" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                              <img src={location.pathname === '/dashboard' ? "/images/dashboard-active.svg" : "/images/dashboard-deactivate.svg"} />
                         </div>
                         <span>{t('sidebarDashboard')}</span>
@@ -53,16 +51,23 @@ function SideBar(props) {
                 </li>
                 <li>
                     <Link to="/my-account" className={`nav-item ${location.pathname === '/my-account' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/my-account' ? "/images/my-account-active.svg" : "/images/my-account.svg"} />
                         </div>
                         <span>{t('sidebarMyAccount')}</span>
                     </Link>
-
+                </li>
+                <li>
+                    <Link to="/car-template" className={`nav-item ${location.pathname === '/car-template' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
+                        <div className="icon">
+                            <img src={location.pathname === '/car-template' ? "/images/my-account-active.svg" : "/images/my-account.svg"} />
+                        </div>
+                        <span>{t('sidebarCarTemplate')}</span>
+                    </Link>
                 </li>
                  <li>
                     <Link to="/create-car" className={`nav-item ${location.pathname === '/create-car' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/create-car' ? "/images/create-car-active.png" : "/images/create-car-deactive.png"} />
 
                         </div>
@@ -73,7 +78,7 @@ function SideBar(props) {
                 {/* new */}
                 <li>
                     <Link to="/background-logo" className={`nav-item ${location.pathname === '/background-logo' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/background-logo' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
                         </div>
                         <span>{t('sidebarBackgroundLogo')}</span>
@@ -82,7 +87,7 @@ function SideBar(props) {
                 </li>
                  <li>
                     <Link to="/plat-banner" className={`nav-item ${location.pathname === '/plat-banner' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/plat-banner' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
                         </div>
                         <span>{t('create_plat_banner_text')}</span>
@@ -92,7 +97,7 @@ function SideBar(props) {
                
                 <li>
                     <Link to="/create-background" className={`nav-item ${location.pathname === '/create-background' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/create-background' ? "/images/background-logo-active.svg" : "/images/background-logo.svg"} />
 
                         </div>
@@ -103,7 +108,7 @@ function SideBar(props) {
              
                 {/* <li>
                     <Link to="/brand" className={`nav-item ${location.pathname === '/brand' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/brand' ? "/credits-active.svg" : "/credits.svg"} />
 
                         </div>
@@ -114,7 +119,7 @@ function SideBar(props) {
 
                 <li>
                     <Link to="/credits" className={`nav-item ${location.pathname === '/credits' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon">
+                        <div className="icon">
                             <img src={location.pathname === '/credits' ? "/images/credits-active.svg" : "/images/credits.svg"} />
 
                         </div>
@@ -125,7 +130,7 @@ function SideBar(props) {
 
                 {/* <li>
                     <Link to="/billing" className={`nav-item ${location.pathname === '/billing' ? 'active' : ''}`} role="button" tabIndex="1" aria-current>
-                        <div class="icon"><img src="billing.svg" /></div>
+                        <div className="icon"><img src="billing.svg" /></div>
                         <span>{t('sidebarBilling')}</span>
                     </Link>
 
@@ -133,16 +138,16 @@ function SideBar(props) {
 
          
 
-                <div class="nav-divider"></div>
+                <div className="nav-divider"></div>
             </ul>
 
-            <div class="bottom" aria-hidden="false">
-                <div class="credits" title="Credits left">
-                    <div class="coin"> <img src="/images/coin.svg" /></div>
+            <div className="bottom" aria-hidden="false">
+                <div className="credits" title="Credits left">
+                    <div className="coin"> <img src="/images/coin.svg" /></div>
                     <div>
-                        <div class="meta">{((user?.userProfile?.creditsLeft ? user?.userProfile?.creditsLeft : 0) + (user?.userProfile?.leftPackCredits ? user?.userProfile?.leftPackCredits : 0))} <span class="muted">{t('credits_left')}</span></div>
+                        <div className="meta">{((user?.userProfile?.creditsLeft ? user?.userProfile?.creditsLeft : 0) + (user?.userProfile?.leftPackCredits ? user?.userProfile?.leftPackCredits : 0))} <span className="muted">{t('credits_left')}</span></div>
 
-                        {/* <div class="meta">{user?.userProfile?.leftCredits} / {user?.userProfile?.totalCredits} <span class="muted">{t('credits_left')}</span></div> */}
+                        {/* <div className="meta">{user?.userProfile?.leftCredits} / {user?.userProfile?.totalCredits} <span className="muted">{t('credits_left')}</span></div> */}
 
                     </div>
                 </div>
@@ -163,6 +168,16 @@ function SideBar(props) {
                     {open && (
                         <div className="profile-dropdown">
                             <ul>
+                                <li>
+                                    <Link to="/my-account" onClick={() => setOpen(false)}>
+                                        {t('sidebarMyAccount')}
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/car-template" onClick={() => setOpen(false)}>
+                                        {t('sidebarCarTemplate')}
+                                    </Link>
+                                </li>
                                 <li className="logout" onClick={handleLogout}>
                                     {t('Logout_text')}
                                 </li>
@@ -171,13 +186,13 @@ function SideBar(props) {
                     )}
                 </div>
 
-                {/* <div class="profile" title="Account">
-                    <div class="avatar"><img src="user.png" /></div>
+                {/* <div className="profile" title="Account">
+                    <div className="avatar"><img src="user.png" /></div>
                     <div>
-                        <div class="info">{user?.userProfile?.fullName ? user?.userProfile?.fullName : 'User'}</div>
+                        <div className="info">{user?.userProfile?.fullName ? user?.userProfile?.fullName : 'User'}</div>
                         <button onClick={handleLogout}>Logout</button>
                     </div>
-                    <div class="caret" aria-hidden="true">▼</div>
+                    <div className="caret" aria-hidden="true">▼</div>
                 </div> */}
             </div>
 

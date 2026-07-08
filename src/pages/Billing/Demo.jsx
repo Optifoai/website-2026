@@ -21,7 +21,7 @@ function Demo(props) {
   return (
     <>
 
-     {loader ? <LoaderSpiner /> :  <section class="card-block" aria-label="Preview Card">
+     {loader ? <LoaderSpiner /> :  <section className="card-block" aria-label="Preview Card">
         <h4>Demo page</h4>
 
       </section>}

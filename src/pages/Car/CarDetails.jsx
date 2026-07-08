@@ -12,6 +12,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import { Tab, Tabs } from 'react-bootstrap';
 import { GalleryView, GridView } from '../../components/common/model/svg';
 import CarSideBar from './CarSideBar';
+import CarFeatureTab from '../../components/Car/CarFeatureTab';
 
 function CarDetails(props) {
     const { t } = useTranslation();
@@ -79,11 +80,7 @@ function CarDetails(props) {
     };
 
     const changeTabValue = (e) => {
-        if (e == 1) {
-            setFormdata({ tabValue: 1 });
-        } else {
-            setFormdata({ tabValue: 2 });
-        }
+        setFormdata({ tabValue: Number(e) });
     };
 
     const changeCheckValue = (e, index, items) => {
@@ -163,12 +160,14 @@ function CarDetails(props) {
     return (
         <>
             <div className='d-flex mt-4 details-car-page'>
-                <section class="flex-1">
+                <section className="flex-1">
                     <Tabs
                         defaultActiveKey={1}
                         activeKey={formdata?.tabValue}
                         id="uncontrolled-tab-example"
                         onSelect={(e) => changeTabValue(e)}
+                        mountOnEnter
+                        unmountOnExit
                     >
                         <Tab eventKey={1} title={<GridView />}>
                             <div className='scroll-container'>
@@ -245,6 +244,15 @@ function CarDetails(props) {
 
                         <Tab eventKey={2} title={<GalleryView />}>
                             <ImageGallery items={formdata?.galleImages} />
+                        </Tab>
+
+                        <Tab eventKey={3} title={t('carFeatureTabTitle')}>
+                            <CarFeatureTab
+                                dispatch={dispatch}
+                                vehicleId={id}
+                                carDetails={formdata?.carDetails}
+                                onSaved={() => getCarData(id)}
+                            />
                         </Tab>
                     </Tabs>
 

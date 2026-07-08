@@ -7,11 +7,13 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   color: #fff;
-  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  background-color: #0f1117;
 }
 
 #root {
-  height: 100%;
+  min-height: 100vh;
 }
 
 /* Width */
@@ -175,23 +177,26 @@ h6 {
 
 .login-container {
   display: flex;
-  min-height: 100%;
+  min-height: 100vh;
+  background-color: #0f1117;
 }
 
 /* Left side - image section */
 .login-left {
-  background: url("/images/login-bg.jpg") no-repeat;
+  background: #0f1117 url("/images/login-background.svg") no-repeat center center;
   flex: 1;
   min-width: 59%;
-  background-position: 0px 100%;
-  background-size: 100%;
+  background-size: cover;
 }
 
 /* Right side - form section */
 .login-right {
   flex: 1;
-  background-image: url("/images/login-right.png");
-  background-size: 100%;
+  background-color: #151922;
+  background-image: url("/images/signup-background.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .login-right .form-field {
@@ -1813,4 +1818,76 @@ h3.credit {
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 5px;  /* optional for scrollbar spacing */
+}
+
+/* Car Template page */
+.car-template-page {
+  max-width: 960px;
+  padding-right: 24px;
+  color: #fff;
+}
+
+.car-template-title,
+.car-template-subtitle,
+.car-template-category h5 {
+  color: #fff;
+  font-weight: 600;
+}
+
+.car-template-page .form-label {
+  color: #c9c9c9;
+}
+
+.car-template-textarea.form-control {
+  width: 100%;
+  height: auto;
+  min-height: 110px;
+  border-radius: 8px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.car-template-textarea.form-control:focus {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #D5D5D5;
+}
+
+.car-template-textarea.form-control::placeholder {
+  color: #989898;
+  opacity: 1;
+}
+
+.car-template-category label span {
+  color: #fff;
+  font-size: 13px;
+}
+
+.car-template-muted {
+  color: #989898;
+}
+
+.car-template-actions .custom-button {
+  min-width: 120px;
+}
+
+.car-feature-tab {
+  padding-right: 24px;
+}
+
+.car-feature-tab-header .btn {
+  white-space: nowrap;
+}
+
+.details-car-page .nav-tabs .nav-link {
+  color: #fff;
+}
+
+.details-car-page .nav-tabs .nav-link.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
 }

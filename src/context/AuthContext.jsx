@@ -4,7 +4,6 @@ import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } 
 import { notify, setLoginDetailInSession } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import js from '@eslint/js';
 // import { setLoginDetailInSession } from '../utils/helpers';
 
 const AuthContext = createContext(null);

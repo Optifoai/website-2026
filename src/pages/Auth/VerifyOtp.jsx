@@ -68,7 +68,7 @@ function VerifyOtp() {
           <Link to="/signup"><img className='back-arrow' src='/images/back-arrow.svg' /></Link>
           <div className="login-logo">
             <div className='logo-blk'>
-              <img src="/images/optifo-logo.png" alt="Logo" />
+              <img src="/images/optifo-white-logo.svg" alt="Logo" />
             </div>
           </div>
 
