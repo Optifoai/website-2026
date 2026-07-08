@@ -241,3 +241,41 @@ export const removeCarImageBackground = (payLoad) => (dispatch) => {
   })
 }
 
+// Calls the API to create car
+export const createCarPlate = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CREAT_CAR_LICENCE_PLATE}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to create car
+export const updateCarLicencePlateDetails = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+let apiurl = `${APICONFIG.UPDATE_CAR_LICENCE_PLATE}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// Calls the API to update car
+export const updateCar = (payLoad,vehicleId) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  let apiurl = `${APICONFIG.CAR_UPDATE}?vehicleId=${vehicleId}`
+  return postRequest(apiurl,payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+
+

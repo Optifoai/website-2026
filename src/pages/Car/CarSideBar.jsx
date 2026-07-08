@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, notify, numberPlatePositions } from '../../utils/helpers';
 import { useTranslation } from 'react-i18next';
 import Dropdown from 'react-bootstrap/Dropdown';
 // import WebRotate360Viewer from './WebRotate360Viewer';
@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import EditCarForm from './EditCarForm';
 import { useNavigate } from 'react-router-dom';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
+import UpdateCarLicencePlateForm from './UpdateCarLicencePlateForm';
 
 
 function CarSideBar(props) {
@@ -22,7 +23,6 @@ function CarSideBar(props) {
     const navigate = useNavigate();
     const { dispatch, isUserLogin, loader, Link } = props
     const { carDetailsData, actionDownloadModal, getCarData, inputValue } = props
-
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
 
 
@@ -45,6 +45,9 @@ function CarSideBar(props) {
             carsBrandList: [],
             loader: false,
             closeAIVideo: false,
+            addLicencePlateModelOpen: false,
+            addMoreCardModelOpen: false
+
 
 
 
@@ -86,6 +89,12 @@ function CarSideBar(props) {
     const editCarForm = (
         <EditCarForm customeClass={'mw-100'} carsBrandList={formdata.carsBrandList} carDetailsData={carDetailsData} onClose={() => setFormdata({ editModelOpen: false })} getCarData={getCarData} />
     )
+     const updateCarLicencePlateForm = (
+        <UpdateCarLicencePlateForm customeClass={'mw-100'}   carDetailsData={carDetailsData} onClose={() => setFormdata({ addLicencePlateModelOpen: false })} getCarData={getCarData} />
+    )
+
+
+  
 
     // 360 function
 
@@ -500,6 +509,28 @@ function CarSideBar(props) {
 
     };
 
+    const handleUpdateLicencePlate = () =>{
+    
+        if(carDetailsData?.selectedImage?.length ==1){
+                let selectedImage = carDetailsData?.galleImages[inputValue[0]]
+            if(numberPlatePositions.includes(selectedImage?.partName)){
+                setFormdata({ addLicencePlateModelOpen: true })
+            }
+            else{
+                notify('error', 'Please select either the front or back image of the license plate to update it.')
+            }
+            
+        }else{
+            notify('error', 'Please select only one image to update the licence plate.')
+        }
+
+    } 
+
+    const handleAddMoreCar = () =>{
+      navigate(`/create-car/${carDetailsData.carDetails._id}`)
+
+    } 
+
 
 
     return (
@@ -594,6 +625,9 @@ function CarSideBar(props) {
                                 <Dropdown.Item onClick={() => setFormdata({ deleteModelOpen: true })}><img src="/images/icon/dalete-car.png" />Delete Car</Dropdown.Item>
                                 <Dropdown.Item onClick={() => setFormdata({ editModelOpen: true })}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Edit Car Info</Dropdown.Item>
                                 <Dropdown.Item onClick={handleRemoveBackground}><img src="/images/image.png" />Remove Background Image</Dropdown.Item>
+                                <Dropdown.Item onClick={handleUpdateLicencePlate}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Apply Number Plate</Dropdown.Item>
+                                <Dropdown.Item onClick={handleAddMoreCar}><img className='edit-icon' src="/images/icon/add.png" />Add New Car Image</Dropdown.Item>
+                                
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>
@@ -648,6 +682,14 @@ function CarSideBar(props) {
 
 
             </CommonModel>
+
+             <CommonModel show={formdata.addLicencePlateModelOpen} customeClass={'mw-100 w-100 p-1'} size="modal-xl" onClose={() => { setFormdata({ addLicencePlateModelOpen: false }) }}>
+
+                {updateCarLicencePlateForm}
+
+
+            </CommonModel>
+
 
         </>
     );

@@ -172,7 +172,7 @@ function DashboardPage(props) {
     const CarForm = () => {
         return (<section class="card-block" aria-label="Preview Card">
 
-            {formdata?.carsList?.length > 0 && formdata?.carsList?.map((items, index) => {
+            {formdata?.carsList?.length > 0 &&  formdata?.carsList?.filter((item) => item?.carImages?.[0]?.partUrl !== '').map((items, index) => {
                 return (
                     <div key={index} class="car-card dashboard-page" >
 

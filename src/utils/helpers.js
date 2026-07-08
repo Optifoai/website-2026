@@ -137,6 +137,23 @@ export const formDataToJson = (formData) => {
   return formObject
 }
 
+export const handleDownloadfile = (blob, filename) => {
+  if (window.navigator && window.navigator.msSaveBlob) {
+    window.navigator.msSaveBlob(blob, filename);
+  } else {
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+
+    document.body.appendChild(a);
+    a.click();
+
+    URL.revokeObjectURL(a.href);
+    document.body.removeChild(a);
+  }
+};
+
 
   export const carTypes = ['Mini', 'Hatchback', 'Sedan', 'Wagon', 'SUV', 'Van', 'Convertible'];
   export const carPositions = ['Front','Back','FrontR','FrontL','BackR','BackL','SideR','SideL','FrontSeats','RearSeats','Dashboard','Wheel','Exterior','Interior'];

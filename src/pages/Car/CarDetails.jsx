@@ -109,6 +109,7 @@ function CarDetails(props) {
         setFormdata({ selectedImage: selectImage })
 
     };
+   
 
     // const changeCheckValue = (e, index, items) => {
     //     const { checked } = e.target
@@ -173,7 +174,7 @@ function CarDetails(props) {
                         <Tab eventKey={1} title={<GridView />}>
                             <div className='scroll-container'>
                                 <div className="row">
-                                    {formdata?.galleImages?.map((items, i) => {
+                                    {formdata?.galleImages?.filter((v)=>v.partUrl!='').map((items, i) => {
 
                                         return (
                                             <div

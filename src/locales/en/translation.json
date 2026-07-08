@@ -335,7 +335,8 @@
   "delete_account_confiramtion_text": "Are you sure you want to delete your account?",
   "delete_account_confiramtion_msg_text": "When you delete your Optifo account, all your images will be deleted and gone forever.",
 
-  "runout_auto_refill_buy": "When you buy the pack, you accept that Optifo will automatically refill when you run out of credits. You can always disable this later."
+  "runout_auto_refill_buy": "When you buy the pack, you accept that Optifo will automatically refill when you run out of credits. You can always disable this later.",
 
+ "create_car_plate_text": "Upload Number Plate"
   
 }
