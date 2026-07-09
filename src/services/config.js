@@ -5,6 +5,6 @@ export const Config = {
 
   // URLs
   serverUrl: import.meta.env.VITE_SERVER_URL,
-  serverAPIUrl: import.meta.env.VITE_API_BASE_URL,
+  serverAPIUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1/',
   webUrl: import.meta.env.VITE_WEB_URL,
 };

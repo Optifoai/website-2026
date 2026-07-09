@@ -112,7 +112,7 @@ function UploadPage(props) {
 
     return (
         <>
-            <section class="mt-3" aria-label="Preview Card">
+            <section className="mt-3" aria-label="Preview Card">
                 <Dropzone
                     onDrop={(acceptedFiles) => handleUploadImage(acceptedFiles)}
                     maxSize={fileSize ? parseInt(fileSize, 10) : undefined}

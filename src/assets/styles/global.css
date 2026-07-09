@@ -1,3 +1,7 @@
+:root {
+  --black: #111;
+}
+
 .loader-main {
   position: fixed;
   height: 100%;

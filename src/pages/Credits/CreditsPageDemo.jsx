@@ -8,7 +8,7 @@ function CreditsPageDemo(props) {
   return (
     <>  
     
-    <section class="card-block" aria-label="Preview Card">
+    <section className="card-block" aria-label="Preview Card">
 
                <h4>CreditsPageDemo page</h4> 
             </section>

@@ -11,10 +11,13 @@ import ProfilePage from '../pages/Dashboard/ProfilePage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 import PrivateRoute from './PrivateRoute';
+import Spinner from '../hooks/Spinner';
+import { useAuth } from '../hooks/useAuth';
 // Layout Components (optional, for consistent structure)
 import Header from '../components/layout/Header/Header';
 import Footer from '../components/layout/Footer/Footer';
 import VerifyOtp from '../pages/Auth/VerifyOtp';
+import UpdatePassword from '../pages/Auth/updatePassword';
 import BackgroundLogoPage from '../pages/BackgroundLogo/BackgroundLogoPage';
 import CreditsPage from '../pages/Credits/CreditsPage';
 import BillingPage from '../pages/Billing/BillingPage';
@@ -25,10 +28,20 @@ import CreateBackground from '../pages/CreateBackground/CreateBackground';
 import BrandDetails from '../pages/Brand/BrandDetails';
 import Brand from '../pages/Brand/Brand';
 import PlateBanner from '../pages/PlateBanner/PlateBanner';
-import UpdatePassword from '../pages/Auth/updatePassword';
-import CarLicencePlate from '../pages/CarLicencePlate/carLicencePlate';
+import CarLicencePlate from '../pages/CarLicencePlate/CarLicencePlate';
+import CarTemplatePage from '../pages/CarTemplate/CarTemplatePage';
 
 
+
+function HomeRedirect() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />;
+}
 
 export default function AppRouter() {
 
@@ -55,6 +68,7 @@ export default function AppRouter() {
           <Route path="/dashboard" element={<PrivateRoute><DashboardPage dispatch={dispatch} navigate={navigate} Link={Link} /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute> <ProfilePage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/my-account" element={<PrivateRoute> <AccountPage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
+          <Route path="/car-template" element={<PrivateRoute> <CarTemplatePage navigate={navigate} /> </PrivateRoute>} />
 
           <Route path="/background-logo" element={<PrivateRoute> <BackgroundLogoPage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
           <Route path="/credits" element={<PrivateRoute> <CreditsPage dispatch={dispatch} navigate={navigate} Link={Link} /> </PrivateRoute>} />
@@ -71,8 +85,8 @@ export default function AppRouter() {
 
           
           {/* <Footer /> */}
-          {/* Redirect to dashboard if logged in, otherwise to login */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Redirect based on auth state */}
+          <Route path="/" element={<HomeRedirect />} />
 
           {/* 404 Not Found Page */}
           <Route path="*" element={<NotFoundPage />} />
