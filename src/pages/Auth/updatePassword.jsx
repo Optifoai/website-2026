@@ -83,13 +83,13 @@ function UpdatePassword(props) {
 
 
   return (
-    <div class="login-container">
-      <div class="login-left">
+    <div className="login-container">
+      <div className="login-left">
 
       </div>
-      <div class="login-right">
-        <div class="login-card">
-          <div class="login-logo">
+      <div className="login-right">
+        <div className="login-card">
+          <div className="login-logo">
             <div className='logo-blk'>
               <img src="/images/optifo-logo.png" alt="Logo" />
             </div>
@@ -97,7 +97,7 @@ function UpdatePassword(props) {
 
           <hr className='divider' />
 
-          <h5 class="login-title">{t('updatePasswordText')}</h5>
+          <h5 className="login-title">{t('updatePasswordText')}</h5>
           <div className="form-field">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="f-group">
@@ -123,7 +123,7 @@ function UpdatePassword(props) {
                 <img className='eye-icon close' src={formdata.showConfirmPassword ? '/images/eye-open.png' : '/images/eye-close.png'} onClick={() => setFormdata({ showConfirmPassword: !formdata.showConfirmPassword })} />
               </div>
               <div className="f-group">
-                <button type="submit" class="btn btn-login">{t('submit_text')}</button>
+                <button type="submit" className="btn btn-login">{t('submit_text')}</button>
               </div>
             </form>
 

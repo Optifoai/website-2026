@@ -15,6 +15,7 @@ export const getCarList = (params = {}) => (dispatch) => {
   }).catch((err) => {
     let errObject = err 
     dispatch({ type: CONSTANTS.GET_CAR_LIST_FAILURE })
+    return err
   })
 }
 
@@ -226,6 +227,19 @@ export const createCarSave = (payLoad) => (dispatch) => {
     return res
   }).catch((err) => {
     dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+  })
+}
+
+// FastAPI wrapper: carImages file + numberPlateUrl
+export const processCarImageWithNumberPlate = (payLoad) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  const apiurl = `${APICONFIG.FASTAPI_PROCESS_CAR_IMAGE}`
+  return postRequest(apiurl, payLoad).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+    throw err
   })
 }
 

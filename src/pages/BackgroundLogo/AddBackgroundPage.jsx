@@ -139,14 +139,14 @@ function AddBackgroundPage(props) {
                             {optifoBackgrounds.map((item, i) => {
                                 return (
                                     <div className="" key={i}>
-                                        <label class="">
+                                        <label className="">
                                             <input
                                                 type="radio"
                                                 name="showBgValue"
                                                 value={formdata?.BgImageUrl?.backgroundImage}
                                                 onChange={() => setFormdata({ BgImageUrl: item })}
                                             />
-                                            <span class="checkmark">
+                                            <span className="checkmark">
                                                 <img src='/images/check-icon.png'/>
                                             </span>
                                             <div className="custom-bg-in">

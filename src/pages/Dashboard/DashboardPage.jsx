@@ -75,9 +75,11 @@ function DashboardPage(props) {
 
                 return true;
             } else {
+                setFormdata({ loader: false })
                 notify('error', res?.error?.responseMessage ? res?.error?.responseMessage : 'Something went wrong!')
             }
         }).catch((err) => {
+            setFormdata({ loader: false })
             notify('error', err?.message ? err?.message : 'Something went wrong!')
         });
 
@@ -170,13 +172,13 @@ function DashboardPage(props) {
     }
 
     const CarForm = () => {
-        return (<section class="card-block" aria-label="Preview Card">
+        return (<section className="card-block" aria-label="Preview Card">
 
             {formdata?.carsList?.length > 0 &&  formdata?.carsList?.filter((item) => item?.carImages?.[0]?.partUrl !== '').map((items, index) => {
                 return (
-                    <div key={index} class="car-card dashboard-page" >
+                    <div key={index} className="car-card dashboard-page" >
 
-                        <div class="image-section">
+                        <div className="image-section">
                            <div className="image-wrapper position-relative">
                                 {!loadedImages[index] && (
                                     <img
@@ -210,32 +212,32 @@ function DashboardPage(props) {
                                     }}
                                 />
                             </div>
-                            {/* <img class="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} /> */}
+                            {/* <img className="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} /> */}
 
-                            <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
+                            <div className="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
                                 <img src='/images/trash.png' />
                             </div>
                         </div>
 
-                        <div class="content-section" >
+                        <div className="content-section" >
                             <Link to={`/car/${items._id}`}> <>
-                                <h2 class="car-title">{items?.carModel}</h2>
+                                <h2 className="car-title">{items?.carModel}</h2>
 
-                                <p class="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
+                                <p className="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
 
-                                <p class="license-plate">{items?.carId}</p>
+                                <p className="license-plate">{items?.carId}</p>
                             </> </Link>
-                            <div class="date-download-blk">
-                                <p class="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
+                            <div className="date-download-blk">
+                                <p className="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
 
-                                {/* <p class="date-time">06:00PM, 03 Mar 2021</p> */}
+                                {/* <p className="date-time">06:00PM, 03 Mar 2021</p> */}
 
-                                <div class="action-buttons">
-                                    {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
+                                <div className="action-buttons">
+                                    {items?.aIVideoUrl && <button className="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
                                         <img src="/images/video.svg" />
                                     </button>}
 
-                                    <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
+                                    <button className="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
                                         <img src="/images/download.svg" />
                                     </button>
                                 </div>
@@ -289,7 +291,7 @@ function DashboardPage(props) {
                     >
                         {CarForm()}
                     </InfiniteScroll> :
-                   <p style={{ textAlign: 'center', marginTop: '180px' }}>
+                   <p style={{ textAlign: 'center', marginTop: '180px', color: '#fff' }}>
                         <b>No cars found. Please create a car.</b>
                     </p>}
 
@@ -316,8 +318,8 @@ function DashboardPage(props) {
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download all photos of the {`${formdata?.actionCarDetails?.carBrand} ${formdata?.actionCarDetails?.carModel}`} ?</p>
                 <div className='popup-btn'>
-                    <button type="button" class="btn btn-login" onClick={actionDownloadModal}>{t('DownloadAllText')}</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ downloadModelOpen: false }); }}>{t('cancelText')}</button>
+                    <button type="button" className="btn btn-login" onClick={actionDownloadModal}>{t('DownloadAllText')}</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ downloadModelOpen: false }); }}>{t('cancelText')}</button>
                 </div>
 
             </CommonModel>
@@ -329,8 +331,8 @@ function DashboardPage(props) {
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download video of the {`${formdata?.actionCarDetails?.carBrand} ${formdata?.actionCarDetails?.carModel}`} ?</p>
                 <div className='popup-btn'>
-                    <button type="button" class="btn btn-login" onClick={actionVideoModal}>{t('DownloadAllText')}</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ videoModelOpen: false }); }}>{t('cancelText')}</button>
+                    <button type="button" className="btn btn-login" onClick={actionVideoModal}>{t('DownloadAllText')}</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ videoModelOpen: false }); }}>{t('cancelText')}</button>
                 </div>
 
             </CommonModel>

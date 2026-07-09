@@ -48,7 +48,7 @@ function Brand(props) {
   return (
     <>
 
-      {formdata?.loader ? <LoaderSpiner /> : <section class="card-block" aria-label="Preview Card">
+      {formdata?.loader ? <LoaderSpiner /> : <section className="card-block" aria-label="Preview Card">
        
           {carsList.map((items, i) => {
             return (
