@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession } from '../../utils/helpers';
@@ -9,10 +9,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { get } from 'jquery';
-
-
-
+import { useCarListJobRefresh } from '../../hooks/useCarListJobRefresh';
 function DashboardPage(props) {
     const { t } = useTranslation();
     const { user, getUserData } = useAuth();
@@ -33,6 +30,47 @@ function DashboardPage(props) {
 
         }
     );
+
+    const listStateRef = useRef({
+        carsList: EMPTY_ARRAY,
+        activePage: 1
+    });
+
+    useEffect(() => {
+        listStateRef.current = {
+            carsList: formdata.carsList,
+            activePage: formdata.activePage
+        };
+    }, [formdata.carsList, formdata.activePage]);
+
+    const refreshCarListPreservingView = useCallback(() => {
+        const { carsList, activePage } = listStateRef.current;
+        const loadedCount = Math.max(carsList?.length || 0, 30);
+        const nextActivePage = activePage > 1 ? activePage : 2;
+
+        return dispatch(getCarList({ page: 1, limit: loadedCount })).then((res) => {
+            if (res?.statusCode == '1') {
+                const carListData = res?.responseData?.carsList || [];
+                const totalRecords = res?.responseData?.totalRecords || 0;
+
+                setFormdata({
+                    carsList: carListData,
+                    hasMore: carListData.length < totalRecords,
+                    activePage: nextActivePage,
+                    deleteModelOpen: false
+                });
+            }
+        }).catch((err) => {
+            notify('error', err?.message ? err.message : 'Something went wrong!');
+        });
+    }, [dispatch]);
+
+    const userId = user?._id || user?.id || user?.userProfile?._id;
+
+    useCarListJobRefresh({
+        userId,
+        onJobCompleted: refreshCarListPreservingView
+    });
 
     useEffect(() => {
         getCarData();

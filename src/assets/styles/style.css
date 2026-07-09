@@ -1278,6 +1278,32 @@ h3.credit {
   cursor: pointer;
 }
 
+.create-car-page {
+  min-height: calc(100vh - 120px);
+  padding-right: 24px;
+}
+
+.create-car-page .card-block {
+  display: block;
+  padding-top: 0;
+}
+
+.create-car-page .upload_file_main {
+  min-height: 360px;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.create-car-page .upload_file {
+  min-height: 360px;
+}
+
+.create-car-page .upload_file_main p,
+.create-car-page .upload_file_main strong {
+  color: #fff;
+}
+
 .custom-tabs {
   border: 0px;
 }

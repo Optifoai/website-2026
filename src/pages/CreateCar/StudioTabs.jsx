@@ -18,7 +18,7 @@ import UploadPage from '../../components/common/UploadPage/UploadPage';
 function StudioTabs(props) {
     const { formdata, setFormdata, saveCarDetails, userDetails, dispatch ,vehicleId} = props;
     const { t } = useTranslation();
-    const { getUserData } = useAuth();
+    const { user, getUserData } = useAuth();
     const [activeTab, setActiveTab] = useState('2');
 
     const [localState, setLocalState] = useReducer((state, newState) => ({ ...state, ...newState }),
@@ -38,14 +38,15 @@ function StudioTabs(props) {
 
 
 
-    // Mock data - replace with actual data from props or state management
-    const displayBg = userDetails?.backgroundsUploaded || [];
-    const displayPlate = userDetails?.number_plates || [];
-    const displayBanner = userDetails?.banners || []; // Assuming banners are managed similarly
+    const studioData = user?.backgroundsUploaded != null ? user : userDetails;
+    const displayBg = studioData?.backgroundsUploaded || [];
+    const displayPlate = studioData?.number_plates || [];
+    const displayBanner = studioData?.banners || [];
     // const carTypes = ['Sedan', 'SUV', 'Hatchback', 'Truck'];
 
     useEffect(() => {
         getBrandData();
+        getUserData();
     }, EMPTY_ARRAY);
 
     const getBrandData = () => {

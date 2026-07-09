@@ -227,6 +227,19 @@ export const createCarSave = (payLoad) => (dispatch) => {
     return res
   }).catch((err) => {
     dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+    return Promise.reject(err)
+  })
+}
+
+export const getCarJobStatus = (jobId) => (dispatch) => {
+  dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
+  const apiurl = `${APICONFIG.CAR_JOB_STATUS}/${encodeURIComponent(jobId)}`
+  return getRequest(apiurl).then((res) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
+    return res
+  }).catch((err) => {
+    dispatch({ type: CONSTANTS.GET_CAR_COMMON_FAILURE })
+    return Promise.reject(err)
   })
 }
 

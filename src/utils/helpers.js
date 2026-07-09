@@ -84,6 +84,48 @@ export const getAccessToken = () => {
   }
 }
 
+/** Normalize create-car API response (sync success or async job queue). */
+export function parseCarCreateResponse(res) {
+  if (!res) return null
+  const data = res.responseData || res
+  const jobId = res.jobId || data.jobId || data.job?.id
+  const statusCode = res.statusCode ?? data.statusCode
+  const errorMessage = res?.error?.responseMessage || data?.error?.responseMessage
+  const hasExplicitError = statusCode == '0' || statusCode === 0 || Boolean(errorMessage)
+  const hasSuccessCode = statusCode == '1' || statusCode == 1
+  // Legacy addcar route returns { message, car } without statusCode (see web-crm carsRoute /addcar)
+  const hasLegacySuccess =
+    !hasExplicitError &&
+    Boolean(res?.message || data?.message || res?.car || data?.car)
+  const success = hasSuccessCode || hasLegacySuccess
+
+  return {
+    jobId,
+    isAsyncJob: Boolean(jobId),
+    success,
+    status: data.status || res.status || 'pending',
+    totalImages: data.totalImages ?? res.totalImages,
+    processedImages: data.processedImages ?? res.processedImages ?? 0,
+    message: res.message || data.message,
+    phase: data.phase || res.phase,
+  }
+}
+
+/** Normalize car image job status polling response. */
+export function parseCarJobStatusResponse(res) {
+  if (!res) return null
+  const data = res.responseData || res
+  return {
+    jobId: data.jobId || res.jobId,
+    status: data.status || res.status,
+    totalImages: data.totalImages ?? res.totalImages,
+    processedImages: data.processedImages ?? res.processedImages ?? 0,
+    currentImage: data.currentImage || res.currentImage,
+    errorMessage: data.errorMessage || res.errorMessage,
+    phase: data.phase || res.phase,
+  }
+}
+
 export const removeLocalStorage = (key) => {
   localStorage.removeItem(key)
 }

@@ -24,6 +24,13 @@ function ImageJobProgress({ phase, progressPercent, job, onClose }) {
           {job?.currentImage ? ` — ${job.currentImage}` : ''}
         </p>
 
+        {!isDone && (
+          <p className="small text-muted mb-3">
+            Your upload was received. Images are processing in the background and you will be
+            notified by email when they are ready.
+          </p>
+        )}
+
         <ul className="image-job-phases list-unstyled small">
           <li className={phase === 'Upload Started' || status === 'pending' ? 'active' : ''}>
             Upload Started
@@ -34,9 +41,11 @@ function ImageJobProgress({ phase, progressPercent, job, onClose }) {
           <li className={status === 'failed' ? 'active text-danger' : ''}>Failed</li>
         </ul>
 
-        {isDone && onClose && (
+        {onClose && (
           <button type="button" className="btn btn-primary mt-2" onClick={onClose}>
-            {status === 'completed' ? 'Go to Dashboard' : 'Close'}
+            {isDone
+              ? (status === 'completed' ? 'Go to Dashboard' : 'Close')
+              : 'Continue to Dashboard'}
           </button>
         )}
       </div>

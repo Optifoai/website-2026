@@ -1,13 +1,21 @@
 import { useEffect, useState, useCallback } from 'react';
 import { connectSocket } from '../services/socket';
 
-const PHASE_LABELS = {
+export const PHASE_LABELS = {
   pending: 'Upload Started',
   processing: 'Processing Images',
   uploading: 'Uploading to S3',
   completed: 'Completed',
   failed: 'Failed',
 };
+
+function phaseFromJob(data) {
+  if (!data) return '';
+  if (data.phase && PHASE_LABELS[data.phase]) return PHASE_LABELS[data.phase];
+  if (data.phase) return data.phase;
+  if (data.status && PHASE_LABELS[data.status]) return PHASE_LABELS[data.status];
+  return '';
+}
 
 export function useImageJob(userId) {
   const [job, setJob] = useState(null);
@@ -25,7 +33,7 @@ export function useImageJob(userId) {
 
     const onProgress = (data) => {
       setJob((prev) => ({ ...prev, ...data }));
-      setPhase(data.phase || PHASE_LABELS.processing);
+      setPhase(phaseFromJob(data) || PHASE_LABELS.processing);
     };
 
     const onCompleted = (data) => {

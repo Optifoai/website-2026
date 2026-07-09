@@ -47,57 +47,22 @@ function CreateCar(props) {
     }
 
     return (
-        <>
-            {/* <div className='bg-logo-blk'> 
-            <div className="card add-card">
-              <div className="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
-                <div className="add-icon"><img src='/images/add-icon.svg' /></div>
-                <p>Add Car Image </p>
-              </div>
-            </div>
-        </div> */}
-            <div style={{ display: 'block'}}
-            >
-                <div className="modal-dialog modal-dialog-centered modal-xl">
-                    <div className="modal-content">
-                        <div className="modal-body custom-modal-body">
-                            <MultipalUploadPage
-                                // fileNote={'NOTE: Background size 1600 x 1200 pixels'}
-                                //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
-                                fileIntructions=''
-                                onFileSelect={onFileSelect}
-                                formdata={formdata}
-                                setFormdata={setFormdata}
-                                onClose={onModalClose}
-                                acceptfile={['jpg', 'jpeg', 'png']}
-                                width={'1600'}
-                                height={'1200'}
-                                fileSize={'400000000'}
-                                isValidDimensions={false}
-                                multiple={true}
-                                cancelBtn={false}
-                            /> 
-                             </div></div> 
-                              </div> </div>
-
-            {/* <CommonModel show={addModalOpen} size="modal-xl" onClose={onModalClose}>
-            <MultipalUploadPage 
-              fileNote={'NOTE: Background size 1600 x 1201 pixels'}
-            //   fileIntructions={'(Wall height 600 pixels + floor height 600 pixels)'} 
-            fileIntructions=''
-              onFileSelect={onFileSelect}
-              formdata={formdata} 
-              setFormdata={setFormdata}
-              onClose={onModalClose}
-              acceptfile={['jpg', 'jpeg', 'png']}
-              width={'1600'}
-              height={'1200'}
-              fileSize={'400000000'}
-              isValidDimensions={false}
-              multiple={true}
-              />                               
-        </CommonModel> */}
-        </>
+        <div className="create-car-page mt-4">
+            <MultipalUploadPage
+                fileIntructions=""
+                onFileSelect={onFileSelect}
+                formdata={formdata}
+                setFormdata={setFormdata}
+                onClose={onModalClose}
+                acceptfile={['jpg', 'jpeg', 'png']}
+                width={'1600'}
+                height={'1200'}
+                fileSize={'400000000'}
+                isValidDimensions={false}
+                multiple={true}
+                cancelBtn={false}
+            />
+        </div>
     );
 }
 
