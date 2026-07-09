@@ -40,7 +40,6 @@ function CreateCarForm(props) {
     useEffect(() => {
         if (files.length > 0 && formdata.imageDetails.length === 0) {
             setFormdata({ ...formdata,imageDetails: files.map(() => ({ position: '' })) });
-            console.log('coming 1', files)
         }
     }, [files]);
 
@@ -56,7 +55,6 @@ function CreateCarForm(props) {
         }));
 
         setFormdata({...formdata, carImage: selectedImages, caruploadName: selectedImages, dataImage }); 
-            console.log('coming 2')
 
         
     }, [selectedImages]);
@@ -66,7 +64,6 @@ function CreateCarForm(props) {
             dispatch(getCarDetails(vehicleId)).then(res => {
                 if (res?.statusCode == '1') {
                     const carData = res?.responseData;
-                   console.log('carData', carData)
                     setFormdata({...formdata,
                         carType: carData?.carType || '',
                         carBrand: carData?.carBrand || '',
@@ -78,13 +75,13 @@ function CreateCarForm(props) {
                         activeLogoURL: carData?.numberPlateUrl || '',
                         activeBannerURL: carData?.bannerUrl || '',
                     });
-            console.log('coming 3')
+      
 
                 }
             });
         }
     }, [vehicleId]);
-    console.log('formdata', formdata)
+ 
 
 
     /* =======================

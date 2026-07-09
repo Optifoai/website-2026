@@ -46,7 +46,7 @@ function StudioTabs(props) {
 
     useEffect(() => {
         getBrandData();
-    }, EMPTY_ARRAY);
+    }, EMPTY_ARRAY,formdata);
 
     const getBrandData = () => {
         setFormdata({ ...formdata, loader: true })
