@@ -159,7 +159,7 @@ h6 {
   padding: .8rem;
   border-radius: 3px;
   margin: 0 .5rem;
-  margin-top: 9rem;
+  margin-top: 2rem;
 }
 
 .credits {
@@ -1847,6 +1847,10 @@ h3.credit {
   .image-Preview .delete-bg {
     left: 205px;
   }
+}
+.image-gallery-thumbnails {
+    width: calc(100vw - 535px);
+    overflow-x: auto;
 }
 
 @media (max-width: 1366px) {
