@@ -1932,3 +1932,74 @@ h3.credit {
     object-fit: contain;
     border-radius: 10px;
 }
+
+.car-processing-banner {
+    color: #c9c9c9;
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.car-card--processing {
+    opacity: 0.95;
+}
+
+.car-processing-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.65) 100%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.car-processing-badge {
+    align-self: flex-start;
+    background: rgba(255, 107, 53, 0.92);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.car-processing-progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.car-processing-progress-bar {
+    height: 100%;
+    background: #ff6b35;
+    transition: width 0.4s ease;
+}
+
+.car-processing-status-text {
+    color: #ff6b35;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.car-copy-preview-modal {
+    text-align: left;
+}
+
+.car-copy-preview-label {
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.car-copy-preview-text {
+    color: #c9c9c9;
+    font-size: 14px;
+    white-space: pre-wrap;
+}

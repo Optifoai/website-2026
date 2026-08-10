@@ -10,6 +10,54 @@ export const EMPTY_ARRAY = Object.freeze([])
 export const EMPTY_OBJECT = Object.freeze({})
 export const EMPTY_STRING = ''
 
+export function getLoggedInUserId() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY.USER_DETAILS)
+    if (!raw) return null
+    const profile = JSON.parse(raw)
+    return profile?._id || profile?.id || null
+  } catch {
+    return null
+  }
+}
+
+export function getCarThumbnailUrl(car) {
+  const images = car?.carImages || []
+  const match = images.find((img) => img?.partUrl && String(img.partUrl).trim() !== '')
+  return match?.partUrl || ''
+}
+
+export function hasCarThumbnail(car) {
+  return Boolean(getCarThumbnailUrl(car))
+}
+
+const CAR_PROCESSING_TERMINAL = new Set(['completed', 'failed'])
+
+export function isCarProcessing(car) {
+  const status = car?.processingStatus
+  if (!status || CAR_PROCESSING_TERMINAL.has(status)) {
+    return false
+  }
+  return true
+}
+
+export function getCarProcessingLabel(status) {
+  const labels = {
+    queued: 'Queued',
+    processing: 'Processing',
+    uploading: 'Uploading Images',
+    background_removed: 'Removing Background',
+    ai_processing: 'Generating AI',
+    completed: 'Completed',
+    failed: 'Failed',
+  }
+  return labels[status] || 'Processing'
+}
+
+export function shouldShowCarOnDashboard(car) {
+  return hasCarThumbnail(car) || isCarProcessing(car)
+}
+
 
 export const setLoginDetailInSession = (loggedInUserData) => {
   const userData = [
@@ -89,19 +137,22 @@ export function parseCarCreateResponse(res) {
   if (!res) return null
   const data = res.responseData || res
   const jobId = res.jobId || data.jobId || data.job?.id
+  const vehicleId = res.vehicleId || data.vehicleId || data.vehicleMongoId || res.carId || data.carId
   const statusCode = res.statusCode ?? data.statusCode
   const errorMessage = res?.error?.responseMessage || data?.error?.responseMessage
   const hasExplicitError = statusCode == '0' || statusCode === 0 || Boolean(errorMessage)
   const hasSuccessCode = statusCode == '1' || statusCode == 1
   // Legacy addcar route returns { message, car } without statusCode (see web-crm carsRoute /addcar)
+  const apiSuccess = res.success === true || data.success === true
   const hasLegacySuccess =
     !hasExplicitError &&
-    Boolean(res?.message || data?.message || res?.car || data?.car)
+    (apiSuccess || Boolean(res?.message || data?.message || res?.car || data?.car || jobId || vehicleId))
   const success = hasSuccessCode || hasLegacySuccess
 
   return {
     jobId,
-    isAsyncJob: Boolean(jobId),
+    vehicleId,
+    isAsyncJob: Boolean(jobId || res.processingStatus === 'queued' || data.processingStatus === 'queued'),
     success,
     status: data.status || res.status || 'pending',
     totalImages: data.totalImages ?? res.totalImages,
@@ -115,15 +166,17 @@ export function parseCarCreateResponse(res) {
 export function parseCarJobStatusResponse(res) {
   if (!res) return null
   const data = res.responseData || res
-  return {
-    jobId: data.jobId || res.jobId,
-    status: data.status || res.status,
-    totalImages: data.totalImages ?? res.totalImages,
-    processedImages: data.processedImages ?? res.processedImages ?? 0,
-    currentImage: data.currentImage || res.currentImage,
-    errorMessage: data.errorMessage || res.errorMessage,
-    phase: data.phase || res.phase,
-  }
+    return {
+        jobId: data.jobId || res.jobId,
+        vehicleId: data.vehicleId || res.vehicleId,
+        status: data.status || res.status,
+        totalImages: data.totalImages ?? res.totalImages,
+        processedImages: data.processedImages ?? res.processedImages ?? 0,
+        currentImage: data.currentImage || res.currentImage,
+        errorMessage: data.errorMessage || res.errorMessage,
+        phase: data.phase || res.phase,
+        result: data.result || res.result,
+    }
 }
 
 export const removeLocalStorage = (key) => {

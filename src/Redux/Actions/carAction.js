@@ -219,10 +219,10 @@ export const getBrandDetails = (folderName) => (dispatch) => {
 
 
 // Calls the API to create car
-export const createCarSave = (payLoad) => (dispatch) => {
+export const createCarSave = (payLoad, requestConfig) => (dispatch) => {
   dispatch({ type: CONSTANTS.GET_CAR_COMMON_REQUEST })
   let apiurl = `${APICONFIG.CREAT_CAR}`
-  return postRequest(apiurl,payLoad).then((res) => {
+  return postRequest(apiurl, payLoad, requestConfig).then((res) => {
     dispatch({ type: CONSTANTS.GET_CAR_COMMON_SUCCESS, data: res })
     return res
   }).catch((err) => {

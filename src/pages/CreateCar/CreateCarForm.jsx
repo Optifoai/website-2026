@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { notify, parseCarCreateResponse } from '../../utils/helpers';
-import { setPendingCarJobId } from '../../utils/carJobStorage';
+import { setPendingCarJobId, setPendingVehicleId } from '../../utils/carJobStorage';
 import SelectedCarImage from './SelectedCarImage';
 import StudioTabs from './StudioTabs';
 import { createCarSave, getCarDetails, updateCar } from '../../Redux/Actions/carAction';
@@ -25,6 +25,7 @@ const initialState = {
     activeBannerURL: '',
     loader: false,
     formloader: false,
+    uploadProgress: 0,
     imageDetails: [],
 };
 
@@ -123,11 +124,14 @@ function CreateCarForm(props) {
             const message =
                 parsed?.message ||
                 (parsed?.isAsyncJob
-                    ? 'Car upload received. Images are processing in the background. You will be notified by email when ready.'
+                    ? 'Car has been queued for processing.'
                     : 'Car created successfully');
 
             if (parsed?.isAsyncJob && parsed?.jobId) {
                 setPendingCarJobId(parsed.jobId);
+            }
+            if (parsed?.vehicleId) {
+                setPendingVehicleId(parsed.vehicleId);
             }
 
             notify('success', message);
@@ -172,7 +176,11 @@ function CreateCarForm(props) {
             return;
         }
 
-        setFormdata({ formloader: true });
+        if (formdata?.formloader) {
+            return;
+        }
+
+        setFormdata({ formloader: true, uploadProgress: 0 });
 
         const formPostData = new FormData();
 
@@ -210,46 +218,61 @@ function CreateCarForm(props) {
                     setFormdata({ formloader: false });
                 });
         } else {
-            dispatch(createCarSave(formPostData))
+            dispatch(
+                createCarSave(formPostData, {
+                    onUploadProgress: (progressEvent) => {
+                        if (progressEvent.total) {
+                            const pct = Math.round(
+                                (progressEvent.loaded * 100) / progressEvent.total
+                            );
+                            setFormdata({ uploadProgress: pct });
+                        }
+                    },
+                })
+            )
                 .then((res) => {
-                    setFormdata({ formloader: false });
+                    setFormdata({ formloader: false, uploadProgress: 0 });
                     handleCreateSuccess(res);
                 })
                 .catch((err) => {
-                    notify('error', err?.error?.responseMessage || err?.message || 'Something went wrong');
-                    setFormdata({ formloader: false });
+                    const apiError =
+                        err?.error ||
+                        err?.message ||
+                        err?.error?.responseMessage ||
+                        'Something went wrong';
+                    notify('error', apiError);
+                    setFormdata({ formloader: false, uploadProgress: 0 });
                 });
         }
     };
 
     return (
         <>
-            {!formdata?.formloader && (
-                <div className="grid_1_3 custom_tab_section">
-                    <StudioTabs
-                        formdata={formdata}
-                        setFormdata={setFormdata}
-                        saveCarDetails={saveCarDetails}
-                        dispatch={dispatch}
-                        userDetails={userDetails}
-                        vehicleId={vehicleId || ''}
-                    />
+            <div className="grid_1_3 custom_tab_section">
+                <StudioTabs
+                    formdata={formdata}
+                    setFormdata={setFormdata}
+                    saveCarDetails={saveCarDetails}
+                    dispatch={dispatch}
+                    userDetails={userDetails}
+                    vehicleId={vehicleId || ''}
+                    isSaving={formdata?.formloader}
+                />
 
-                    <SelectedCarImage
-                        selectedImages={selectedImages}
-                        imageDetails={formdata.dataImage}
-                        handleImagePositionChange={handleImagePositionChange}
-                        handleDeleteCar={handleDeleteCar}
-                        updateCarImage={updateCarImage}
-                    />
-                </div>
-            )}
+                <SelectedCarImage
+                    selectedImages={selectedImages}
+                    imageDetails={formdata.dataImage}
+                    handleImagePositionChange={handleImagePositionChange}
+                    handleDeleteCar={handleDeleteCar}
+                    updateCarImage={updateCarImage}
+                />
+            </div>
 
             <CommonModel
-                show={formdata.formloader}
+                show={formdata.formloader && !vehicleId}
                 custombg={'visitmodal'}
                 onClose={() => {
-                    setFormdata({ formloader: false });
+                    setFormdata({ formloader: false, uploadProgress: 0 });
                 }}
             >
                 <div className="visit-car-image">
@@ -257,6 +280,18 @@ function CreateCarForm(props) {
                 </div>
                 <h2 className="mt-0">Glad to have you at Optifo!</h2>
                 <p>Please wait, uploading your car images...</p>
+                <div className="progress mb-3" style={{ height: '8px' }}>
+                    <div
+                        className="progress-bar bg-success"
+                        style={{
+                            width: `${formdata.uploadProgress || 0}%`,
+                            transition: 'width 0.2s ease',
+                        }}
+                    />
+                </div>
+                <p className="small text-muted mb-0">
+                    {formdata.uploadProgress || 0}% uploaded
+                </p>
             </CommonModel>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -8,6 +8,8 @@ import LoaderSpiner from '../../hooks/LoaderSpiner';
 
 import Button from '../common/Button/Button';
 
+import CommonModel from '../common/model/CommonModel';
+
 import FeatureCheckboxGroup from '../CarTemplate/FeatureCheckboxGroup';
 
 import { notify } from '../../utils/helpers';
@@ -15,6 +17,8 @@ import { notify } from '../../utils/helpers';
 import { getTemplate, getGroupedFeatures } from '../../services/vendorCarTemplate.service';
 
 import { updateCarDetails } from '../../Redux/Actions/carAction';
+
+import { generateCarDescription } from '../../services/ai.service';
 
 
 
@@ -56,37 +60,147 @@ function resolveFeatureNamesFromGroups(groupedFeatures, selectedFeatures) {
 
 
 
-function buildCopyText(carDescription, mainDescription, featureNames) {
+const MIN_CAR_DESCRIPTION_LENGTH = 100;
+
+
+
+function validateCarDescriptionForCopy(carDescription) {
+
+    return (carDescription || '').trim().length >= MIN_CAR_DESCRIPTION_LENGTH;
+
+}
+
+
+
+function buildCopyContent(carDescription, profileTemplate, featureNames) {
 
     const featuresLine = featureNames.length ? featureNames.join(', ') : '';
+
+    return {
+
+        carDescription: carDescription || '',
+
+        featuresLine,
+
+        profileTemplate: profileTemplate || '',
+
+    };
+
+}
+
+
+
+function buildCopyText(carDescription, profileTemplate, featureNames) {
+
+    const content = buildCopyContent(carDescription, profileTemplate, featureNames);
 
 
 
     return [
 
-        'Car Description',
+        content.carDescription,
 
         '',
 
-        carDescription || '',
+        content.featuresLine,
 
         '',
 
-        'Main Description',
-
-        '',
-
-        mainDescription || '',
-
-        '',
-
-        'Car Features',
-
-        '',
-
-        featuresLine
+        content.profileTemplate,
 
     ].join('\n');
+
+}
+
+
+
+function CopyPreviewContent({ content }) {
+
+    return (
+
+        <>
+
+            <div className="car-copy-preview-section mb-3">
+
+                <p className="car-copy-preview-text mb-0">{content.carDescription || '-'}</p>
+
+            </div>
+
+            <div className="car-copy-preview-section mb-3">
+
+                <p className="car-copy-preview-text mb-0">{content.featuresLine || '-'}</p>
+
+            </div>
+
+            <div className="car-copy-preview-section">
+
+                <p className="car-copy-preview-text mb-0">{content.profileTemplate || '-'}</p>
+
+            </div>
+
+        </>
+
+    );
+
+}
+
+
+
+function buildAiPayload(carDetails = {}, featureNames = []) {
+
+    const payload = {
+
+        brand: carDetails.carBrand || '',
+
+        model: carDetails.carModel || '',
+
+        year: carDetails.carYear || '',
+
+        type: carDetails.carType || '',
+
+        features: featureNames,
+
+    };
+
+
+
+    const optionalMap = {
+
+        color: carDetails.carColor,
+
+        fuelType: carDetails.fuelType,
+
+        transmission: carDetails.transmission,
+
+        engine: carDetails.engine,
+
+        mileage: carDetails.mileage,
+
+        seatingCapacity: carDetails.seatingCapacity,
+
+        bodyType: carDetails.bodyType,
+
+        variant: carDetails.variant,
+
+        numberOfDoors: carDetails.numberOfDoors,
+
+    };
+
+
+
+    Object.entries(optionalMap).forEach(([key, value]) => {
+
+        if (value !== undefined && value !== null && String(value).trim() !== '') {
+
+            payload[key] = String(value).trim();
+
+        }
+
+    });
+
+
+
+    return payload;
 
 }
 
@@ -95,6 +209,8 @@ function buildCopyText(carDescription, mainDescription, featureNames) {
 function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
     const { t } = useTranslation();
+
+    const aiAbortRef = useRef(null);
 
     const [state, setState] = useReducer(
 
@@ -106,7 +222,11 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
             saving: false,
 
+            generating: false,
+
             copying: false,
+
+            previewOpen: false,
 
             carDescription: '',
 
@@ -238,6 +358,176 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
 
 
+    useEffect(() => {
+
+        return () => {
+
+            if (aiAbortRef.current) {
+
+                aiAbortRef.current.abort();
+
+            }
+
+        };
+
+    }, []);
+
+
+
+    const handleAiGenerate = async () => {
+
+        const featureNames = resolveFeatureNamesFromGroups(
+
+            state.groupedFeatures,
+
+            state.selectedFeatures
+
+        );
+
+
+
+        const payload = buildAiPayload(carDetails, featureNames);
+
+
+
+        if (!payload.brand || !payload.model || !payload.year || !payload.type) {
+
+            notify('error', t('aiGenerateMissingFields'));
+
+            return;
+
+        }
+
+
+
+        if (aiAbortRef.current) {
+
+            aiAbortRef.current.abort();
+
+        }
+
+
+
+        const controller = new AbortController();
+
+        aiAbortRef.current = controller;
+
+
+
+        setState({ generating: true });
+
+
+
+        try {
+
+            const response = await generateCarDescription(payload, {
+
+                signal: controller.signal,
+
+            });
+
+
+
+            if (aiAbortRef.current !== controller) {
+
+                return;
+
+            }
+
+
+
+            if (response?.statusCode == 1) {
+
+                const description =
+
+                    response?.responseData?.description ||
+
+                    response?.description ||
+
+                    '';
+
+
+
+                if (description) {
+
+                    setState({ carDescription: description, generating: false });
+
+                    notify('success', t('aiGenerateSuccess'));
+
+                } else {
+
+                    setState({ generating: false });
+
+                    notify('error', t('aiGenerateError'));
+
+                }
+
+            } else {
+
+                setState({ generating: false });
+
+                notify(
+
+                    'error',
+
+                    response?.error?.responseMessage || t('aiGenerateError')
+
+                );
+
+            }
+
+        } catch (error) {
+
+            if (aiAbortRef.current !== controller) {
+
+                return;
+
+            }
+
+
+
+            const isCanceled =
+
+                error?.code === 'ERR_CANCELED' ||
+
+                error?.name === 'CanceledError';
+
+
+
+            if (isCanceled) {
+
+                setState({ generating: false });
+
+                return;
+
+            }
+
+
+
+            setState({ generating: false });
+
+            notify(
+
+                'error',
+
+                error?.error?.responseMessage || error?.message || t('aiGenerateError')
+
+            );
+
+        } finally {
+
+            if (aiAbortRef.current === controller) {
+
+                aiAbortRef.current = null;
+
+            }
+
+        }
+
+    };
+
+
+
     const handleToggleFeature = (featureId) => {
 
         setState({
@@ -336,7 +626,7 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
 
 
-    const handleCopyDetails = async () => {
+    const getCopyContext = () => {
 
         const featureNames = resolveFeatureNamesFromGroups(
 
@@ -348,15 +638,63 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
 
 
-        const copyText = buildCopyText(
+        return {
 
-            state.carDescription,
+            featureNames,
 
-            state.mainDescription,
+            content: buildCopyContent(
 
-            featureNames
+                state.carDescription,
 
-        );
+                state.mainDescription,
+
+                featureNames
+
+            ),
+
+            copyText: buildCopyText(
+
+                state.carDescription,
+
+                state.mainDescription,
+
+                featureNames
+
+            ),
+
+        };
+
+    };
+
+
+
+    const validateBeforeCopy = () => {
+
+        if (!validateCarDescriptionForCopy(state.carDescription)) {
+
+            notify('error', t('carFeatureCopyValidationError'));
+
+            return false;
+
+        }
+
+        return true;
+
+    };
+
+
+
+    const handleCopyDetails = async () => {
+
+        if (!validateBeforeCopy()) {
+
+            return;
+
+        }
+
+
+
+        const { copyText } = getCopyContext();
 
 
 
@@ -384,6 +722,44 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
 
 
+    const handleCopyAndPreview = async () => {
+
+        if (!validateBeforeCopy()) {
+
+            return;
+
+        }
+
+
+
+        const { copyText } = getCopyContext();
+
+
+
+        setState({ copying: true });
+
+
+
+        try {
+
+            await navigator.clipboard.writeText(copyText);
+
+            notify('success', t('copiedToClipboard'));
+
+            setState({ previewOpen: true, copying: false });
+
+        } catch (error) {
+
+            notify('error', t('carFeatureCopyError'));
+
+            setState({ copying: false });
+
+        }
+
+    };
+
+
+
     if (state.loader) {
 
         return <LoaderSpiner />;
@@ -400,21 +776,41 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
                 <h4 className="car-template-subtitle mb-0">{t('carFeatureTabTitle')}</h4>
 
-                <Button
+                <div className="d-flex gap-2">
 
-                    type="button"
+                    <Button
 
-                    className="btn btn-secondary"
+                        type="button"
 
-                    disabled={state.copying}
+                        className="btn btn-secondary"
 
-                    onClick={handleCopyDetails}
+                        disabled={state.copying}
 
-                >
+                        onClick={handleCopyDetails}
 
-                    {t('carFeatureCopyDetails')}
+                    >
 
-                </Button>
+                        {t('carFeatureCopyDetails')}
+
+                    </Button>
+
+                    <Button
+
+                        type="button"
+
+                        className="btn btn-secondary"
+
+                        disabled={state.copying}
+
+                        onClick={handleCopyAndPreview}
+
+                    >
+
+                        {t('carFeatureCopyAndPreview')}
+
+                    </Button>
+
+                </div>
 
             </div>
 
@@ -422,7 +818,27 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
 
             <div className="car-template-section mb-4">
 
-                <label className="form-label">{t('carTemplateCarDescription')}</label>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+
+                    <label className="form-label mb-0">{t('carTemplateCarDescription')}</label>
+
+                    <Button
+
+                        type="button"
+
+                        className="btn btn-secondary btn-sm"
+
+                        disabled={state.generating}
+
+                        onClick={handleAiGenerate}
+
+                    >
+
+                        {state.generating ? t('aiGenerating') : t('aiGenerate')}
+
+                    </Button>
+
+                </div>
 
                 <textarea
 
@@ -495,6 +911,24 @@ function CarFeatureTab({ dispatch, vehicleId, carDetails, onSaved }) {
                 </Button>
 
             </div>
+
+
+
+            <CommonModel
+
+                show={state.previewOpen}
+
+                size="modal-lg"
+
+                customeClass="car-copy-preview-modal"
+
+                onClose={() => setState({ previewOpen: false })}
+
+            >
+
+                <CopyPreviewContent content={getCopyContext().content} />
+
+            </CommonModel>
 
         </div>
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useReducer, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useReducer, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession } from '../../utils/helpers';
+import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession, getCarThumbnailUrl, hasCarThumbnail, shouldShowCarOnDashboard, isCarProcessing, getCarProcessingLabel } from '../../utils/helpers';
 import { getAllCarImages, getAllCarVideo, getCarDelete, getCarList } from '../../Redux/Actions/carAction';
 import Spinner from '../../hooks/Spinner';
 import CommonModel from '../../components/common/model/CommonModel';
@@ -31,24 +31,8 @@ function DashboardPage(props) {
         }
     );
 
-    const listStateRef = useRef({
-        carsList: EMPTY_ARRAY,
-        activePage: 1
-    });
-
-    useEffect(() => {
-        listStateRef.current = {
-            carsList: formdata.carsList,
-            activePage: formdata.activePage
-        };
-    }, [formdata.carsList, formdata.activePage]);
-
     const refreshCarListPreservingView = useCallback(() => {
-        const { carsList, activePage } = listStateRef.current;
-        const loadedCount = Math.max(carsList?.length || 0, 30);
-        const nextActivePage = activePage > 1 ? activePage : 2;
-
-        return dispatch(getCarList({ page: 1, limit: loadedCount })).then((res) => {
+        return dispatch(getCarList({ page: 1, limit: 30 })).then((res) => {
             if (res?.statusCode == '1') {
                 const carListData = res?.responseData?.carsList || [];
                 const totalRecords = res?.responseData?.totalRecords || 0;
@@ -56,7 +40,7 @@ function DashboardPage(props) {
                 setFormdata({
                     carsList: carListData,
                     hasMore: carListData.length < totalRecords,
-                    activePage: nextActivePage,
+                    activePage: 2,
                     deleteModelOpen: false
                 });
             }
@@ -65,14 +49,14 @@ function DashboardPage(props) {
         });
     }, [dispatch]);
 
-    const userId = user?._id || user?.id || user?.userProfile?._id;
-
-    useCarListJobRefresh({
-        userId,
+    const { isProcessingCar } = useCarListJobRefresh({
+        user,
+        carsList: formdata.carsList,
         onJobCompleted: refreshCarListPreservingView
     });
 
     useEffect(() => {
+        getUserData();
         getCarData();
 
         let visit=getLocalStorage('visit')
@@ -212,9 +196,13 @@ function DashboardPage(props) {
     const CarForm = () => {
         return (<section className="card-block" aria-label="Preview Card">
 
-            {formdata?.carsList?.length > 0 &&  formdata?.carsList?.filter((item) => item?.carImages?.[0]?.partUrl !== '').map((items, index) => {
+            {formdata?.carsList?.length > 0 && formdata?.carsList?.filter(shouldShowCarOnDashboard).map((items, index) => {
+                const thumbnailUrl = getCarThumbnailUrl(items);
+                const processing = isCarProcessing(items);
+                const processingLabel = getCarProcessingLabel(items?.processingStatus);
+                const progress = Math.max(0, Math.min(100, items?.processingProgress ?? 0));
                 return (
-                    <div key={index} className="car-card dashboard-page" >
+                    <div key={items._id || index} className={`car-card dashboard-page${processing ? ' car-card--processing' : ''}`} >
 
                         <div className="image-section">
                            <div className="image-wrapper position-relative">
@@ -228,7 +216,7 @@ function DashboardPage(props) {
 
                                 <img
                                     className="card-image"
-                                    src={items?.carImages?.[0]?.partUrl || "/images/car-placeholder.png"}
+                                    src={thumbnailUrl || "/images/car-placeholder.png"}
                                     alt=""
                                     style={{
                                         display: loadedImages[index] ? "block" : "none",
@@ -249,6 +237,18 @@ function DashboardPage(props) {
                                         }));
                                     }}
                                 />
+
+                                {processing && (
+                                    <div className="car-processing-overlay">
+                                        <span className="car-processing-badge">{processingLabel}</span>
+                                        <div className="car-processing-progress">
+                                            <div
+                                                className="car-processing-progress-bar"
+                                                style={{ width: `${progress}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                             {/* <img className="card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "/images/car-placeholder.png"} /> */}
 
@@ -258,6 +258,14 @@ function DashboardPage(props) {
                         </div>
 
                         <div className="content-section" >
+                            {processing ? (
+                                <>
+                                    <h2 className="car-title">{items?.carModel || 'New Car'}</h2>
+                                    <p className="car-metadata">{items?.carYear}, {items?.carBrand}</p>
+                                    <p className="license-plate">{items?.carId}</p>
+                                    <p className="car-processing-status-text">{processingLabel} ({progress}%)</p>
+                                </>
+                            ) : (
                             <Link to={`/car/${items._id}`}> <>
                                 <h2 className="car-title">{items?.carModel}</h2>
 
@@ -265,19 +273,18 @@ function DashboardPage(props) {
 
                                 <p className="license-plate">{items?.carId}</p>
                             </> </Link>
+                            )}
                             <div className="date-download-blk">
                                 <p className="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
 
-                                {/* <p className="date-time">06:00PM, 03 Mar 2021</p> */}
-
                                 <div className="action-buttons">
-                                    {items?.aIVideoUrl && <button className="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
+                                    {!processing && items?.aIVideoUrl && <button className="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
                                         <img src="/images/video.svg" />
                                     </button>}
 
-                                    <button className="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
+                                    {!processing && <button className="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
                                         <img src="/images/download.svg" />
-                                    </button>
+                                    </button>}
                                 </div>
                             </div>
                         </div>
@@ -296,6 +303,11 @@ function DashboardPage(props) {
             {formdata?.loader && !formdata?.visitModelOpen ? <LoaderSpiner /> :
                 <div>
 
+                    {isProcessingCar && (
+                        <p className="car-processing-banner text-center mb-3">
+                            Your car is being processed in the background. It will appear here automatically when ready.
+                        </p>
+                    )}
 
                     {formdata?.carsList.length >0 ?
                     <InfiniteScroll

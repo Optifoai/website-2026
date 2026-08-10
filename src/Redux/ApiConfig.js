@@ -83,6 +83,7 @@ export const APICONFIG = {
 
     VENDOR_CAR_TEMPLATE: `${baseURL}vendor/car-template`,
     VENDOR_CAR_TEMPLATE_FEATURES: `${baseURL}vendor/car-template/features`,
+    AI_GENERATE_CAR_DESCRIPTION: `${baseURL}ai/generate-car-description`,
 
 
 

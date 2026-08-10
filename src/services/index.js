@@ -8,7 +8,7 @@ export function getRequest(URL) {
 	return axiosClient.get(URL)
 }
 
-export function postRequest(URL, payload) {
+export function postRequest(URL, payload, config = {}) {
 	const isMasquerade = localStorage.getItem('masquerade')
 
 	// Check if the payload is a FormData object
@@ -24,7 +24,7 @@ export function postRequest(URL, payload) {
 		payload = editPayload  // Assign the modified object back to payload
 	}
 
-	return axiosClient.post(URL, payload)
+	return axiosClient.post(URL, payload, config)
 }
 
 export function patchRequest(URL, payload) {

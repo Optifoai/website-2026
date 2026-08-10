@@ -16,7 +16,7 @@ import CommonModel from '../../components/common/model/CommonModel';
 import UploadPage from '../../components/common/UploadPage/UploadPage';
 
 function StudioTabs(props) {
-    const { formdata, setFormdata, saveCarDetails, userDetails, dispatch ,vehicleId} = props;
+    const { formdata, setFormdata, saveCarDetails, userDetails, dispatch ,vehicleId, isSaving} = props;
     const { t } = useTranslation();
     const { user, getUserData } = useAuth();
     const [activeTab, setActiveTab] = useState('2');
@@ -479,7 +479,16 @@ function StudioTabs(props) {
                             </div>
 
                             <div className="">
-                                <button type="button" className="buy-btn position-static" onClick={saveCarDetails}>Save</button>
+                                <button
+                                    type="button"
+                                    className="buy-btn position-static"
+                                    onClick={saveCarDetails}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving
+                                        ? (vehicleId ? 'Saving...' : 'Creating...')
+                                        : (vehicleId ? 'Save' : 'Create Car')}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -525,6 +534,7 @@ StudioTabs.propTypes = {
     formdata: PropTypes.object.isRequired,
     setFormdata: PropTypes.func.isRequired,
     saveCarDetails: PropTypes.func.isRequired,
+    isSaving: PropTypes.bool,
     userDetails: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
     vehicleId: PropTypes.string,
