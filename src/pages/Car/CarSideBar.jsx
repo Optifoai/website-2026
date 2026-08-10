@@ -230,9 +230,9 @@ function CarSideBar(props) {
 
     const uploadAIVideoBody = (
         <>
-            <div className="flex-1 mb-3">
+            <div class="flex-1 mb-3">
                 <label className='form-label'>Car Info</label>
-                <input type="text" className="form-control" name="aiVideoImageInfo"
+                <input type="text" class="form-control" name="aiVideoImageInfo"
                     value={formdata.aiVideoImageInfo}
                     onChange={(e) => changeInputValue(e)}
                     placeholder='Enter car info' />
@@ -537,36 +537,36 @@ function CarSideBar(props) {
         <>
 
             <div className='car-details'>
-                <h2 className="">{carDetailsData?.carDetails?.carModel}</h2>
+                <h2 class="">{carDetailsData?.carDetails?.carModel}</h2>
 
-                <div className="info-block">
-                    <p className="label">Brand</p>
-                    <p className="value">{carDetailsData?.carDetails?.carBrand}</p>
+                <div class="info-block">
+                    <p class="label">Brand</p>
+                    <p class="value">{carDetailsData?.carDetails?.carBrand}</p>
                 </div>
 
-                <div className="info-block">
-                    <p className="label">Year</p>
-                    <p className="value">{carDetailsData?.carDetails?.carYear}</p>
+                <div class="info-block">
+                    <p class="label">Year</p>
+                    <p class="value">{carDetailsData?.carDetails?.carYear}</p>
                 </div>
 
-                <div className="info-block">
-                    <p className="label">Card Id</p>
-                    <p className="value">{carDetailsData?.carDetails?.carId}</p>
+                <div class="info-block">
+                    <p class="label">Card Id</p>
+                    <p class="value">{carDetailsData?.carDetails?.carId}</p>
                 </div>
 
-                <div className="info-block">
-                    <p className="label">Created</p>
-                    <p className="value">{carDetailsData?.carDetails?.created ? displayDateFormat(carDetailsData?.carDetails?.created) : '-'}</p>
+                <div class="info-block">
+                    <p class="label">Created</p>
+                    <p class="value">{carDetailsData?.carDetails?.created ? displayDateFormat(carDetailsData?.carDetails?.created) : '-'}</p>
                 </div>
                 {/* video */}
                 {carDetailsData?.carDetails && carDetailsData?.carDetails.carVideo ?
                     <div className="boxdesignbox">
-                        <div className="wrap mb-2">
-                            <div className="mb-1">
+                        <div class="wrap mb-2">
+                            <div class="mb-1">
                                 <DownloadVideo />
 
                             </div>
-                            <div className="">
+                            <div class="">
                                 <h6>Video available</h6>
                                 <p>{showDownloadAll(carDetailsData?.carDetails)} days left to download video</p>
                             </div>
@@ -586,19 +586,19 @@ function CarSideBar(props) {
               
 
 
-                {/* <div className="justify-content-between">
+                {/* <div class="justify-content-between">
 
-                    <button type='button' className="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/download.svg' /> {t('generate_ai_image')}</button>
+                    <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/download.svg' /> {t('generate_ai_image')}</button>
 
                 </div> */}
 
 
-                <div className=" btn-download ">
+                <div class=" btn-download ">
                       {/* 360 creation flow */}
                 <div className="justify-content-between">
                     {carDetailsData?.carDetails?.carVideo == '' ?
-                        <button type='button' className="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/icon/Upload-Active.png' /> {t('upload_video_text')}</button>
-                        : <button type='button' className="small-btn" onClick={generate_360_image}><img src='/images/icon/360.png' /> {t('generate_image_text')}</button>}
+                        <button type='button' class="small-btn" onClick={() => { setFormdata({ uploadVideoModelOpen: true }); }}><img src='/images/icon/Upload-Active.png' /> {t('upload_video_text')}</button>
+                        : <button type='button' class="small-btn" onClick={generate_360_image}><img src='/images/icon/360.png' /> {t('generate_image_text')}</button>}
                 </div>
                 {/* AI video creation flow */}
                 {carDetailsData?.carDetails?.aIVideoUrl && carDetailsData?.carDetails?.aIVideoUrl != '' ?
@@ -615,7 +615,7 @@ function CarSideBar(props) {
                     </button>
                 }
                     <div className='d-flex justify-content-between mt-2'>
-                        <button type='button' className="small-btn" onClick={actionDownloadModal}><img src='/images/download.svg' /> {carDetailsData?.selectedImage?.length > 0 ? `${t('DownloadText')} (${carDetailsData?.selectedImage?.length})` : t('DownloadAllText')}</button>
+                        <button type='button' class="small-btn" onClick={actionDownloadModal}><img src='/images/download.svg' /> {carDetailsData?.selectedImage?.length > 0 ? `${t('DownloadText')} (${carDetailsData?.selectedImage?.length})` : t('DownloadAllText')}</button>
 
                         <Dropdown>
                             <Dropdown.Toggle variant="success" id="dropdown-basic" className="small-btn">
@@ -625,8 +625,8 @@ function CarSideBar(props) {
                                 <Dropdown.Item onClick={() => setFormdata({ deleteModelOpen: true })}><img src="/images/icon/dalete-car.png" />Delete Car</Dropdown.Item>
                                 <Dropdown.Item onClick={() => setFormdata({ editModelOpen: true })}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Edit Car Info</Dropdown.Item>
                                 <Dropdown.Item onClick={handleRemoveBackground}><img src="/images/image.png" />Remove Background Image</Dropdown.Item>
-                                <Dropdown.Item onClick={handleUpdateLicencePlate}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Apply Number Plate</Dropdown.Item>
-                                <Dropdown.Item onClick={handleAddMoreCar}><img className='edit-icon' src="/images/icon/add.png" />Add New Car Image</Dropdown.Item>
+                                {/* <Dropdown.Item onClick={handleUpdateLicencePlate}><img className='edit-icon' src="/images/icon/Edit-Active.png" />Apply Number Plate</Dropdown.Item>
+                                <Dropdown.Item onClick={handleAddMoreCar}><img className='edit-icon' src="/images/icon/add.png" />Add New Car Image</Dropdown.Item> */}
                                 
                             </Dropdown.Menu>
                         </Dropdown>

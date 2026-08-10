@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth'; // API calls
 import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } from '../Redux/Actions/loginAction';
-import { notify, setLoginDetailInSession, getAccessToken } from '../utils/helpers';
+import { notify, setLoginDetailInSession } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import js from '@eslint/js';
 // import { setLoginDetailInSession } from '../utils/helpers';
 
 const AuthContext = createContext(null);
@@ -16,9 +17,13 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = getAccessToken();
+    const token = localStorage.getItem('authToken');
     if (token) {
+      // In a real app, you'd validate the token with your backend
+      // For simplicity, we'll assume a token means authenticated
+      // You might also fetch user details here
       setIsAuthenticated(true);
+      // Example: setUser({ username: 'testuser' });
     }
     setIsLoading(false);
   }, []);

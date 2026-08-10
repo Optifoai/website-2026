@@ -63,7 +63,7 @@ function SelectedCarImage(props) {
                     <>
                         <h5 className='main-heading mb-2'>Selected Image Preview:</h5>
                         <div className='custom-scrollbar'>
-                            <div className="card-block">
+                            <div class="card-block">
 
                                 {selectedImages.map((image, index) => (
                                     <div key={index} className="mb-1">

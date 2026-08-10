@@ -204,7 +204,7 @@ function AccountPage(props) {
                                         })} readOnly />
                                            <a href="#" className="edit-account" onClick={() => { setFormdata({ editModelOpen: true }) }}>
                                           
-                                            <img className="edit-icon " src="/images/icon/Edit-Active.png"></img>
+                                            <img class="edit-icon " src="/images/icon/Edit-Active.png"></img>
                                         </a>
                                         </div>
                                         {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>}

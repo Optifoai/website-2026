@@ -66,11 +66,6 @@ export const APICONFIG = {
     DELETE_CAR_Image: `${baseURL}backgrounds/deleteCarOne`,
     UPLOAD_CAR: `${baseURL}backgrounds/uploadCar`,
     CREAT_CAR: `${baseURL}cars/addcar`,
-    CAR_JOB_STATUS: `${baseURL}cars/addcar/status`,
-    NOTIFICATIONS: `${baseURL}notifications`,
-    NOTIFICATIONS_UNREAD_COUNT: `${baseURL}notifications/unread-count`,
-    ADMIN_IMAGE_JOBS: `${baseURL}admin/image-jobs`,
-    FASTAPI_PROCESS_CAR_IMAGE: `${baseURL}cars/fastapi/processCarImage`,
     CREAT_360CAR_IMAGE: `${baseURL}cars/generate360Images`,
     UPLOAD_CAR_VIDEO: `${baseURL}cars/uploadCarVideo`,
     // CREAT_AI_IMAGE: `${baseURL}cars/generate360Images1`,
@@ -80,9 +75,6 @@ export const APICONFIG = {
     UPDATE_CAR_LICENCE_PLATE: `${baseURL}cars/fastapi/processImageWithNumberPlate`,
     UPDATE_MORE_CAR_IAMGE: `${baseURL}cars/update`,
 
-
-    VENDOR_CAR_TEMPLATE: `${baseURL}vendor/car-template`,
-    VENDOR_CAR_TEMPLATE_FEATURES: `${baseURL}vendor/car-template/features`,
 
 
 

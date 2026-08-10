@@ -80,16 +80,16 @@ function EditCarForm(props) {
   return (
     <>  
    
-     <div className="modal-body">
-            <div className="modal-header">
+     <div class="modal-body">
+            <div class="modal-header">
                 <h5>Edit Car Information</h5>
             </div>
 
             <div className="form-field mt-3">
                 <form onSubmit={handleSubmit(onEditSubmit)}>
-                    <div className="mb-3 select-option">
+                    <div class="mb-3 select-option">
                         <label className='form-label'>Brand</label>
-                        <select className="form-control" {...register('brand', { required: 'Brand is required' })}>
+                        <select class="form-control" {...register('brand', { required: 'Brand is required' })}>
                             <option value="">Select Brand</option>
                             {carsBrandList?.map((brand, index) => (
                                 <option key={index} value={brand.carBrand}>
@@ -99,26 +99,26 @@ function EditCarForm(props) {
                         </select>
                         {errors.brand && <small className="text-danger">{errors.brand.message}</small>}
                     </div>
-                    <div className="mb-3">
+                    <div class="mb-3">
                         <label className='form-label'>Model</label>
-                        <input type="text" className="form-control" {...register('model', { required: 'Model is required' })} />
+                        <input type="text" class="form-control" {...register('model', { required: 'Model is required' })} />
                         {errors.model && <small className="text-danger">{errors.model.message}</small>}
                     </div>
                     <div className='d-flex column-gap-3'>
-                        <div className="flex-1 mb-3">
+                        <div class="flex-1 mb-3">
                             <label className='form-label'>Year</label>
-                            <input type="text" className="form-control" {...register('year', { required: 'Year is required', pattern: { value: /^\d{4}$/, message: 'Please enter a valid year' } })} />
+                            <input type="text" class="form-control" {...register('year', { required: 'Year is required', pattern: { value: /^\d{4}$/, message: 'Please enter a valid year' } })} />
                             {errors.year && <small className="text-danger">{errors.year.message}</small>}
                         </div>
-                        <div className="flex-1 mb-3">
+                        <div class="flex-1 mb-3">
                             <label className='form-label'>Car ID</label>
-                            <input type="text" className="form-control" {...register('carId', { required: 'Car ID is required' })} />
+                            <input type="text" class="form-control" {...register('carId', { required: 'Car ID is required' })} />
                             {errors.carId && <small className="text-danger">{errors.carId.message}</small>}
                         </div>
                     </div>
                     <div className='popup-btn'>
-                        <button type="submit" className="btn btn-login">{t('UpdateText')}</button>
-                        <button type="button" className="btn btn-secondary" onClick={onClose}>{t('cancelText')}</button>
+                        <button type="submit" class="btn btn-login">{t('UpdateText')}</button>
+                        <button type="button" class="btn btn-secondary" onClick={onClose}>{t('cancelText')}</button>
                     </div>
                 </form>
             </div>

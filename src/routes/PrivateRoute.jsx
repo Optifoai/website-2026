@@ -14,9 +14,9 @@ export default function PrivateRoute({ children }) {
   }
   return isAuthenticated ?
 
-     <div className="app"> 
+     <div class="app"> 
      <SideBar/>
-        <main className="main">
+        <main class="main">
          <Header/>
      {children} 
       </main>

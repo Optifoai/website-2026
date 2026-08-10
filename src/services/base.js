@@ -1,11 +1,13 @@
 import axios from 'axios'
-import { getAccessToken } from '../utils/helpers'
+// import { notify } from '../utils/helpers'
+// import { getConfigDetails } from './config'
+// import { getConfigDetails } from '../redux/config/Config'
 const axiosClient = axios.create()
 
 // Intercept request
 axiosClient.interceptors.request.use(
 	(request) => {
-		const accessToken = getAccessToken()
+		const accessToken = localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null       
         const authorization = import.meta.env.VITE_PUBLIC_AUTHORIZATION;
 		  // If payload is FormData, don't set content type
 			if (request.data instanceof FormData) {
@@ -24,11 +26,12 @@ axiosClient.interceptors.request.use(
 // Intercept response
 axiosClient.interceptors.response.use(
 	(response) => {
-		const accessToken = getAccessToken()
+		// const userData = JSON.parse(localStorage.getItem('userData'))
+		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
 
 		// Dispatch any action on success
 		//if(response?.status === responseCodes.SUCCESS200)
-		if (response?.status == 201 || response?.status == 200 || response?.status == 202) {
+		if (response?.status == 201 || response?.status == 200) {
 			if(response?.data?.error?.responseMessage && response?.data?.error?.responseMessage=='Your Token has been expired'){
 				// notify('error', 'Session Expired, Please Login Again')
 				localStorage.clear()
@@ -57,7 +60,8 @@ axiosClient.interceptors.response.use(
 	}
 	,
 	(error) => {
-		const accessToken = getAccessToken()
+		// const userData = JSON.parse(localStorage.getItem('userData'))
+		const accessToken = JSON.parse(localStorage.getItem('authToken'))        
 
 
 		if(error?.response?.status == 401){

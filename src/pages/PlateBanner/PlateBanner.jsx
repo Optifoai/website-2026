@@ -30,7 +30,7 @@ useEffect(()=>{
   return (
     <>
     {loader ? <LoaderSpiner /> :<>
-      <div className="bg-gradient">
+      <div class="bg-gradient">
         <h3 className='heading-title'>Licence Plate</h3>
         <p className='heading-subtitle'>Select the Licence Plate you want to apply on all your exterior images.</p>
       </div>
@@ -38,7 +38,7 @@ useEffect(()=>{
        
 
       <div className='divider-1'></div>
- <div className="bg-gradient">
+ <div class="bg-gradient">
         <h3 className='heading-title'>Banner</h3>
         <p className='heading-subtitle'>Select the Banner type you want to apply on all your exterior images.</p>
       </div>

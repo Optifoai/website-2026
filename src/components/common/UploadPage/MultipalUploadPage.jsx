@@ -111,7 +111,7 @@ const { t, i18n } = useTranslation();
 
     return (
         <>
-            <section className="card-block" aria-label="Preview Card">
+            <section class="card-block" aria-label="Preview Card">
                 <Dropzone
                     onDrop={(acceptedFiles) => handleUploadImage(acceptedFiles)}
                     maxSize={fileSize ? parseInt(fileSize, 10) : undefined}

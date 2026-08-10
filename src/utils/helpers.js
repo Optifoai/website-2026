@@ -64,24 +64,7 @@ export const notify = (type, message, heading = '') => {
 }
 
 export const getLocalStorage = (key) => {
-  try {
-    const item = localStorage.getItem(key)
-    if (item === null) return null
-    return JSON.parse(item)
-  } catch {
-    return null
-  }
-}
-
-export const getAccessToken = () => {
-  try {
-    const token = localStorage.getItem('authToken')
-    if (!token) return null
-    return JSON.parse(token)
-  } catch {
-    localStorage.removeItem('authToken')
-    return null
-  }
+  return JSON.parse(localStorage.getItem(key))
 }
 
 export const removeLocalStorage = (key) => {

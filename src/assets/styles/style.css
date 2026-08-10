@@ -7,13 +7,11 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   color: #fff;
-  min-height: 100%;
-  margin: 0;
-  background-color: #0f1117;
+  height: 100%;
 }
 
 #root {
-  min-height: 100vh;
+  height: 100%;
 }
 
 /* Width */
@@ -114,12 +112,6 @@ h6 {
   padding-top: 20px;
 }
 
-.top-strip > img {
-  width: 108px;
-  height: auto;
-  margin-bottom: 6px;
-}
-
 .logo {
   width: 56px;
   height: 56px;
@@ -183,8 +175,7 @@ h6 {
 
 .login-container {
   display: flex;
-  min-height: 100vh;
-  background-color: #0f1117;
+  min-height: 100%;
 }
 
 /* Left side - image section */
@@ -192,7 +183,7 @@ h6 {
   background: url("/images/login-bg.jpg") no-repeat;
   flex: 1;
   min-width: 59%;
-  background-position: 0 100%;
+  background-position: 0px 100%;
   background-size: 100%;
 }
 
@@ -201,8 +192,6 @@ h6 {
   flex: 1;
   background-image: url("/images/login-right.png");
   background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .login-right .form-field {
@@ -298,36 +287,6 @@ h6 {
   border-color: #D5D5D5;
   box-shadow: none;
   color: #fff;
-}
-
-.car-template-page {
-  padding: 0 4px 20px 0;
-}
-
-.car-template-title {
-  color: #fff;
-  font-size: 38px;
-  line-height: 1.1;
-  font-weight: 600;
-}
-
-.car-template-section .form-label {
-  color: #c9d0e3;
-  font-size: 13px;
-  margin-bottom: 8px;
-}
-
-.car-template-textarea.form-control {
-  min-height: 120px;
-  height: auto;
-  border-radius: 14px;
-  resize: vertical;
-  padding: 12px 14px;
-  line-height: 1.4;
-}
-
-.car-template-actions .btn {
-  min-width: 90px;
 }
 
 .btn-login {
@@ -885,44 +844,6 @@ p.value {
 
 .details-car-page .nav-item button[aria-selected="false"] svg {
   fill: #fff;
-}
-
-.details-car-page .nav-tabs {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.details-car-page .nav-tabs .nav-link {
-  color: #fff;
-  border: 1px solid transparent;
-  background: transparent;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 4px;
-  padding: 6px 12px;
-  min-height: 38px;
-  line-height: 1.2;
-}
-
-.details-car-page .nav-tabs .nav-link:hover,
-.details-car-page .nav-tabs .nav-link:focus {
-  color: #fff;
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.details-car-page .nav-tabs .nav-link.active {
-  background: #fff;
-  color: #0c1735;
-  border-color: #fff;
-}
-
-.details-car-page .nav-tabs .nav-link.active:hover,
-.details-car-page .nav-tabs .nav-link.active:focus {
-  color: #0c1735;
-}
-
-.details-car-page .nav-tabs .nav-link.active svg {
-  fill: #000;
 }
 
 .details-car-page .car-details {
@@ -1843,14 +1764,15 @@ h3.credit {
   border-color: transparent;
 }
 
+.image-gallery-thumbnails {
+    width: calc(100vw - 535px);
+    overflow-x: auto;
+}
+
 @media (max-width: 1440px) {
   .image-Preview .delete-bg {
     left: 205px;
   }
-}
-.image-gallery-thumbnails {
-    width: calc(100vw - 535px);
-    overflow-x: auto;
 }
 
 @media (max-width: 1366px) {

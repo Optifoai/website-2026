@@ -140,14 +140,14 @@ function AddBanner(props) {
                             {optifoBackgrounds.map((item, i) => {
                                 return (
                                     <div className="" key={i}>
-                                        <label className="">
+                                        <label class="">
                                             <input
                                                 type="radio"
                                                 name="showBgValue"
                                                 value={formdata?.BgImageUrl?.backgroundImage}
                                                 onChange={() => setFormdata({ BgImageUrl: item })}
                                             />
-                                            <span className="checkmark">
+                                            <span class="checkmark">
                                                 <img src='/images/check-icon.png'/>
                                             </span>
                                             <div className="custom-bg-in">

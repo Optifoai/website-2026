@@ -83,15 +83,15 @@ function Banner(props) {
                 <div className='bg-logo-blk  flex-wrap'>
                     {background?.length > 0 ? background?.map((item, index) => {
                         return (<>
-                            <div className={`card ${item?.isActive ? 'active' : ''}`} key={`bg-${index}`}>
+                            <div class={`card ${item?.isActive ? 'active' : ''}`} key={`bg-${index}`}>
                                 <img src={item?.backgroundImage} alt={`Background ${index + 1}`} />
-                                <div className="bottom-row">
-                                    <label className="radio-item">
+                                <div class="bottom-row">
+                                    <label class="radio-item">
                                         <input type="radio" checked={item?.isActive} name="background" value={item?._id} onChange={changeBackgroud} />
-                                        <span className="custom-radio"></span>
+                                        <span class="custom-radio"></span>
                                         {item?.isActive ? 'Active' : ''}
                                     </label>
-                                    <button className="delete-btn"><img src='/images/delete-icon.svg' alt="delete" disabled={formdata?.isSubmit} onClick={()=>{setFormdata({deleteModalOpen :true,backgroundId:item?._id})}} /></button>
+                                    <button class="delete-btn"><img src='/images/delete-icon.svg' alt="delete" disabled={formdata?.isSubmit} onClick={()=>{setFormdata({deleteModalOpen :true,backgroundId:item?._id})}} /></button>
                                 </div>
                             </div>
 
@@ -100,9 +100,9 @@ function Banner(props) {
                     })
                         : null}
 
-                    <div className="card add-card">
-                        <div className="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
-                            <div className="add-icon" ><img src='/images/add-icon.svg' /></div>
+                    <div class="card add-card">
+                        <div class="add-content" onClick={()=>{setFormdata({addModalOpen :true})}}>
+                            <div class="add-icon" ><img src='/images/add-icon.svg' /></div>
                             <p >Add New Banner</p>
                         </div>
                     </div>

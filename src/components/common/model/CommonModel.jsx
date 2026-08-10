@@ -31,7 +31,7 @@ function CommonModel({ show, onClose,size, children, customeClass, custombg }) {
             
             <div className={`modal-dialog ${custombg} modal-dialog-centered`}>
                 <div className="modal-content">
-                    {/* <button type="button" className="btn-close btn-close-white ms-auto" onClick={onClose} aria-label="Close"/> */}
+                    {/* <button type="button" class="btn-close btn-close-white ms-auto" onClick={onClose} aria-label="Close"/> */}
                     <div className={`modal-body custom-modal-body ${customeClass}`}>
 
                         {children}

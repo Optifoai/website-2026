@@ -83,8 +83,8 @@ function EditEmailForm(props) {
                         {errors.optifoPassword && <small className="text-danger">{errors.optifoPassword.message}</small>}
                     </div>
                     <div className='popup-btn'>
-                        <button type="submit" className="btn btn-login">{t('UpdateText')}</button>
-                        <button type="button" className="btn btn-secondary" onClick={onClose}>{t('cancelText')}</button>
+                        <button type="submit" class="btn btn-login">{t('UpdateText')}</button>
+                        <button type="button" class="btn btn-secondary" onClick={onClose}>{t('cancelText')}</button>
                     </div>
                 </form>
             </div>

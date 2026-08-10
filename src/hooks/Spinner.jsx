@@ -4,7 +4,7 @@ function Spinner() {
    
     return (
         <div className="loader-main">
-                          <div className="lds-ellipsis">
+                          <div class="lds-ellipsis">
                             <div><small className="x-large" >.</small></div>
                             <div><small>.</small></div>
                             <div><small>.</small></div>

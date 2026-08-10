@@ -127,23 +127,23 @@ function Plate(props) {
     
             {logo?.length > 0 ? logo.map((item, index) => {
               return (
-                <div className={`card ${item?.isActive ? 'active' : ''}`} key={`logo-${index}`}>
+                <div class={`card ${item?.isActive ? 'active' : ''}`} key={`logo-${index}`}>
                   <img src={item?.backgroundImage} alt={`Logo ${index + 1}`} />
-                  <div className="bottom-row">
-                    <label className="radio-item">
+                  <div class="bottom-row">
+                    <label class="radio-item">
                       <input type="radio" checked = {item?.isActive} name="logo" value={item?._id} onChange={changeLogo}/>
-                      <span className="custom-radio"></span>
+                      <span class="custom-radio"></span>
                         {item?.isActive ? 'Active' : ''}
                     </label>
-                    <button className="delete-btn"><img src='/images/delete-icon.svg' alt="delete" disabled={formdata?.isSubmit} onClick={()=>{setFormdata({deleteModalOpen :true,backgroundId:item?._id})}} /></button>
+                    <button class="delete-btn"><img src='/images/delete-icon.svg' alt="delete" disabled={formdata?.isSubmit} onClick={()=>{setFormdata({deleteModalOpen :true,backgroundId:item?._id})}} /></button>
                   </div>
                 </div>)
             }) : null}
     
     
-            <div className="card add-card">
-              <div className="add-content" onClick={()=>{setFormdata({addLogoModalOpen :true})}}>
-                <div className="add-icon"><img src='/images/add-icon.svg' /></div>
+            <div class="card add-card">
+              <div class="add-content" onClick={()=>{setFormdata({addLogoModalOpen :true})}}>
+                <div class="add-icon"><img src='/images/add-icon.svg' /></div>
                 <p>Add New Licence Plate</p>
               </div>
             </div>

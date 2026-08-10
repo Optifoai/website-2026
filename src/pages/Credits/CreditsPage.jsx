@@ -44,77 +44,77 @@ const { t } = useTranslation();
     <>
 
 
-      <div className="bg-gradient">
+      <div class="bg-gradient">
         <h3 className='heading-title'>Credit Packs</h3>
         <p className='heading-subtitle'>Select the credit pack that gives your dealer the most value..</p>
       </div>
-      <section className="card-block-credit" aria-label="Preview Card">
-        <div className="pricing-card">
-          <div className="price-section">
-            <h2 className="price">€89</h2>
-            <p className="subtext"> per month</p>
+      <section class="card-block-credit" aria-label="Preview Card">
+        <div class="pricing-card">
+          <div class="price-section">
+            <h2 class="price">€89</h2>
+            <p class="subtext"> per month</p>
           </div>
 
-          <div className="divider"></div>
+          <div class="divider"></div>
 
-          <div className="credits-section">
-            <h3 className="credit">500 </h3>
-            <p className="credits-label">{t('credits_text')}</p>
+          <div class="credits-section">
+            <h3 class="credit">500 </h3>
+            <p class="credits-label">{t('credits_text')}</p>
           </div>
 
-          {/* <p className="tax-note">All prices are exclusive tax.</p> */}
+          {/* <p class="tax-note">All prices are exclusive tax.</p> */}
 
-          <button className="buy-btn"  onClick={() => window.location.href = getPaymentLink(isDenmark)} >{t('subscribe_text')}</button>
+          <button class="buy-btn"  onClick={() => window.location.href = getPaymentLink(isDenmark)} >{t('subscribe_text')}</button>
         </div>
 
-        <div className="pricing-card">
-          <div className="price-section">
-            <h2 className="price">€129</h2>
-            <p className="subtext"> per month</p>
+        <div class="pricing-card">
+          <div class="price-section">
+            <h2 class="price">€129</h2>
+            <p class="subtext"> per month</p>
           </div>
 
-          <div className="divider"></div>
+          <div class="divider"></div>
 
-          <div className="credits-section">
-            <h3 className="credit">Unlimited</h3>
-            <p className="credits-label">{t('credits_text')}</p>
+          <div class="credits-section">
+            <h3 class="credit">Unlimited</h3>
+            <p class="credits-label">{t('credits_text')}</p>
           </div>
 
-          {/* <p className="tax-note">All prices are exclusive tax.</p> */}
+          {/* <p class="tax-note">All prices are exclusive tax.</p> */}
 
-          <button className="buy-btn" onClick={() => window.location.href = getUnlimitedPackLink(isDenmark)}>{t('subscribe_text')}</button>
+          <button class="buy-btn" onClick={() => window.location.href = getUnlimitedPackLink(isDenmark)}>{t('subscribe_text')}</button>
         </div>
 
-        {/* <div className="pricing-card">
-          <div className="price-section">
-            <h2 className="price">399<span className="currency">/kr.</span></h2>
-            <p className="subtext">3.99 kr. / Credit</p>
+        {/* <div class="pricing-card">
+          <div class="price-section">
+            <h2 class="price">399<span class="currency">/kr.</span></h2>
+            <p class="subtext">3.99 kr. / Credit</p>
           </div>
 
-          <div className="divider"></div>
+          <div class="divider"></div>
 
-          <div className="credits-section">
-            <h3 className="credit">100</h3>
-            <p className="credits-label">CREDITS</p>
+          <div class="credits-section">
+            <h3 class="credit">100</h3>
+            <p class="credits-label">CREDITS</p>
           </div>
 
-          <p className="tax-note">All prices are exclusive tax.</p>
+          <p class="tax-note">All prices are exclusive tax.</p>
 
-          <button className="buy-btn">Buy Pack</button>
+          <button class="buy-btn">Buy Pack</button>
         </div> */}
 
       </section>
 
 
-      {/* <div className="auto-refill-card">
-        <div className="text-group">
+      {/* <div class="auto-refill-card">
+        <div class="text-group">
           <h3>Automatic Refill</h3>
           <p>Never run out of credits with automatic refills. Optifo will refill with recent bought pack.</p>
         </div>
 
-        <label className="switch">
+        <label class="switch">
           <input type="checkbox" />
-          <span className="slider"></span>
+          <span class="slider"></span>
         </label>
       </div> */}
 

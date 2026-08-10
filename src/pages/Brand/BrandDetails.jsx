@@ -137,39 +137,39 @@ function BrandDetails(props) {
      <>
             {loader ? <LoaderSpiner /> :
                 <div>
-                    <section className="card-block" aria-label="Preview Card">
+                    <section class="card-block" aria-label="Preview Card">
 
                         {formdata?.carsList?.length > 0 && formdata?.carsList?.map((items, index) => {
                             return (
-                                <div key={index} className="car-card" >
+                                <div key={index} class="car-card" >
 
-                                    <div className="image-section">
-                                        <img className="/images/card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
+                                    <div class="image-section">
+                                        <img class="/images/card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
 
-                                        <div className="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
+                                        <div class="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
                                             <img src='/images/trash.png' />
                                         </div>
                                     </div>
 
-                                    <div className="content-section" >
+                                    <div class="content-section" >
                                         <Link to={`/car/${items._id}`}> <>
-                                            <h2 className="car-title">{items?.carModel}</h2>
+                                            <h2 class="car-title">{items?.carModel}</h2>
 
-                                            <p className="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
+                                            <p class="car-metadata"> {items?.carYear}, {items?.carBrand}</p>
 
-                                            <p className="license-plate">{items?.carId}</p>
+                                            <p class="license-plate">{items?.carId}</p>
                                         </> </Link>
-                                        <div className="date-download-blk">
-                                            <p className="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
+                                        <div class="date-download-blk">
+                                            <p class="date-time">{items?.created ? displayDateFormat(items?.created) : '-'}</p>
 
-                                            {/* <p className="date-time">06:00PM, 03 Mar 2021</p> */}
+                                            {/* <p class="date-time">06:00PM, 03 Mar 2021</p> */}
 
-                                            <div className="action-buttons">
-                                                {items?.aIVideoUrl && <button className="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
+                                            <div class="action-buttons">
+                                                {items?.aIVideoUrl && <button class="icon-button video-icon" onClick={() => { setFormdata({ videoModelOpen: true, actionCarDetails: items }); }}>
                                                     <img src="/images/video.svg" />
                                                 </button>}
 
-                                                <button className="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
+                                                <button class="icon-button download-icon" onClick={() => { setFormdata({ downloadModelOpen: true, actionCarDetails: items }); }}>
                                                     <img src="/images/download.svg" />
                                                 </button>
                                             </div>
@@ -203,8 +203,8 @@ function BrandDetails(props) {
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download all photos of the {formdata?.actionCarDetails?.carType}?</p>
                 <div className='popup-btn'>
-                    <button type="button" className="btn btn-login" onClick={actionDownloadModal}>{t('DownloadAllText')}</button>
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ downloadModelOpen: false }); }}>{t('cancelText')}</button>
+                    <button type="button" class="btn btn-login" onClick={actionDownloadModal}>{t('DownloadAllText')}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ downloadModelOpen: false }); }}>{t('cancelText')}</button>
                 </div>
 
             </CommonModel>
@@ -216,8 +216,8 @@ function BrandDetails(props) {
                 <h2>Download Complete Set</h2>
                 <p>Would you like to download video of the {formdata?.actionCarDetails?.carType}?</p>
                 <div className='popup-btn'>
-                    <button type="button" className="btn btn-login" onClick={actionVideoModal}>{t('DownloadAllText')}</button>
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ videoModelOpen: false }); }}>{t('cancelText')}</button>
+                    <button type="button" class="btn btn-login" onClick={actionVideoModal}>{t('DownloadAllText')}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onClick={() => { setFormdata({ videoModelOpen: false }); }}>{t('cancelText')}</button>
                 </div>
 
             </CommonModel>

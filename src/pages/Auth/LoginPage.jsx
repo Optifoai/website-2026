@@ -10,16 +10,7 @@ function LoginPage(props) {
   const { login, isAuthenticated ,logout} = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { t } = useTranslation();
-  const accessToken = (() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) return null;
-    try {
-      return JSON.parse(token);
-    } catch {
-      localStorage.removeItem('authToken');
-      return null;
-    }
-  })();
+  const accessToken = localStorage.getItem('authToken') ? JSON.parse(localStorage.getItem('authToken')) : null  
 
   const onSubmit = async (data) => {
     try {
@@ -48,13 +39,13 @@ function LoginPage(props) {
   
 
   return (
-    <div className="login-container">
-      <div className="login-left">
+    <div class="login-container">
+      <div class="login-left">
 
       </div>
-      <div className="login-right">
-        <div className="login-card">
-          <div className="login-logo">
+      <div class="login-right">
+        <div class="login-card">
+          <div class="login-logo">
             <div className='logo-blk'>
               <img src="/images/optifo-logo.png" alt="Logo" />
             </div>
@@ -62,19 +53,19 @@ function LoginPage(props) {
 
           <hr className='divider' />
 
-          <h5 className="login-title">{t('loginTitle')}</h5>
-          <p className="login-subtext">{t('loginSubtitle')}</p>
+          <h5 class="login-title">{t('loginTitle')}</h5>
+          <p class="login-subtext">{t('loginSubtitle')}</p>
           <div className="form-field">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="f-group">
+              <div class="f-group">
                 <label className='form-label'>{t('emailAddressLabel')}</label>
-                <input type="email" className={`form-control ${errors.email ? 'error' : ''}`}
+                <input type="email" class={`form-control ${errors.email ? 'error' : ''}`}
                   {...register("email", { required: "Email is required" })} />
                 {/* {errors.email && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.email.message}</p>} */}
               </div>
-              <div className="f-group">
+              <div class="f-group">
                 <label className='form-label'>{t('passwordLabel')}</label>
-                <input type={userInput.showPassword ? "text" : "password"} className={`form-control ${errors.password ? 'error' : ''}`}
+                <input type={userInput.showPassword ? "text" : "password"} class={`form-control ${errors.password ? 'error' : ''}`}
                   {...register("password", { required: "Password is required" })} />
                 {/* {errors.password && <p className="error-message" style={{ color: 'red', fontSize: '12px' }}>{errors.password.message}</p>} */}
                 <img
@@ -89,11 +80,11 @@ function LoginPage(props) {
                 />
               </div>
               <div className="f-group">
-                <button type="submit" className="btn btn-login">{t('loginButton')}</button>
+                <button type="submit" class="btn btn-login">{t('loginButton')}</button>
               </div>
             </form>
 
-            <Link to="/forgot-password" className="forgot-password">{t('forgotPasswordLink')}</Link>
+            <Link to="/forgot-password" class="forgot-password">{t('forgotPasswordLink')}</Link>
             <p className="register-link mb-5">
               <Trans i18nKey="dontHaveAccount">
                 Don't have an account? <Link to="/signup">Sign Up</Link> here

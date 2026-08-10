@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import Button from '../../common/Button/Button';
 import { useTranslation } from 'react-i18next';
-import NotificationBell from './NotificationBell';
 
 function Header() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -18,8 +17,6 @@ function Header() {
         return t('recentCars');   
       case '/my-account':
         return t('sidebarMyAccount');
-      case '/car-template':
-        return t('carTemplateTitle');
       case '/background-logo':
         return t('sidebarBackgroundLogo');
       case '/create-car':
@@ -40,8 +37,8 @@ function Header() {
   };
 
   return (
-      <div className="topbar">
-                <div className="title">
+      <div class="topbar">
+                <div class="title">
                   {location.pathname === '/create-car' ? 
                   <button onClick={() => window.location.reload()} className="back-button" aria-label="Go back"><img src='/images/icon/back.png'/></button>
                   :
@@ -50,9 +47,6 @@ function Header() {
                     
                     <h2>{getTitle()}</h2>
                 </div>
-                {isAuthenticated && (
-                  <NotificationBell userId={user?._id || user?.id} />
-                )}
             </div>
   );
 }
