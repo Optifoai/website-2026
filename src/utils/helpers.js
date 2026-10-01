@@ -4,6 +4,7 @@ import React from 'react'
 import STORAGE_KEY from '../constants/storageKey'
 import {toast, Bounce } from 'react-toastify';
 import moment from 'moment';
+import { Config } from '../services/config';
 
 
 export const EMPTY_ARRAY = Object.freeze([])
@@ -22,7 +23,21 @@ export function getLoggedInUserId() {
 }
 
 export function getCarThumbnailUrl(car) {
+  if (!car) return ''
+
+  if (car.thumbnailUrl && String(car.thumbnailUrl).trim() !== '') {
+    return String(car.thumbnailUrl).trim()
+  }
+
   const images = car?.carImages || []
+  const priority = ['FrontL', 'Front', 'FrontR']
+  for (let i = 0; i < priority.length; i++) {
+    const img = images.find((entry) => entry?.partName === priority[i])
+    if (img?.partUrl && String(img.partUrl).trim() !== '') {
+      return String(img.partUrl).trim()
+    }
+  }
+
   const match = images.find((img) => img?.partUrl && String(img.partUrl).trim() !== '')
   return match?.partUrl || ''
 }
@@ -66,6 +81,10 @@ export const setLoginDetailInSession = (loggedInUserData) => {
       value: loggedInUserData?.accessToken,
     },
     {
+      key: STORAGE_KEY.REFRESH_TOKEN,
+      value: loggedInUserData?.refreshToken,
+    },
+    {
       key: STORAGE_KEY.USER_DETAILS,
       value: loggedInUserData?.userProfile,
     },
@@ -78,8 +97,10 @@ export const setLoginDetailInSession = (loggedInUserData) => {
 }
 
 const setLocalStorage = (userData) => {
-  userData.map((data) => {
-    localStorage.setItem(data.key, JSON.stringify(data.value))
+  userData.forEach((data) => {
+    if (data.value !== undefined && data.value !== null) {
+      localStorage.setItem(data.key, JSON.stringify(data.value))
+    }
   })
 }
 
@@ -130,6 +151,78 @@ export const getAccessToken = () => {
     localStorage.removeItem('authToken')
     return null
   }
+}
+
+export const getRefreshToken = () => {
+  try {
+    const token = localStorage.getItem('refreshToken')
+    if (!token) return null
+    return JSON.parse(token)
+  } catch {
+    localStorage.removeItem('refreshToken')
+    return null
+  }
+}
+
+export const setAccessToken = (token) => {
+  if (token) {
+    localStorage.setItem('authToken', JSON.stringify(token))
+  }
+}
+
+export const setRefreshToken = (token) => {
+  if (token) {
+    localStorage.setItem('refreshToken', JSON.stringify(token))
+  }
+}
+
+export const clearAuthStorage = () => {
+  localStorage.removeItem('authToken')
+  localStorage.removeItem('refreshToken')
+  localStorage.removeItem('userData')
+  localStorage.removeItem('visit')
+}
+
+/** Server origin used to turn /uploads/... localPath into an absolute URL. */
+export function getServerOrigin() {
+  const configured = Config.serverUrl || import.meta.env.VITE_MEDIA_BASE_URL
+  if (configured) return String(configured).replace(/\/$/, '')
+
+  const api = Config.serverAPIUrl || ''
+  return api.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
+}
+
+/**
+ * Display URL for background / logo / banner / plate assets.
+ * Prefer imageUrl when present; otherwise build from localPath; else S3.
+ */
+export function getMediaDisplayUrl(itemOrPath) {
+  if (!itemOrPath) return ''
+
+  if (typeof itemOrPath === 'string') {
+    if (/^https?:\/\//i.test(itemOrPath) || itemOrPath.startsWith('blob:')) {
+      return itemOrPath
+    }
+    if (itemOrPath.startsWith('/')) {
+      return `${getServerOrigin()}${itemOrPath}`
+    }
+    return itemOrPath
+  }
+
+  if (itemOrPath.imageUrl) return itemOrPath.imageUrl
+
+  const localPath = itemOrPath.localPath
+  if (localPath) {
+    if (/^https?:\/\//i.test(localPath)) return localPath
+    const path = localPath.startsWith('/') ? localPath : `/${localPath}`
+    return `${getServerOrigin()}${path}`
+  }
+
+  if (itemOrPath.s3Key) {
+    return `${getServerOrigin()}/uploads/${String(itemOrPath.s3Key).replace(/^\//, '')}`
+  }
+
+  return itemOrPath.backgroundImage || itemOrPath.s3Url || ''
 }
 
 /** Normalize create-car API response (sync success or async job queue). */

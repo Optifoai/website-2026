@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT, getMediaDisplayUrl, notify } from '../../utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { updateCarLicencePlateDetails } from '../../Redux/Actions/carAction';
@@ -89,7 +89,7 @@ function UpdateCarLicencePlateForm(props) {
                                                 // checked={items.isActive}
                                                 checked={items._id == formdata?.activeLogoId}
                                                 name="activeValueLogo"
-                                                value={items.backgroundImage}
+                                                value={getMediaDisplayUrl(items)}
                                             // value={activeLogo.activeValueLogo}
                                             />
 
@@ -103,11 +103,11 @@ function UpdateCarLicencePlateForm(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {items.backgroundImage ? (
+                                        {getMediaDisplayUrl(items) ? (
                                             <div
                                                 className="card">
                                                 <img
-                                                    src={items.backgroundImage}
+                                                    src={getMediaDisplayUrl(items)}
                                                     className="plate-mxw-100"
                                                 />
                                             </div>

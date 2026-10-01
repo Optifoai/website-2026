@@ -7,7 +7,7 @@ import { SiReasonstudios } from 'react-icons/si';
 import { LuRectangleEllipsis } from 'react-icons/lu';
 import { RiQrScan2Line } from 'react-icons/ri';
 import { MdLibraryBooks } from 'react-icons/md';
-import { EMPTY_ARRAY, EMPTY_OBJECT, notify, carTypes } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT, notify, carTypes, getMediaDisplayUrl } from '../../utils/helpers';
 import { CheckIcon, DeleteIcon } from '../../components/common/model/svg';
 import { actionBackgroundDelete, getBrandList, getCarBrandList, updateCarBackground, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
@@ -68,25 +68,29 @@ function StudioTabs(props) {
     };
 
     const ActiveBg = (e, backgroundId) => {
-        const { value } = e.target
-        setFormdata({ ...formdata, activeBGId: backgroundId, backgroundURL: value, });
+        const item = displayBg.find((bg) => bg._id == backgroundId)
+        const url = getMediaDisplayUrl(item) || e.target.value
+        setFormdata({ ...formdata, activeBGId: backgroundId, backgroundURL: url, });
     };
 
     const ActiveLogo = (e, backgroundId) => {
-        const { value } = e.target
+        const item = displayPlate.find((bg) => bg._id == backgroundId)
+        const url = getMediaDisplayUrl(item) || e.target.value
         if (formdata?.activeLogoId === backgroundId) {
             setFormdata({ ...formdata, activeLogoId: '', activeLogoURL: '', });
         } else {
-            setFormdata({ ...formdata, activeLogoId: backgroundId, activeLogoURL: value });
+            setFormdata({ ...formdata, activeLogoId: backgroundId, activeLogoURL: url });
         }
 
     };
 
     const ActiveBanner = (e, backgroundId) => {
+        const item = displayBanner.find((bg) => bg._id == backgroundId)
+        const url = getMediaDisplayUrl(item) || e?.target?.value
         if (formdata?.activeBannerId === backgroundId) {
             setFormdata({ ...formdata, activeBannerId: '', activeBannerURL: '', });
         } else {
-            setFormdata({ ...formdata, activeBannerId: backgroundId, activeBannerURL: e.target.value, });
+            setFormdata({ ...formdata, activeBannerId: backgroundId, activeBannerURL: url, });
         }
     };
 
@@ -193,7 +197,7 @@ function StudioTabs(props) {
                                                 onChange={(e) => ActiveBg(e, item._id)}
                                                 checked={item._id == formdata?.activeBGId}
                                                 name="activeValue"
-                                                value={item.backgroundImage}
+                                                value={getMediaDisplayUrl(item)}
                                             />
                                             <div className="select-bg">
                                                 <div>
@@ -204,9 +208,9 @@ function StudioTabs(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {item.backgroundImage && (
+                                        {getMediaDisplayUrl(item) && (
                                             <div className="card">
-                                                <img src={item.backgroundImage} className="mxw-100" alt={`Background ${i + 1}`} />
+                                                <img src={getMediaDisplayUrl(item)} className="mxw-100" alt={`Background ${i + 1}`} />
                                             </div>
                                         )}
                                     </div>
@@ -256,7 +260,7 @@ function StudioTabs(props) {
                                                         // checked={items.isActive}
                                                         checked={items._id == formdata?.activeLogoId}
                                                         name="activeValueLogo"
-                                                        value={items.backgroundImage}
+                                                        value={getMediaDisplayUrl(items)}
                                                     // value={activeLogo.activeValueLogo}
                                                     />
 
@@ -270,11 +274,11 @@ function StudioTabs(props) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {items.backgroundImage ? (
+                                                {getMediaDisplayUrl(items) ? (
                                                     <div
                                                         className="card">
                                                         <img
-                                                            src={items.backgroundImage}
+                                                            src={getMediaDisplayUrl(items)}
                                                             className="plate-mxw-100"
                                                         />
                                                     </div>
@@ -336,7 +340,7 @@ function StudioTabs(props) {
                                                         // checked={items.isActive}
                                                         checked={items._id == formdata?.activeBannerId}
                                                         name="activeValueBanner"
-                                                        value={items.backgroundImage}
+                                                        value={getMediaDisplayUrl(items)}
                                                     // value={activeBanner.activeValueBanner}
                                                     />
 
@@ -352,11 +356,11 @@ function StudioTabs(props) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {items.backgroundImage ? (
+                                                {getMediaDisplayUrl(items) ? (
                                                     <div
                                                         className="card">
                                                         <img
-                                                            src={items.backgroundImage}
+                                                            src={getMediaDisplayUrl(items)}
                                                             className="mxw-100"
                                                         />
                                                     </div>

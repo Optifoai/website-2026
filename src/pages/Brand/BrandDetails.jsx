@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, notify, getCarThumbnailUrl } from '../../utils/helpers';
 
 import { getBrandDetails, getBrandList, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
@@ -78,6 +78,7 @@ function BrandDetails(props) {
                     }
                     let payLoad = {
                         imgArray: links,
+                        vehicleId: items?._id,
                         carBrand: items?.carBrand,
                         carYear: items?.carYear,
                         carModel: items?.carModel
@@ -144,7 +145,7 @@ function BrandDetails(props) {
                                 <div key={index} className="car-card" >
 
                                     <div className="image-section">
-                                        <img className="/images/card-image" src={items?.carImages?.[0]?.partUrl ? items?.carImages?.[0]?.partUrl : "car1.jpg"} />
+                                        <img className="/images/card-image" src={getCarThumbnailUrl(items) || "car1.jpg"} />
 
                                         <div className="top-right-square" onClick={() => { setFormdata({ deleteModelOpen: true, actionCarDetails: items }); }}>
                                             <img src='/images/trash.png' />

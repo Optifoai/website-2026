@@ -51,7 +51,14 @@ function Header() {
                     <h2>{getTitle()}</h2>
                 </div>
                 {isAuthenticated && (
-                  <NotificationBell userId={user?._id || user?.id} />
+                  <NotificationBell
+                    userId={
+                      user?.userProfile?._id ||
+                      user?._id ||
+                      user?.id ||
+                      user?.userId
+                    }
+                  />
                 )}
             </div>
   );

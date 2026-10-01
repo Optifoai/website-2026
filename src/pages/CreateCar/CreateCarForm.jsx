@@ -220,6 +220,8 @@ function CreateCarForm(props) {
         } else {
             dispatch(
                 createCarSave(formPostData, {
+                    // Upload-only wait; server returns after queue (BG processing is async)
+                    timeout: 180000,
                     onUploadProgress: (progressEvent) => {
                         if (progressEvent.total) {
                             const pct = Math.round(
@@ -235,11 +237,15 @@ function CreateCarForm(props) {
                     handleCreateSuccess(res);
                 })
                 .catch((err) => {
-                    const apiError =
-                        err?.error ||
-                        err?.message ||
-                        err?.error?.responseMessage ||
-                        'Something went wrong';
+                    const isTimeout =
+                        err?.code === 'ECONNABORTED' ||
+                        /timeout/i.test(String(err?.message || ''));
+                    const apiError = isTimeout
+                        ? 'Upload is taking too long. Please try again with fewer/smaller images.'
+                        : err?.error?.responseMessage ||
+                          err?.error ||
+                          err?.message ||
+                          'Something went wrong';
                     notify('error', apiError);
                     setFormdata({ formloader: false, uploadProgress: 0 });
                 });

@@ -29,6 +29,7 @@ export const APICONFIG = {
 
 	
     LOGOUT: `${baseURL}user/logout`,
+    REFRESH_TOKEN: `${baseURL}user/refresh-token`,
     
     
     USER_STRIPE_PRICE: `${baseURL}user/stripePrices`,
@@ -69,6 +70,8 @@ export const APICONFIG = {
     CAR_JOB_STATUS: `${baseURL}cars/addcar/status`,
     NOTIFICATIONS: `${baseURL}notifications`,
     NOTIFICATIONS_UNREAD_COUNT: `${baseURL}notifications/unread-count`,
+    DEVICE_TOKEN: `${baseURL}user/device-token`,
+    NOTIFICATIONS_TEST: `${baseURL}notifications/test`,
     ADMIN_IMAGE_JOBS: `${baseURL}admin/image-jobs`,
     FASTAPI_PROCESS_CAR_IMAGE: `${baseURL}cars/fastapi/processCarImage`,
     CREAT_360CAR_IMAGE: `${baseURL}cars/generate360Images`,

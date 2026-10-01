@@ -132,6 +132,7 @@ function CarDetails(props) {
 
         let payLoad = {
             imgArray: formdata?.selectedImage.length > 0 ? formdata?.selectedImage : formdata?.allImageURL,
+            vehicleId: items?._id,
             carBrand: items?.carBrand,
             carYear: items?.carYear,
             carModel: items?.carModel

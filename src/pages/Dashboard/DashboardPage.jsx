@@ -138,6 +138,7 @@ function DashboardPage(props) {
         }
         let payLoad = {
             imgArray: links,
+            vehicleId: items?._id,
             carBrand: items?.carBrand,
             carYear: items?.carYear,
             carModel: items?.carModel

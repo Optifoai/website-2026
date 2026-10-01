@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT, getMediaDisplayUrl, notify } from '../../utils/helpers';
 import { actionBackgroundDelete, updateCarBackground, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
 import LoaderSpiner from '../../hooks/LoaderSpiner';
@@ -150,7 +150,7 @@ function AddBackgroundPage(props) {
                                                 <img src='/images/check-icon.png'/>
                                             </span>
                                             <div className="custom-bg-in">
-                                                <img src={item.backgroundImage} className="w-100 rounded-8" />
+                                                <img src={getMediaDisplayUrl(item)} className="w-100 rounded-8" />
                                             </div>
                                         </label>
 

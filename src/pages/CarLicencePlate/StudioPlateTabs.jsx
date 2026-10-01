@@ -7,7 +7,7 @@ import { SiReasonstudios } from 'react-icons/si';
 import { LuRectangleEllipsis } from 'react-icons/lu';
 import { RiQrScan2Line } from 'react-icons/ri';
 import { MdLibraryBooks } from 'react-icons/md';
-import { EMPTY_ARRAY, EMPTY_OBJECT, notify, carTypes } from '../../utils/helpers';
+import { EMPTY_ARRAY, EMPTY_OBJECT, notify, carTypes, getMediaDisplayUrl } from '../../utils/helpers';
 import { CheckIcon, DeleteIcon } from '../../components/common/model/svg';
 import { actionBackgroundDelete, getBrandList, getCarBrandList, updateCarBackground, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
@@ -182,7 +182,7 @@ function StudioPlateTabs(props) {
                                                         // checked={items.isActive}
                                                         checked={items._id == formdata?.activeLogoId}
                                                         name="activeValueLogo"
-                                                        value={items.backgroundImage}
+                                                        value={getMediaDisplayUrl(items)}
                                                     // value={activeLogo.activeValueLogo}
                                                     />
 
@@ -196,11 +196,11 @@ function StudioPlateTabs(props) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {items.backgroundImage ? (
+                                                {getMediaDisplayUrl(items) ? (
                                                     <div
                                                         className="card">
                                                         <img
-                                                            src={items.backgroundImage}
+                                                            src={getMediaDisplayUrl(items)}
                                                             className="plate-mxw-100"
                                                         />
                                                     </div>

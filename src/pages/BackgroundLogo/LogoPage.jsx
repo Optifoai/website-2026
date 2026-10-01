@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {  EMPTY_ARRAY, EMPTY_OBJECT, notify } from '../../utils/helpers';
+import {  EMPTY_ARRAY, EMPTY_OBJECT, getMediaDisplayUrl, notify } from '../../utils/helpers';
 import { actionBackgroundDelete, updateCarBackground, uploadBackground } from '../../Redux/Actions/carAction';
 import { useAuth } from '../../context/AuthContext';
 import AddBackgroundPage from './AddBackgroundPage';
@@ -128,7 +128,7 @@ function LogoPage(props) {
             {logo?.length > 0 ? logo.map((item, index) => {
               return (
                 <div className={`card ${item?.isActive ? 'active' : ''}`} key={`logo-${index}`}>
-                  <img src={item?.backgroundImage} alt={`Logo ${index + 1}`} />
+                  <img src={getMediaDisplayUrl(item)} alt={`Logo ${index + 1}`} />
                   <div className="bottom-row">
                     <label className="radio-item">
                       <input type="radio" checked = {item?.isActive} name="logo" value={item?._id} onChange={changeLogo}/>

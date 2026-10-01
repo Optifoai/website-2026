@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
+import FcmRegistrar from './components/common/FcmRegistrar.jsx';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import configureStore from './Redux/middleware/configureStore'
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
     <BrowserRouter>
       <AuthProvider>
+        <FcmRegistrar />
         <App />
       </AuthProvider>
     </BrowserRouter>

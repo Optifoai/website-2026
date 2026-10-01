@@ -1,9 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as authService from '../services/auth'; // API calls
 import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } from '../Redux/Actions/loginAction';
-import { notify, setLoginDetailInSession, getAccessToken } from '../utils/helpers';
+import { notify, setLoginDetailInSession, getAccessToken, getRefreshToken, clearAuthStorage } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { clearWebPushTokenOnLogout } from '../hooks/useFcmMessaging';
+import { postRequest } from '../services';
+import { APICONFIG } from '../Redux/ApiConfig';
 // import { setLoginDetailInSession } from '../utils/helpers';
 
 const AuthContext = createContext(null);
@@ -225,9 +228,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
-    localStorage.removeItem('visit');
+    clearWebPushTokenOnLogout().catch(() => {});
+    const refreshToken = getRefreshToken();
+    if (getAccessToken()) {
+      postRequest(APICONFIG.LOGOUT, { refreshToken }).catch(() => {});
+    }
+    clearAuthStorage();
     localStorage.clear()
 		sessionStorage.clear()
    
