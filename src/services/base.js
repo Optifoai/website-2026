@@ -25,8 +25,12 @@ function processQueue(error, token = null) {
 }
 
 function redirectToLogin() {
+	const alreadyOnLogin = window.location.pathname === '/login'
 	clearAuthStorage()
 	sessionStorage.clear()
+	if (alreadyOnLogin) {
+		return
+	}
 	window.location.replace('/login')
 }
 
@@ -106,7 +110,9 @@ async function handleUnauthorized(originalRequest) {
 		return axiosClient(originalRequest)
 	} catch (refreshError) {
 		processQueue(refreshError, null)
-		redirectToLogin()
+		if (getAccessToken() || getRefreshToken()) {
+			redirectToLogin()
+		}
 		return Promise.reject(refreshError)
 	} finally {
 		isRefreshing = false

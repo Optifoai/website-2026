@@ -4,7 +4,7 @@ import { getUserProfile, resendOtp, userLogin, userOtpVeification, userSignup } 
 import { notify, setLoginDetailInSession, getAccessToken, getRefreshToken, clearAuthStorage } from '../utils/helpers';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { clearWebPushTokenOnLogout } from '../hooks/useFcmMessaging';
+import { clearWebPushTokenOnLogout, getWebDeviceLoginFields } from '../hooks/useFcmMessaging';
 import { postRequest } from '../services';
 import { APICONFIG } from '../Redux/ApiConfig';
 // import { setLoginDetailInSession } from '../utils/helpers';
@@ -48,7 +48,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = (credentials) => {  
       setIsLoading(true);
-      dispatch(userLogin(credentials)).then((res) => {
+      getWebDeviceLoginFields()
+        .then((deviceFields) => dispatch(userLogin({ ...credentials, ...deviceFields })))
+        .then((res) => {
         if(res?.statusCode=='1'){
           let userData = res?.responseData
           delete (userData?.userProfile?.password);

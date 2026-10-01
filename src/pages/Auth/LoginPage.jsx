@@ -7,7 +7,7 @@ import { Trans } from 'react-i18next';
 
 function LoginPage(props) {
   const { navigate, Link } = props
-  const { login, isAuthenticated ,logout} = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { t } = useTranslation();
   const accessToken = (() => {
@@ -34,10 +34,8 @@ function LoginPage(props) {
   useEffect(() => {   
     if (isAuthenticated && accessToken) {
       navigate('/dashboard')
-    }else{
-        logout()
     }
-  }, [isAuthenticated,accessToken])
+  }, [isAuthenticated, accessToken, navigate])
 
   const [userInput, setUserInput] = useReducer((state, newState) => ({ ...state, ...newState }),
     {

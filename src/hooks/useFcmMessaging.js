@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { postRequest } from '../services';
 import { APICONFIG } from '../Redux/ApiConfig';
+import { getAccessToken } from '../utils/helpers';
 import {
   getWebPushToken,
   listenForegroundMessages,
@@ -13,6 +14,23 @@ async function saveDeviceToken(deviceToken) {
     deviceToken,
     deviceType: 'web',
   });
+}
+
+export async function getWebDeviceLoginFields() {
+  try {
+    const fcmToken = await getWebPushToken();
+    if (!fcmToken) {
+      return {};
+    }
+    localStorage.setItem(TOKEN_STORAGE_KEY, fcmToken);
+    return {
+      deviceToken: fcmToken,
+      deviceType: 'web',
+    };
+  } catch (err) {
+    console.warn('[FCM] login token skipped:', err?.message || err);
+    return {};
+  }
 }
 
 export function useFcmMessaging(enabled) {
@@ -88,13 +106,15 @@ export function useFcmMessaging(enabled) {
 }
 
 export async function clearWebPushTokenOnLogout() {
-  try {
-    await postRequest(APICONFIG.DEVICE_TOKEN, {
-      deviceToken: '',
-      deviceType: 'web',
-    });
-  } catch {
-    /* ignore logout cleanup errors */
+  if (getAccessToken()) {
+    try {
+      await postRequest(APICONFIG.DEVICE_TOKEN, {
+        deviceToken: '',
+        deviceType: 'web',
+      });
+    } catch {
+      /* ignore logout cleanup errors */
+    }
   }
   localStorage.removeItem(TOKEN_STORAGE_KEY);
 }
