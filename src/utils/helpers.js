@@ -22,24 +22,38 @@ export function getLoggedInUserId() {
   }
 }
 
-export function getCarThumbnailUrl(car) {
-  if (!car) return ''
+export function getCarDisplayImageUrls(car) {
+  if (!car) return []
 
-  if (car.thumbnailUrl && String(car.thumbnailUrl).trim() !== '') {
-    return String(car.thumbnailUrl).trim()
+  const urls = []
+  const add = (url) => {
+    const value = String(url || '').trim()
+    if (value && urls.indexOf(value) === -1) {
+      urls.push(value)
+    }
   }
+
+  add(car.thumbnailUrl)
+  add(car.imageUrl)
 
   const images = car?.carImages || []
   const priority = ['FrontL', 'Front', 'FrontR']
   for (let i = 0; i < priority.length; i++) {
     const img = images.find((entry) => entry?.partName === priority[i])
-    if (img?.partUrl && String(img.partUrl).trim() !== '') {
-      return String(img.partUrl).trim()
-    }
+    add(img?.partUrl)
+    add(img?.thumbnailUrl)
   }
 
-  const match = images.find((img) => img?.partUrl && String(img.partUrl).trim() !== '')
-  return match?.partUrl || ''
+  images.forEach((img) => {
+    add(img?.partUrl)
+    add(img?.thumbnailUrl)
+  })
+
+  return urls
+}
+
+export function getCarThumbnailUrl(car) {
+  return getCarDisplayImageUrls(car)[0] || ''
 }
 
 export function hasCarThumbnail(car) {

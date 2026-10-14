@@ -79,13 +79,18 @@ export function useFcmMessaging(enabled) {
 
     let unsubscribe = () => {};
     listenForegroundMessages((payload) => {
-      const title =
-        payload?.notification?.title || payload?.data?.title || 'Optifo';
-      const body =
-        payload?.notification?.body || payload?.data?.body || '';
+      const title = String(
+        payload?.notification?.title || payload?.data?.title || ''
+      ).trim();
+      const body = String(
+        payload?.notification?.body || payload?.data?.body || ''
+      ).trim();
+      if (!title && !body) {
+        return;
+      }
       if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
         try {
-          new Notification(title, {
+          new Notification(title || 'Optifo', {
             body,
             icon: '/images/icon/notification.svg',
           });

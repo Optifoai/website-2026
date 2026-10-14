@@ -15,19 +15,25 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(function (payload) {
-  const title =
+  const title = String(
     (payload.notification && payload.notification.title) ||
-    (payload.data && payload.data.title) ||
-    'Optifo';
-  const options = {
-    body:
-      (payload.notification && payload.notification.body) ||
+      (payload.data && payload.data.title) ||
+      ''
+  ).trim();
+  const body = String(
+    (payload.notification && payload.notification.body) ||
       (payload.data && payload.data.body) ||
-      '',
+      ''
+  ).trim();
+  if (!title && !body) {
+    return;
+  }
+  const options = {
+    body: body,
     icon: '/images/icon/notification.svg',
     data: payload.data || {},
   };
-  self.registration.showNotification(title, options);
+  self.registration.showNotification(title || 'Optifo', options);
 });
 
 self.addEventListener('notificationclick', function (event) {

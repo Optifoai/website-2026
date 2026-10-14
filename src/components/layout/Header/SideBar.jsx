@@ -156,7 +156,7 @@ function SideBar(props) {
                 <div className="credits" title="Credits left">
                     <div className="coin"> <img src="/images/coin.svg" /></div>
                     <div>
-                        <div className="meta">{((user?.userProfile?.creditsLeft ? user?.userProfile?.creditsLeft : 0) + (user?.userProfile?.leftPackCredits ? user?.userProfile?.leftPackCredits : 0))} <span className="muted">{t('credits_left')}</span></div>
+                        <div className="meta">{(Number(user?.userProfile?.leftCredits) || 0) + (Number(user?.userProfile?.leftPackCredits) || 0)} <span className="muted">{t('credits_left')}</span></div>
 
                         {/* <div className="meta">{user?.userProfile?.leftCredits} / {user?.userProfile?.totalCredits} <span className="muted">{t('credits_left')}</span></div> */}
 

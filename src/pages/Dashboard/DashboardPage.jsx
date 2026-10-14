@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession, getCarThumbnailUrl, hasCarThumbnail, shouldShowCarOnDashboard, isCarProcessing, getCarProcessingLabel } from '../../utils/helpers';
+import { displayDateFormat, EMPTY_ARRAY, EMPTY_OBJECT, getLocalStorage, notify, ResponseFilter, setLoginDetailInSession, getCarDisplayImageUrls, hasCarThumbnail, shouldShowCarOnDashboard, isCarProcessing, getCarProcessingLabel } from '../../utils/helpers';
 import { getAllCarImages, getAllCarVideo, getCarDelete, getCarList } from '../../Redux/Actions/carAction';
 import Spinner from '../../hooks/Spinner';
 import CommonModel from '../../components/common/model/CommonModel';
@@ -198,7 +198,8 @@ function DashboardPage(props) {
         return (<section className="card-block" aria-label="Preview Card">
 
             {formdata?.carsList?.length > 0 && formdata?.carsList?.filter(shouldShowCarOnDashboard).map((items, index) => {
-                const thumbnailUrl = getCarThumbnailUrl(items);
+                const imageUrls = getCarDisplayImageUrls(items);
+                const thumbnailUrl = imageUrls[0] || '';
                 const processing = isCarProcessing(items);
                 const processingLabel = getCarProcessingLabel(items?.processingStatus);
                 const progress = Math.max(0, Math.min(100, items?.processingProgress ?? 0));
@@ -229,6 +230,13 @@ function DashboardPage(props) {
                                         }));
                                     }}
                                     onError={(e) => {
+                                        const attempt = Number(e.target.getAttribute('data-try') || '0');
+                                        const nextUrl = imageUrls[attempt + 1];
+                                        if (nextUrl) {
+                                            e.target.setAttribute('data-try', String(attempt + 1));
+                                            e.target.src = nextUrl;
+                                            return;
+                                        }
                                         e.target.onerror = null;
                                         e.target.src = "/images/car-placeholder.png";
 
@@ -306,7 +314,7 @@ function DashboardPage(props) {
 
                     {isProcessingCar && (
                         <p className="car-processing-banner text-center mb-3">
-                            Your car is being processed in the background. It will appear here automatically when ready.
+                            Your car is in the list and still being processed. Photos will show on the card when they are ready.
                         </p>
                     )}
 
